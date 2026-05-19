@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>跟进 - 智能营销</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="page">
+    <div class="header" style="padding-bottom:16px;">
+        <div class="header-row">
+            <div class="header-title" style="margin-top:0;">跟进</div>
+            <span style="font-size:14px;color:var(--brand-primary);font-weight:600;background:#eff6ff;padding:4px 10px;border-radius:100px;">7 家活跃</span>
+        </div>
+    </div>
+
+    <!-- 快速统计 (可点击锚点) -->
+    <div class="follow-stat-grid" style="overflow-x: auto; white-space: nowrap; padding-bottom: 8px; margin-bottom: 16px;">
+        <div class="follow-stat-item" onclick="document.getElementById('grp-confirm').scrollIntoView({behavior:'smooth',block:'start'})">
+            <div class="follow-stat-val" style="color:var(--warning);">1</div>
+            <div class="follow-stat-label">确认意向</div>
+        </div>
+        <div class="follow-stat-item" onclick="document.getElementById('grp-retry').scrollIntoView({behavior:'smooth',block:'start'})">
+            <div class="follow-stat-val" style="color:var(--danger);">2</div>
+            <div class="follow-stat-label">再次联系</div>
+        </div>
+        <div class="follow-stat-item" onclick="document.getElementById('grp-push').scrollIntoView({behavior:'smooth',block:'start'})">
+            <div class="follow-stat-val" style="color:var(--success);">1</div>
+            <div class="follow-stat-label">推进转化</div>
+        </div>
+        <div class="follow-stat-item" onclick="document.getElementById('grp-credit').scrollIntoView({behavior:'smooth',block:'start'})">
+            <div class="follow-stat-val" style="color:var(--brand-primary);">2</div>
+            <div class="follow-stat-label">跟进授信</div>
+        </div>
+        <div class="follow-stat-item" onclick="document.getElementById('grp-drawdown').scrollIntoView({behavior:'smooth',block:'start'})">
+            <div class="follow-stat-val" style="color:var(--brand-primary);">1</div>
+            <div class="follow-stat-label">引导提款</div>
+        </div>
+    </div>
+
+    <!-- ====== 确认意向 ====== -->
+    <div class="follow-group" id="grp-confirm">
+        <div class="follow-group-title">确认意向</div>
+
+        <!-- 南京创新智造 — 跟进中·意向沟通中 -->
+        <div class="follow-item" onclick="location.href='detail.html?id=2'">
+            <div class="fi-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
+            </div>
+            <div class="fi-body">
+                <div class="fi-name">南京创新智造集团有限公司</div>
+                <div class="fi-info">
+                    <span>意向沟通中</span>
+                    <span style="color:var(--gray-300);">·</span>
+                    <span>2天前更新</span>
+                </div>
+            </div>
+            <span class="fi-chevron">›</span>
+        </div>
+    </div>
+
+    <!-- ====== 再次联系 ====== -->
+    <div class="follow-group" id="grp-retry">
+        <div class="follow-group-title">再次联系</div>
+
+        <!-- 苏州生物医药 — 触达失败·无人接听 -->
+        <div class="follow-item" onclick="location.href='detail.html?id=5'">
+            <div class="fi-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
+            </div>
+            <div class="fi-body">
+                <div class="fi-name">苏州生物医药研究院有限公司</div>
+                <div class="fi-info">
+                    <span>触达失败</span>
+                    <span style="color:var(--gray-300);">·</span>
+                    <span>2天前标记</span>
+                </div>
+            </div>
+            <span class="fi-chevron">›</span>
+        </div>
+
+        <!-- 无锡集成电路 — 触达失败·拒绝沟通 -->
+        <div class="follow-item" onclick="location.href='detail.html?id=9'">
+            <div class="fi-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
+            </div>
+            <div class="fi-body">
+                <div class="fi-name">无锡集成电路设计有限公司</div>
+                <div class="fi-info">
+                    <span>触达失败</span>
+                    <span style="color:var(--gray-300);">·</span>
+                    <span>昨天标记</span>
+                </div>
+            </div>
+            <span class="fi-chevron">›</span>
+        </div>
+    </div>
+
+    <!-- ====== 推进转化 ====== -->
+    <div class="follow-group" id="grp-push">
+        <div class="follow-group-title">推进转化</div>
+
+        <!-- 南京艾科微电子 — 有意向·未申请 (作为兜底卡片演示) -->
+        <div class="follow-item" onclick="location.href='detail.html?id=12'">
+            <div class="fi-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
+            </div>
+            <div class="fi-body">
+                <div class="fi-name">南京艾科微电子有限公司</div>
+                <div class="fi-info">
+                    <span>明确有意向</span>
+                    <span style="color:var(--gray-300);">·</span>
+                    <span>待引导申请</span>
+                </div>
+            </div>
+            <span class="fi-chevron">›</span>
+        </div>
+    </div>
+
+    <!-- ====== 跟进授信 ====== -->
+    <div class="follow-group" id="grp-credit">
+        <div class="follow-group-title">跟进授信</div>
+
+        <!-- 无锡光电半导体 — 有意向·已申请 -->
+        <div class="follow-item" onclick="location.href='detail.html?id=3'">
+            <div class="fi-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
+            </div>
+            <div class="fi-body">
+                <div class="fi-name">无锡光电半导体有限公司</div>
+                <div class="fi-info">
+                    <span>已提交申请</span>
+                    <span style="color:var(--gray-300);">·</span>
+                    <span>2天前更新</span>
+                </div>
+            </div>
+            <span class="fi-chevron">›</span>
+        </div>
+
+        <!-- 常州智能制造 — 有意向·审批中 -->
+        <div class="follow-item" onclick="location.href='detail.html?id=10'">
+            <div class="fi-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
+            </div>
+            <div class="fi-body">
+                <div class="fi-name">常州智能制造系统有限公司</div>
+                <div class="fi-info">
+                    <span>业务审批中</span>
+                    <span style="color:var(--gray-300);">·</span>
+                    <span>12天前更新</span>
+                </div>
+            </div>
+            <span class="fi-chevron">›</span>
+        </div>
+    </div>
+
+    <!-- ====== 引导提款 ====== -->
+    <div class="follow-group" id="grp-drawdown">
+        <div class="follow-group-title">引导提款</div>
+
+        <!-- 南京云端数据 — 已授信 -->
+        <div class="follow-item" onclick="location.href='detail.html?id=8'">
+            <div class="fi-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
+            </div>
+            <div class="fi-body">
+                <div class="fi-name">南京云端数据技术有限公司</div>
+                <div class="fi-info">
+                    <span>已授信 400万</span>
+                    <span style="color:var(--gray-300);">·</span>
+                    <span>待客户提款</span>
+                </div>
+            </div>
+            <span class="fi-chevron">›</span>
+        </div>
+    </div>
+
+    <!-- ====== 暂缓跟进 ====== -->
+    <div class="follow-group" id="grp-paused">
+        <div class="follow-group-title">暂缓跟进</div>
+
+        <!-- 常州新能源 — 无意向 -->
+        <div class="follow-item" style="opacity:0.6;" onclick="location.href='detail.html?id=4'">
+            <div class="fi-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
+            </div>
+            <div class="fi-body">
+                <div class="fi-name">常州新能源科技股份有限公司</div>
+                <div class="fi-info">
+                    <span>已在他行申请</span>
+                    <span style="color:var(--gray-300);">·</span>
+                    <span>利息高</span>
+                </div>
+            </div>
+            <span class="fi-chevron">›</span>
+        </div>
+    </div>
+
+</div>
+
+<!-- 悬浮Tab栏 -->
+<nav class="tab-bar">
+    <div class="tab-bar-inner">
+        <a href="index.html" class="tab-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>首页</span>
+        </a>
+        <a href="customers.html" class="tab-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+            <span>名单</span>
+        </a>
+        <a href="follow.html" class="tab-item on">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <span>跟进</span>
+        </a>
+    </div>
+</nav>
+</body>
+</html>

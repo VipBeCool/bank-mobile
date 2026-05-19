@@ -1,0 +1,1696 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>客户名单 - 智能营销</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="page">
+        <div class="header" style="padding-bottom:8px;">
+            <div class="header-row">
+                <div class="header-title" style="margin-top:0;">客户名单</div>
+                <span id="countBadge" style="font-size:14px;color:var(--brand-primary);font-weight:600;background:#eff6ff;padding:4px 10px;border-radius:100px;"><span id="countLabel">10</span> 家企业</span>
+            </div>
+        </div>
+
+        <!-- 搜索 -->
+        <div class="search-bar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input type="text" placeholder="搜索企业名称" id="searchInput" oninput="doFilter()">
+        </div>
+
+        <!-- 筛选排序栏 (Xianyu Style) -->
+        <style>
+            .filter-wrap {
+                background: #fff;
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                padding: 12px 0 0;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+            }
+
+            .f-row1 {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 16px 16px;
+            }
+
+            .f-dropdown {
+                display: flex;
+                align-items: center;
+                gap: 2px;
+                font-size: 13px;
+                font-weight: 600;
+                color: var(--gray-800);
+            }
+
+            .f-dropdown.on {
+                color: var(--brand-primary);
+            }
+
+            .f-dropdown svg {
+                transition: transform 0.2s;
+            }
+
+            .f-dropdown.on svg {
+                transform: rotate(180deg);
+            }
+
+            .f-center-tabs {
+                display: flex;
+                gap: 12px;
+                align-items: center;
+            }
+
+            .f-ctab {
+                font-size: 14px;
+                color: var(--gray-600);
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+
+            .f-ctab.on {
+                font-weight: 700;
+                color: var(--brand-primary);
+            }
+
+            .sort-icon {
+                margin-left: 2px;
+                transition: all 0.2s;
+            }
+            .sort-icon path { opacity: 0.2; }
+            .sort-tab.asc .arr-up { opacity: 1; }
+            .sort-tab.desc .arr-down { opacity: 1; }
+
+            .f-row2-wrap {
+                position: relative;
+                display: flex;
+                align-items: center;
+                overflow: hidden;
+                padding-bottom: 12px;
+            }
+
+            .f-row2 {
+                display: flex;
+                gap: 8px;
+                overflow-x: auto;
+                scrollbar-width: none;
+                padding: 0 16px;
+                padding-right: 70px;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .f-row2::-webkit-scrollbar {
+                display: none;
+            }
+
+            .f-tag {
+                padding: 5px 12px;
+                border-radius: 100px;
+                font-size: 12px;
+                font-weight: 500;
+                white-space: nowrap;
+                flex-shrink: 0;
+                background: #f3f4f6;
+                color: var(--gray-600);
+                border: 1px solid transparent;
+            }
+
+            .f-tag.on, .f-tag.has-val {
+                background: #eff6ff;
+                color: var(--brand-primary);
+                border-color: rgba(37, 99, 235, 0.2);
+                font-weight: 600;
+            }
+
+            .f-filter-btn {
+                position: absolute;
+                right: 0;
+                top: 0;
+                bottom: 12px;
+                background: #fff;
+                display: flex;
+                align-items: center;
+                padding: 0 12px 0 16px;
+                font-size: 13px;
+                font-weight: 600;
+                color: var(--gray-800);
+                box-shadow: -15px 0 15px -5px rgba(255, 255, 255, 1);
+                z-index: 2;
+                border-left: 1px solid rgba(0, 0, 0, 0.03);
+            }
+
+            .dd-overlay {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.4);
+                z-index: -2;
+                display: none;
+                opacity: 0;
+                transition: opacity 0.2s;
+            }
+
+            .dd-overlay.show {
+                display: block;
+                opacity: 1;
+            }
+
+            .dd-menu {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: #fff;
+                z-index: -1;
+                border-radius: 0 0 16px 16px;
+                transform: translateY(-100%);
+                opacity: 0;
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                max-height: 50vh;
+                overflow-y: auto;
+                display: none;
+            }
+
+            .dd-menu.show {
+                transform: translateY(0);
+                opacity: 1;
+                display: block;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            }
+
+            .dd-item {
+                padding: 14px 20px;
+                font-size: 14px;
+                color: var(--gray-800);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px solid var(--gray-100);
+            }
+
+            .dd-item:last-child {
+                border-bottom: none;
+            }
+
+            .dd-item.on {
+                color: var(--brand-primary);
+                font-weight: 600;
+            }
+
+            .dd-item .chk {
+                display: none;
+            }
+
+            .dd-item.on .chk {
+                display: block;
+            }
+
+            .dd-side-item {
+                padding: 14px 20px;
+                font-size: 14px;
+                color: var(--gray-600);
+                transition: all 0.2s;
+            }
+
+            .dd-side-item.on {
+                background: #fff;
+                color: var(--brand-primary);
+                font-weight: 600;
+            }
+
+            /* 三级联动布局 */
+            .dd-region-container {
+                display: flex;
+                height: 350px;
+                background: #fff;
+            }
+
+            .dd-col-city {
+                width: 100px;
+                background: #f9fafb;
+                border-right: 1px solid var(--gray-100);
+                overflow-y: auto;
+                flex-shrink: 0;
+            }
+
+            .dd-col-dist {
+                flex: 1;
+                background: #fff;
+                overflow-y: auto;
+            }
+
+            .dd-city-item {
+                padding: 14px 16px;
+                font-size: 13px;
+                color: var(--gray-600);
+                border-left: 3px solid transparent;
+            }
+
+            .dd-city-item.on {
+                background: #fff;
+                color: var(--brand-primary);
+                font-weight: 600;
+                border-left-color: var(--brand-primary);
+            }
+
+            .dd-dist-item {
+                padding: 14px 20px;
+                font-size: 14px;
+                color: var(--gray-800);
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px solid var(--gray-100);
+            }
+
+            .dd-dist-item.on {
+                color: var(--gray-800);
+                font-weight: 600;
+            }
+
+            .dd-dist-item .chk {
+                display: none;
+            }
+
+            .dd-dist-item.on .chk {
+                display: block;
+                color: var(--brand-primary);
+            }
+
+            .dd-city-item {
+                position: relative;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .dd-city-dot {
+                width: 6px;
+                height: 6px;
+                background: var(--danger);
+                border-radius: 50%;
+                display: none;
+                margin-left: 4px;
+                flex-shrink: 0;
+            }
+
+            .dd-city-item.has-val .dd-city-dot {
+                display: block;
+            }
+
+            /* 区域筛选底部操作栏 */
+            .dd-region-footer {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px 16px;
+                border-top: 1px solid var(--gray-100);
+                background: #fff;
+            }
+
+            .dd-btn-reset {
+                flex: 1;
+                height: 44px;
+                border-radius: 8px;
+                border: 1px solid var(--gray-200);
+                background: #fff;
+                color: var(--gray-600);
+                font-size: 14px;
+                font-weight: 600;
+            }
+
+            .dd-btn-confirm {
+                flex: 2;
+                height: 44px;
+                border-radius: 8px;
+                background: var(--brand-primary);
+                color: #fff;
+                border: none;
+                font-size: 14px;
+                font-weight: 600;
+            }
+
+            /* 高级筛选 Sheet 底部按钮 */
+            .sheet-footer {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 16px 24px calc(16px + var(--safe-bottom));
+                background: #fff;
+                border-top: 1px solid var(--gray-100);
+                z-index: 10;
+            }
+
+            .sheet-btn {
+                flex: 1;
+                height: 48px;
+                border-radius: 12px;
+                font-size: 16px;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: all 0.2s;
+            }
+
+            .sheet-btn.reset {
+                background: var(--gray-100);
+                color: var(--gray-600);
+            }
+
+            .sheet-btn.confirm {
+                background: var(--brand-primary);
+                color: #fff;
+                box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+            }
+
+            .sheet-btn:active {
+                transform: scale(0.97);
+                opacity: 0.9;
+            }
+
+            .filter-section {
+                margin-bottom: 24px;
+            }
+
+            .filter-section-title {
+                font-size: 15px;
+                font-weight: 700;
+                color: var(--gray-900);
+                margin-bottom: 12px;
+        </style>
+        <div class="filter-wrap" id="filterWrap">
+            <div class="f-row1">
+                <div class="f-dropdown" id="btn-sort" onclick="toggleDDrop('sort')">
+                    <span id="txt-sort">综合排序</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+                <div class="f-ctab sort-tab" onclick="toggleSortDir(this)" style="display: flex; align-items: center;">
+                    分配时间
+                    <svg class="sort-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path class="arr-up" d="M7 9l5-5 5 5"></path>
+                        <path class="arr-down" d="M7 15l5 5 5-5"></path>
+                    </svg>
+                </div>
+                <div class="f-ctab" onclick="toggleCTab(this, '待跟进')">待跟进</div>
+                <div class="f-ctab" onclick="toggleCTab(this, '新触达')">新触达</div>
+                <div class="f-dropdown" id="btn-region" onclick="toggleDDrop('region')">
+                    <span id="txt-region">区域</span><svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </div>
+            </div>
+            <div class="f-row2-wrap">
+                <div class="f-row2">
+                    <div class="f-tag f-dropdown" id="btn-source" onclick="toggleDDrop('source')" style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                        <span id="txt-source">客户来源</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div class="f-tag f-dropdown" id="btn-mkt" onclick="toggleDDrop('mkt')" style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                        <span id="txt-mkt">营销状态</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div class="f-tag f-dropdown" id="btn-biz" onclick="toggleDDrop('biz')" style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                        <span id="txt-biz">业务状态</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div class="f-tag f-dropdown" id="btn-dist" onclick="toggleDDrop('dist')" style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                        <span id="txt-dist">距离</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                    <div class="f-tag f-dropdown" id="btn-contact" onclick="toggleDDrop('contact')" style="display: flex; align-items: center; gap: 4px; cursor: pointer;">
+                        <span id="txt-contact">联系方式</span>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </div>
+                </div>
+                <div class="f-filter-btn" onclick="openAdvFilter()">
+                    筛选<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        style="margin-left:2px;">
+                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- 下拉菜单遮罩 -->
+            <div class="dd-overlay" id="ddOverlay" onclick="closeAllDDrop()"></div>
+
+            <!-- 下拉菜单：综合排序 -->
+            <div class="dd-menu" id="dd-sort">
+                <div class="dd-item on" onclick="selectDDrop('sort', '综合排序（默认）', this)">综合排序（默认） <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+                <div class="dd-item" onclick="selectDDrop('sort', '需求意向最高', this)">需求意向最高 <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+                <div class="dd-item" onclick="selectDDrop('sort', '违约风险最低', this)">违约风险最低 <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+                <div class="dd-item" onclick="selectDDrop('sort', '离我最近', this)">离我最近 <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+            </div>
+
+            <!-- 下拉菜单：营销状态 (两级联动多选) -->
+            <div class="dd-menu" id="dd-mkt">
+                <div class="dd-region-container">
+                    <!-- 左侧一级状态 -->
+                    <div class="dd-col-city" id="mktL1List"></div>
+                    <!-- 右侧二级状态 -->
+                    <div class="dd-col-dist" id="mktL2List"></div>
+                </div>
+                <!-- 底部按钮 -->
+                <div class="dd-region-footer">
+                    <button class="dd-btn-reset" onclick="resetMktFilter()">重置</button>
+                    <button class="dd-btn-confirm" onclick="confirmMktFilter()">确认</button>
+                </div>
+            </div>
+
+            <!-- 下拉菜单：业务状态 -->
+            <div class="dd-menu" id="dd-biz">
+                <div class="dd-item on" onclick="selectDDrop('biz', '不限状态', this)">不限状态 <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+                <div class="dd-item" onclick="selectDDrop('biz', '已申请', this)">已申请 <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+                <div class="dd-item" onclick="selectDDrop('biz', '审批中', this)">审批中 <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+                <div class="dd-item" onclick="selectDDrop('biz', '已授信', this)">已授信 <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+                <div class="dd-item" onclick="selectDDrop('biz', '已放款', this)">已放款 <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+                <div class="dd-item" onclick="selectDDrop('biz', '已结清', this)">已结清 <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+                <div class="dd-item" onclick="selectDDrop('biz', '已拒绝', this)">已拒绝 <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+            </div>
+
+            <!-- 下拉菜单：距离 -->
+            <div class="dd-menu" id="dd-dist">
+                <div class="dd-item on" onclick="selectDDrop('dist', '不限距离', this)">不限距离 <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+                <div class="dd-item" onclick="selectDDrop('dist', '3km内', this)">3km内 <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+                <div class="dd-item" onclick="selectDDrop('dist', '3～5km', this)">3～5km <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+                <div class="dd-item" onclick="selectDDrop('dist', '5～10km', this)">5～10km <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+                <div class="dd-item" onclick="selectDDrop('dist', '10～20km', this)">10～20km <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+                <div class="dd-item" onclick="selectDDrop('dist', '20～50km', this)">20～50km <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+                <div class="dd-item" onclick="selectDDrop('dist', '50km以上', this)">50km以上 <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+            </div>
+
+            <!-- 下拉菜单：联系方式 -->
+            <div class="dd-menu" id="dd-contact">
+                <div class="dd-item on" onclick="selectDDrop('contact', '不限联系方式', this)">不限联系方式 <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+                <div class="dd-item" onclick="selectDDrop('contact', '优化联系方式', this)">优化联系方式 <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+                <div class="dd-item" onclick="selectDDrop('contact', '默认联系方式', this)">默认联系方式 <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+                <div class="dd-item" onclick="selectDDrop('contact', '无联系方式', this)">无联系方式 <svg class="chk" width="16"
+                        height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg></div>
+            </div>
+
+            <!-- 下拉菜单：区域 (三级联动) -->
+            <div class="dd-menu" id="dd-region">
+                <div class="dd-region-container">
+                    <!-- 左侧市 -->
+                    <div class="dd-col-city" id="cityList"></div>
+                    <!-- 右侧区 -->
+                    <div class="dd-col-dist" id="distList"></div>
+                </div>
+                <!-- 底部按钮 -->
+                <div class="dd-region-footer">
+                    <button class="dd-btn-reset" onclick="resetRegionFilter()">重置</button>
+                    <button class="dd-btn-confirm" onclick="confirmRegionFilter()">确认</button>
+                </div>
+            </div>
+
+            <!-- 下拉菜单：客户来源 (两级联动) -->
+            <div class="dd-menu" id="dd-source">
+                <div class="dd-region-container">
+                    <!-- 左侧产品 -->
+                    <div class="dd-col-city" id="productList"></div>
+                    <!-- 右侧批次 -->
+                    <div class="dd-col-dist" id="batchList"></div>
+                </div>
+                <!-- 底部按钮 -->
+                <div class="dd-region-footer">
+                    <button class="dd-btn-reset" onclick="resetSourceFilter()">重置</button>
+                    <button class="dd-btn-confirm" onclick="confirmSourceFilter()">确认</button>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- 列表 -->
+        <div class="card-list" id="listWrap"></div>
+        <div class="empty-state hidden" id="emptyTip">暂无匹配客户</div>
+    </div>
+
+    <!-- 触达路径 Sheet (与详情页一致) -->
+    <div class="sheet-overlay" id="contactOverlay" onclick="closeContactSheet()"></div>
+    <div class="sheet-panel" id="contactPanel">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+            <div class="sheet-title">触达路径</div>
+            <button class="sheet-close" onclick="closeContactSheet()">✕</button>
+        </div>
+        <div class="sheet-body" id="contactSheetBody">
+            <div class="cs-tabs">
+                <div class="cs-tab on" onclick="csTab(this, 0)">本企触达</div>
+                <div class="cs-tab" onclick="csTab(this, 1)">关联企业</div>
+                <div class="cs-tab" onclick="csTab(this, 2)">行内关联</div>
+            </div>
+            <div id="csP0" class="cs-panel on"></div>
+            <div id="csP1" class="cs-panel"></div>
+            <div id="csP2" class="cs-panel"></div>
+        </div>
+    </div>
+
+    <!-- 状态标记 Sheet (与详情页一致) -->
+    <div class="sheet-overlay" id="markOverlay" onclick="closeMarkSheet()"></div>
+    <div class="sheet-panel" id="markPanel" style="max-height:85vh;">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+            <div class="sheet-title">状态更新</div>
+            <button class="sheet-close" onclick="closeMarkSheet()">✕</button>
+        </div>
+        <div class="sheet-body" style="overflow-y:auto; max-height:calc(85vh - 140px);">
+            <div class="st-tabs">
+                <div class="st-tab on" onclick="stTab(this,0)">营销状态</div>
+                <div class="st-tab" onclick="stTab(this,1)">业务状态</div>
+            </div>
+            <div class="st-pane on" id="stP0">
+                <div class="form-group">
+                    <div class="form-label">营销状态</div>
+                    <div class="chip-group" id="fL1Group"></div>
+                    <input type="hidden" id="fL1" value="00">
+                </div>
+                <div class="form-group" id="l2Wrap" style="display:none;">
+                    <div class="form-label">详细情况</div>
+                    <div class="chip-group" id="fL2Group"></div>
+                    <input type="hidden" id="fL2" value="">
+                </div>
+                <div class="form-group">
+                    <div class="form-label">营销跟进备注</div>
+                    <div class="note-wrapper">
+                        <textarea class="form-textarea" id="reachNote" rows="3" placeholder="选填，记录营销跟进情况"></textarea>
+                        <div class="quick-tags" id="quickTags"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="st-pane" id="stP1">
+                <div class="form-group">
+                    <div class="form-label">业务状态</div>
+                    <div class="chip-group" id="fBizGroup">
+                        <div class="chip on" data-val="NONE" onclick="selectBiz('NONE')">未申请</div>
+                        <div class="chip" data-val="APPLIED" onclick="selectBiz('APPLIED')">已申请</div>
+                        <div class="chip" data-val="REVIEWING" onclick="selectBiz('REVIEWING')">审批中</div>
+                        <div class="chip" data-val="APPROVED" onclick="selectBiz('APPROVED')">已授信</div>
+                        <div class="chip" data-val="DISBURSED" onclick="selectBiz('DISBURSED')">已放款</div>
+                        <div class="chip" data-val="SETTLED" onclick="selectBiz('SETTLED')">已结清</div>
+                        <div class="chip" data-val="REJECTED_BIZ" onclick="selectBiz('REJECTED_BIZ')">已拒绝</div>
+                    </div>
+                    <input type="hidden" id="fBiz" value="NONE">
+                </div>
+                <div id="bizDynamic"></div>
+                <div class="form-group">
+                    <div class="form-label">业务备注</div>
+                    <textarea class="form-textarea" id="bizNote" rows="3" placeholder="记录业务关键信息"></textarea>
+                </div>
+            </div>
+            <div class="btn-row" style="padding:16px 0 0;">
+                <button class="btn-fill ghost" onclick="closeMarkSheet()">取消</button>
+                <button class="btn-fill primary" onclick="saveMarkStatus()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 高级筛选 Sheet -->
+    <div class="sheet-overlay" id="advFilterOverlay" onclick="closeAdvFilter()"></div>
+    <div class="sheet-panel" id="advFilterPanel">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+            <div class="sheet-title">高级筛选</div>
+            <div class="sheet-close" onclick="closeAdvFilter()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+            </div>
+        </div>
+        <div class="sheet-body" style="padding:0 24px 80px;">
+            <div class="filter-section" style="margin-top: 16px;">
+                <div class="filter-section-title">企业性质</div>
+                <div class="chip-group">
+                    <div class="chip" onclick="toggleAdvTag(this)">国有企业</div>
+                    <div class="chip" onclick="toggleAdvTag(this)">民营企业</div>
+                    <div class="chip" onclick="toggleAdvTag(this)">外资企业</div>
+                    <div class="chip" onclick="toggleAdvTag(this)">合资企业</div>
+                </div>
+            </div>
+            <div class="filter-section">
+                <div class="filter-section-title">企业荣誉标签</div>
+                <div class="chip-group">
+                    <div class="chip" onclick="toggleAdvTag(this)">专精特新“小巨人”</div>
+                    <div class="chip" onclick="toggleAdvTag(this)">高新技术企业</div>
+                    <div class="chip" onclick="toggleAdvTag(this)">瞪羚企业</div>
+                    <div class="chip" onclick="toggleAdvTag(this)">独角兽企业</div>
+                </div>
+            </div>
+            <div class="filter-section">
+                <div style="margin-bottom: 24px;">
+                    <div class="filter-section-title">资金需求意向</div>
+                    <div class="chip-group">
+                        <div class="chip" onclick="toggleAdvTag(this)">高</div>
+                        <div class="chip" onclick="toggleAdvTag(this)">中</div>
+                        <div class="chip" onclick="toggleAdvTag(this)">低</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="filter-section-title">违约风险</div>
+                    <div class="chip-group">
+                        <div class="chip" onclick="toggleAdvTag(this)">高</div>
+                        <div class="chip" onclick="toggleAdvTag(this)">中</div>
+                        <div class="chip" onclick="toggleAdvTag(this)">低</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="sheet-footer">
+            <button class="sheet-btn reset" onclick="resetAdvFilter()">重置</button>
+            <button class="sheet-btn confirm" onclick="closeAdvFilter()">确认</button>
+        </div>
+    </div>
+
+    <nav class="tab-bar">
+        <div class="tab-bar-inner">
+            <a href="index.html" class="tab-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" />
+                    <polyline points="9 22 9 12 15 12 15 22" />
+                </svg>
+                <span>首页</span>
+            </a>
+            <a href="customers.html" class="tab-item on">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                    <circle cx="9" cy="7" r="4" />
+                    <path d="M23 21v-2a4 4 0 00-3-3.87" />
+                    <path d="M16 3.13a4 4 0 010 7.75" />
+                </svg>
+                <span>名单</span>
+            </a>
+            <a href="follow.html" class="tab-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                </svg>
+                <span>跟进</span>
+            </a>
+        </div>
+    </nav>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // 状态配置
+        const R = {
+            PENDING: { l: '待触达', c: 'var(--brand-primary)', bg: '#eff6ff' },
+            FOLLOWING: { l: '跟进中', c: 'var(--warning)', bg: 'var(--warning-bg)' },
+            REACHED_INTERESTED: { l: '有意向', c: 'var(--success)', bg: 'var(--success-bg)' },
+            REACHED_NO_INTEREST: { l: '无意向', c: 'var(--gray-500)', bg: 'var(--gray-100)' },
+            UNREACHED_EMPTY: { l: '触达失败', c: 'var(--danger)', bg: 'var(--danger-bg)' },
+            UNREACHED_REJECTED: { l: '触达失败', c: 'var(--danger)', bg: 'var(--danger-bg)' },
+            UNREACHED_NO_ANSWER: { l: '触达失败', c: 'var(--danger)', bg: 'var(--danger-bg)' },
+            UNREACHED_OTHER: { l: '触达失败', c: 'var(--danger)', bg: 'var(--danger-bg)' },
+        };
+        const B = {
+            NONE: { l: '', c: '', bg: '' },
+            APPLIED: { l: '已申请', c: 'var(--brand-primary)', bg: '#eff6ff' },
+            REVIEWING: { l: '审批中', c: 'var(--warning)', bg: 'var(--warning-bg)' },
+            APPROVED: { l: '已授信', c: 'var(--success)', bg: 'var(--success-bg)' },
+            DISBURSED: { l: '已放款', c: 'var(--info)', bg: 'var(--info-bg)' },
+            SETTLED: { l: '已结清', c: 'var(--gray-500)', bg: 'var(--gray-100)' },
+            REJECTED_BIZ: { l: '已拒绝', c: 'var(--danger)', bg: 'var(--danger-bg)' },
+        };
+
+        // Mock 数据
+        const data = [
+            { id: 1, name: '苏州智云科技有限公司', addr: '江苏省苏州市工业园区星湖街5号', ds: 92, uscc: '91320594MA1EXAMPLE1', rs: 'PENDING', bs: 'NONE', src: '' },
+            { id: 2, name: '南京创新智造集团有限公司', addr: '江苏省南京市江宁区将军大道100号', ds: 88, uscc: '91320115MA2EXAMPLE2', rs: 'PENDING', bs: 'NONE', src: '' },
+            { id: 3, name: '无锡光电半导体有限公司', addr: '江苏省无锡市新吴区太湖国际科技园', ds: 95, uscc: '91320214MA3EXAMPLE3', rs: 'REACHED_INTERESTED', bs: 'APPLIED', src: '手动' },
+            { id: 4, name: '常州新能源科技股份有限公司', addr: '江苏省常州市武进区高新区南区', ds: 72, uscc: '91320412MA4EXAMPLE4', rs: 'REACHED_NO_INTEREST', bs: 'NONE', src: '手动' },
+            { id: 5, name: '苏州生物医药研究院有限公司', addr: '江苏省苏州市工业园区独墅湖大道88号', ds: 81, uscc: '91320594MA5EXAMPLE5', rs: 'UNREACHED_NO_ANSWER', bs: 'NONE', src: '手动' },
+            { id: 6, name: '南通精密机械制造有限公司', addr: '江苏省南通市崇川区工农路23号', ds: 86, uscc: '91320602MA6EXAMPLE6', rs: 'REACHED_INTERESTED', bs: 'DISBURSED', src: 'API' },
+            { id: 7, name: '苏州纳米智能装备有限公司', addr: '江苏省苏州市高新区科技城锦峰路10号', ds: 78, uscc: '91320594MA7EXAMPLE7', rs: 'PENDING', bs: 'NONE', src: '' },
+            { id: 8, name: '南京云端数据技术有限公司', addr: '江苏省南京市雨花台区软件大道1号', ds: 90, uscc: '91320114MA8EXAMPLE8', rs: 'REACHED_INTERESTED', bs: 'APPROVED', src: 'API' },
+            { id: 9, name: '无锡集成电路设计有限公司', addr: '江苏省无锡市滨湖区建筑路32号', ds: 83, uscc: '91320214MA9EXAMPLEB', rs: 'UNREACHED_REJECTED', bs: 'NONE', src: '手动' },
+            { id: 10, name: '常州智能制造系统有限公司', addr: '江苏省常州市新北区通江南路88号', ds: 76, uscc: '91320402MAAEXAMPLEC', rs: 'REACHED_INTERESTED', bs: 'REVIEWING', src: '手动' },
+        ];
+
+        // 触达路径 Mock Data
+        const CONTACT_PATHS = [
+            { phone: '138****1234', full: '13812341234', role: '财务负责人', tips: '企业财税核心负责人，熟悉资金流向，信贷和结算类产品的关键对接人。', tier: 1 },
+            { phone: '186****8888', full: '18688888888', role: '融资对接人', tips: '曾主导企业融资项目，有明确资金需求，转化意向高。', tier: 2 },
+            { phone: '139****5678', full: '13956785678', role: '资质项目申报人', tips: '高新/专精特新资质申报负责人，多为高管或核心骨干。', tier: 3 },
+            { phone: '135****0000', full: '13500000000', role: '董监高/核心股东', tips: '核心管理层或重要股东，法人失联时的最佳替代路径。', tier: 4 },
+            { phone: '0512-6888****', full: '0512-68881234', role: '工商预留固话', tips: '工商注册预留固话，接通率较低，建议作兜底使用。', tier: 7 },
+        ];
+
+        // 一级状态到展示用映射
+        const L1_DISPLAY = {
+            '00': { l: '待触达', c: 'var(--brand-primary)', bg: '#eff6ff' },
+            '10': { l: '触达失败', c: 'var(--danger)', bg: 'var(--danger-bg)' },
+            '20': { l: '无意向', c: 'var(--gray-500)', bg: 'var(--gray-100)' },
+            '30': { l: '跟进中', c: 'var(--warning)', bg: 'var(--warning-bg)' },
+            '40': { l: '有意向', c: 'var(--success)', bg: 'var(--success-bg)' },
+        };
+
+        let segMode = '', pillVal = '', searchVal = '';
+
+        function getCombinedBadge(rs, bs) {
+            let finalRs = rs;
+            if (bs !== 'NONE' && bs !== 'REJECTED_BIZ' && (rs === 'PENDING' || rs.startsWith('UNREACHED'))) {
+                finalRs = 'REACHED_INTERESTED';
+            }
+
+            const rStyle = R[finalRs] || R.PENDING;
+            const bStyle = B[bs] || B.NONE;
+
+            if (bs === 'DISBURSED') {
+                return `<span class="cc-badge" style="background:var(--info-bg);color:var(--info);">已放款</span>`;
+            }
+            if (bs === 'SETTLED') {
+                return `<span class="cc-badge" style="background:var(--gray-100);color:var(--gray-500);">已结清</span>`;
+            }
+            if (bs === 'REJECTED_BIZ') {
+                return `<span class="cc-badge" style="background:var(--danger-bg);color:var(--danger);">审批拒绝</span>`;
+            }
+
+            let label = rStyle.l;
+            if (bs !== 'NONE' && bStyle.l) {
+                label = `${rStyle.l} · ${bStyle.l}`;
+            }
+            return `<span class="cc-badge" style="background:${rStyle.bg};color:${rStyle.c};">${label}</span>`;
+        }
+
+        function render(list) {
+            const wrap = document.getElementById('listWrap');
+            const empty = document.getElementById('emptyTip');
+            document.getElementById('countLabel').textContent = list.length;
+            if (!list.length) { wrap.innerHTML = ''; empty.classList.remove('hidden'); return; }
+            empty.classList.add('hidden');
+            wrap.innerHTML = list.map(c => {
+                return `
+        <div class="cust-card" onclick="location.href='detail.html?id=${c.id}'">
+            <div style="display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px;">
+                <!-- 图标衬底 -->
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: #f0f7ff; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
+                </div>
+                <!-- 文字信息 -->
+                <div style="flex: 1; min-width: 0;">
+                    <div class="cc-top" style="margin-bottom: 4px;">
+                        <div class="cc-name" style="margin-bottom: 0;">${c.name}</div>
+                        ${getCombinedBadge(c.rs, c.bs)}
+                    </div>
+                    <div class="cc-uscc">${c.uscc}</div>
+                </div>
+            </div>
+            <div class="cc-foot">
+                <div class="cc-addr">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    0.45km | ${c.addr}
+                </div>
+                <div class="cc-actions">
+                    <button class="cc-btn secondary" onclick="event.stopPropagation();openMarkSheet(this)">标记</button>
+                    <button class="cc-btn primary" onclick="event.stopPropagation();openContactSheet(${c.id})">触达</button>
+                </div>
+            </div>
+        </div>`;
+            }).join('') + '<div class="no-more">没有更多了~</div>';
+        }
+
+        // ===== Xianyu Style 筛选交互逻辑 =====
+        let currentDDrop = null;
+        function toggleDDrop(type) {
+            const overlay = document.getElementById('ddOverlay');
+            const menu = document.getElementById('dd-' + type);
+            const btn = document.getElementById('btn-' + type);
+
+            if (currentDDrop === type) {
+                closeAllDDrop();
+                return;
+            }
+            closeAllDDrop();
+
+            currentDDrop = type;
+            overlay.classList.add('show');
+            menu.style.display = 'block';
+            setTimeout(() => {
+                menu.classList.add('show');
+            }, 10);
+            btn.classList.add('on');
+            document.body.classList.add('no-scroll');
+        }
+
+        function closeAllDDrop() {
+            document.getElementById('ddOverlay').classList.remove('show');
+            document.querySelectorAll('.dd-menu').forEach(e => {
+                e.classList.remove('show');
+                setTimeout(() => { if (!e.classList.contains('show')) e.style.display = 'none'; }, 300);
+            });
+            document.querySelectorAll('.f-dropdown').forEach(e => e.classList.remove('on'));
+            currentDDrop = null;
+            document.body.classList.remove('no-scroll');
+        }
+
+        function selectDDrop(type, label, el) {
+            const menu = document.getElementById('dd-' + type);
+            menu.querySelectorAll('.dd-item').forEach(e => e.classList.remove('on'));
+            el.classList.add('on');
+
+            let displayTxt = label;
+            if (label === '综合排序（默认）') displayTxt = '综合排序';
+            if (label === '不限状态' && type === 'biz') displayTxt = '业务状态';
+            if (label === '不限距离' && type === 'dist') displayTxt = '距离';
+            if (label === '不限联系方式' && type === 'contact') displayTxt = '联系方式';
+            document.getElementById('txt-' + type).innerText = displayTxt;
+            
+            const btn = document.getElementById('btn-' + type);
+            if (displayTxt === '综合排序' || displayTxt === '业务状态' || displayTxt === '距离' || displayTxt === '联系方式') {
+                btn.classList.remove('has-val');
+            } else {
+                btn.classList.add('has-val');
+            }
+            closeAllDDrop();
+            doFilter();
+        }
+
+        function resetOtherCTabs(currentEl) {
+            document.querySelectorAll('.f-row1 .f-ctab').forEach(tab => {
+                if (tab !== currentEl) {
+                    tab.classList.remove('on', 'asc', 'desc');
+                }
+            });
+        }
+
+        function toggleSortDir(el) {
+            resetOtherCTabs(el);
+            if (el.classList.contains('desc')) {
+                el.classList.remove('desc');
+                el.classList.add('asc');
+            } else {
+                el.classList.remove('asc');
+                el.classList.add('desc');
+            }
+            el.classList.add('on');
+            doFilter();
+        }
+
+        function toggleCTab(el, label) {
+            resetOtherCTabs(el);
+            el.classList.add('on');
+            doFilter();
+        }
+
+        // ===== 区域三级联动数据与逻辑 (单选版) =====
+        const REGION_DATA = [
+            { city: '区域', dists: ['不限区域'] },
+            { city: '南京市', dists: ['全部', '玄武区', '秦淮区', '建邺区', '鼓楼区', '浦口区', '栖霞区', '雨花台区', '江宁区', '六合区', '溧水区', '高淳区'] },
+            { city: '苏州市', dists: ['全部', '虎丘区', '吴中区', '相城区', '姑苏区', '吴江区', '常熟市', '张家港市', '昆山市', '太仓市'] },
+            { city: '无锡市', dists: ['全部', '锡山区', '惠山区', '滨湖区', '梁溪区', '新吴区', '江阴市', '宜兴市'] },
+            { city: '徐州市', dists: ['全部', '鼓楼区', '云龙区', '贾汪区', '泉山区', '铜山区', '丰县', '沛县', '睢宁县', '新沂市', '邳州市'] },
+            { city: '常州市', dists: ['全部', '天宁区', '钟楼区', '新北区', '武进区', '金坛区', '溧阳市'] },
+            { city: '南通市', dists: ['全部', '崇川区', '通州区', '海门区', '如东县', '启东市', '如皋市', '海安市'] },
+            { city: '连云港市', dists: ['全部', '连云区', '海州区', '赣榆区', '东海县', '灌云县', '灌南县'] },
+            { city: '淮安市', dists: ['全部', '清江浦区', '淮安区', '淮阴区', '洪泽区', '涟水县', '洪泽县', '盱眙县', '金湖县'] },
+            { city: '盐城市', dists: ['全部', '亭湖区', '盐都区', '大丰区', '响水县', '滨海县', '阜宁县', '射阳县', '建湖县', '东台市'] },
+            { city: '扬州市', dists: ['全部', '广陵区', '邗江区', '江都区', '宝应县', '仪征市', '高邮市'] },
+            { city: '镇江市', dists: ['全部', '京口区', '润州区', '丹徒区', '丹阳市', '扬中市', '句容市'] },
+            { city: '泰州市', dists: ['全部', '海陵区', '高港区', '姜堰区', '兴化市', '靖江市', '泰兴市'] },
+            { city: '宿迁市', dists: ['全部', '宿城区', '宿豫区', '沭阳县', '泗阳县', '泗洪县'] }
+        ];
+
+        let viewingCityIdx = 0;      // 当前正在看的市
+        let selectedRegions = [{ city: '区域', dist: '不限区域' }]; // 已确认选择的集合
+        let tempRegions = [{ city: '区域', dist: '不限区域' }];     // 临时选择的集合
+
+        function initRegionFilter() {
+            renderCities();
+            renderDistricts(viewingCityIdx);
+        }
+
+        function renderCities() {
+            const cityList = document.getElementById('cityList');
+            if (!cityList) return;
+            cityList.innerHTML = REGION_DATA.map((item, idx) => {
+                // 检查该市下是否有选中的区。注意：“区域”选项不带红点
+                const hasSelected = item.city !== '区域' && tempRegions.some(r => r.city === item.city);
+                return `
+            <div class="dd-city-item ${idx === viewingCityIdx ? 'on' : ''} ${hasSelected ? 'has-val' : ''}" onclick="changeViewingCity(${idx})">
+                <span>${item.city}</span>
+                <div class="dd-city-dot"></div>
+            </div>
+        `;
+            }).join('');
+        }
+
+        function changeViewingCity(idx) {
+            viewingCityIdx = idx;
+            renderCities();
+            renderDistricts(idx);
+        }
+
+        function renderDistricts(cityIdx) {
+            const distList = document.getElementById('distList');
+            if (!distList) return;
+            const dists = REGION_DATA[cityIdx].dists;
+            const currentCityName = REGION_DATA[cityIdx].city;
+
+            distList.innerHTML = dists.map(dist => {
+                let isSelected = false;
+                if (dist === '全部') {
+                    const allD = dists.filter(d => d !== '全部');
+                    isSelected = allD.length > 0 && allD.every(d => tempRegions.some(r => r.city === currentCityName && r.dist === d));
+                } else {
+                    isSelected = tempRegions.some(r => r.city === currentCityName && r.dist === dist);
+                }
+                return `
+            <div class="dd-dist-item ${isSelected ? 'on' : ''}" onclick="tempSelectRegion('${currentCityName}', '${dist}')">
+                ${dist}
+                <svg class="chk" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+        `;
+            }).join('');
+        }
+
+        function tempSelectRegion(city, dist) {
+            if (city === '区域' && dist === '不限区域') {
+                tempRegions = [{ city: '区域', dist: '不限区域' }];
+            } else {
+                // 如果之前选的是全省，切换到具体城市时清空
+                tempRegions = tempRegions.filter(r => !(r.city === '区域' && r.dist === '不限区域'));
+
+                const allDists = REGION_DATA.find(i => i.city === city).dists.filter(d => d !== '全部');
+
+                if (dist === '全部') {
+                    const isAllSelected = allDists.every(d => tempRegions.some(r => r.city === city && r.dist === d));
+                    if (isAllSelected) {
+                        tempRegions = tempRegions.filter(r => r.city !== city);
+                    } else {
+                        tempRegions = tempRegions.filter(r => r.city !== city);
+                        allDists.forEach(d => tempRegions.push({ city, dist: d }));
+                    }
+                } else {
+                    const idx = tempRegions.findIndex(r => r.city === city && r.dist === dist);
+                    if (idx > -1) {
+                        tempRegions.splice(idx, 1);
+                    } else {
+                        tempRegions.push({ city, dist });
+                    }
+                }
+
+                if (tempRegions.length === 0) {
+                    tempRegions = [{ city: '区域', dist: '不限区域' }];
+                }
+            }
+            renderCities();
+            renderDistricts(viewingCityIdx);
+        }
+
+        function resetRegionFilter() {
+            tempRegions = [{ city: '区域', dist: '不限区域' }];
+            selectedRegions = [{ city: '区域', dist: '不限区域' }];
+            document.getElementById('txt-region').innerText = '区域';
+            viewingCityIdx = 0;
+            renderCities();
+            renderDistricts(viewingCityIdx);
+            closeAllDDrop();
+            doFilter();
+        }
+
+        function confirmRegionFilter() {
+            if (tempRegions.length === 0) {
+                showToast('请选择区域');
+                return;
+            }
+            selectedRegions = [...tempRegions];
+
+            // 更新导航栏文案
+            let displayTxt = '';
+            if (selectedRegions.length === 1) {
+                const r = selectedRegions[0];
+                displayTxt = (r.city === '区域' && r.dist === '不限区域') ? '区域' : (r.dist === '全部' ? r.city : r.dist);
+            } else {
+                displayTxt = `已选区域(${selectedRegions.length})`;
+            }
+            document.getElementById('txt-region').innerText = displayTxt;
+
+            closeAllDDrop();
+            doFilter();
+        }
+
+        // ===== 客户来源三级联动数据与逻辑 =====
+        const SOURCE_DATA = [
+            { product: '不限产品', batches: ['不限批次'] },
+            { product: '平安银行橙业贷', batches: ['全部', '橙业贷20160508', '橙业贷20160509', '橙业贷20160510'] },
+            { product: '平安银行厂房贷', batches: ['全部', '厂房贷20160501', '厂房贷20160502'] },
+            { product: '平安银行税务贷', batches: ['全部', '税务贷20160501', '税务贷20160502'] }
+        ];
+
+        let viewingProductIdx = 0;
+        let selectedSources = [{ product: '不限产品', batch: '不限批次' }];
+        let tempSources = [{ product: '不限产品', batch: '不限批次' }];
+
+        function initSourceFilter() {
+            renderProducts();
+            renderBatches(viewingProductIdx);
+        }
+
+        function renderProducts() {
+            const productList = document.getElementById('productList');
+            if (!productList) return;
+            productList.innerHTML = SOURCE_DATA.map((item, idx) => {
+                const hasSelected = item.product !== '不限产品' && tempSources.some(s => s.product === item.product);
+                return `
+            <div class="dd-city-item ${idx === viewingProductIdx ? 'on' : ''} ${hasSelected ? 'has-val' : ''}" onclick="changeViewingProduct(${idx})">
+                <span>${item.product}</span>
+                <div class="dd-city-dot"></div>
+            </div>
+        `;
+            }).join('');
+        }
+
+        function changeViewingProduct(idx) {
+            viewingProductIdx = idx;
+            renderProducts();
+            renderBatches(idx);
+        }
+
+        function renderBatches(productIdx) {
+            const batchList = document.getElementById('batchList');
+            if (!batchList) return;
+            const batches = SOURCE_DATA[productIdx].batches;
+            const currentProductName = SOURCE_DATA[productIdx].product;
+
+            batchList.innerHTML = batches.map(batch => {
+                let isSelected = false;
+                if (batch === '全部') {
+                    const allB = batches.filter(b => b !== '全部');
+                    isSelected = allB.length > 0 && allB.every(b => tempSources.some(s => s.product === currentProductName && s.batch === b));
+                } else {
+                    isSelected = tempSources.some(s => s.product === currentProductName && s.batch === batch);
+                }
+                return `
+            <div class="dd-dist-item ${isSelected ? 'on' : ''}" onclick="tempSelectSource('${currentProductName}', '${batch}')">
+                ${batch}
+                <svg class="chk" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+        `;
+            }).join('');
+        }
+
+        function tempSelectSource(product, batch) {
+            if (product === '不限产品' && batch === '不限批次') {
+                tempSources = [{ product: '不限产品', batch: '不限批次' }];
+            } else {
+                tempSources = tempSources.filter(s => !(s.product === '不限产品' && s.batch === '不限批次'));
+
+                const allBatches = SOURCE_DATA.find(p => p.product === product).batches.filter(b => b !== '全部');
+
+                if (batch === '全部') {
+                    const isAllSelected = allBatches.every(b => tempSources.some(s => s.product === product && s.batch === b));
+                    
+                    if (isAllSelected) {
+                        tempSources = tempSources.filter(s => s.product !== product);
+                    } else {
+                        tempSources = tempSources.filter(s => s.product !== product);
+                        allBatches.forEach(b => tempSources.push({ product, batch: b }));
+                    }
+                } else {
+                    const idx = tempSources.findIndex(s => s.product === product && s.batch === batch);
+                    if (idx > -1) {
+                        tempSources.splice(idx, 1);
+                    } else {
+                        tempSources.push({ product, batch });
+                    }
+                }
+
+                if (tempSources.length === 0) {
+                    tempSources = [{ product: '不限产品', batch: '不限批次' }];
+                }
+            }
+            renderProducts();
+            renderBatches(viewingProductIdx);
+        }
+
+        function resetSourceFilter() {
+            tempSources = [{ product: '不限产品', batch: '不限批次' }];
+            selectedSources = [{ product: '不限产品', batch: '不限批次' }];
+            document.getElementById('txt-source').innerText = '客户来源';
+            document.getElementById('btn-source').classList.remove('has-val');
+            viewingProductIdx = 0;
+            renderProducts();
+            renderBatches(viewingProductIdx);
+            closeAllDDrop();
+            doFilter();
+        }
+
+        function confirmSourceFilter() {
+            if (tempSources.length === 0) {
+                showToast('请选择客户来源');
+                return;
+            }
+            selectedSources = [...tempSources];
+
+            let displayTxt = '';
+            if (selectedSources.length === 1) {
+                const s = selectedSources[0];
+                if (s.product === '不限产品') {
+                    displayTxt = '客户来源';
+                    document.getElementById('btn-source').classList.remove('has-val');
+                } else {
+                    displayTxt = s.batch === '全部' ? s.product : s.batch;
+                    document.getElementById('btn-source').classList.add('has-val');
+                }
+            } else {
+                displayTxt = `已选来源(${selectedSources.length})`;
+                document.getElementById('btn-source').classList.add('has-val');
+            }
+            document.getElementById('txt-source').innerText = displayTxt;
+            closeAllDDrop();
+            doFilter();
+        }
+
+        // ===== 营销状态两级联动数据与逻辑 =====
+        const MKT_STATUS_DATA = [
+            { l1: '不限状态', l2s: ['不限状态'] },
+            { l1: '待触达', l2s: ['待触达'] },
+            { l1: '触达失败', l2s: ['全部', '号码无效', '无人接听/未接通', '拒绝沟通/秒挂', '触达受阻/找错人'] },
+            { l1: '无意向', l2s: ['全部', '暂无资金需求', '他行已营销', '条件不匹配'] },
+            { l1: '跟进中', l2s: ['全部', '意向沟通中', '待后续联系', '待线下拜访'] },
+            { l1: '有意向', l2s: ['明确有意向'] }
+        ];
+
+        let viewingMktL1Idx = 0;
+        let selectedMkts = [{ l1: '不限状态', l2: '不限状态' }];
+        let tempMkts = [{ l1: '不限状态', l2: '不限状态' }];
+
+        function initMktFilter() {
+            renderMktL1();
+            renderMktL2(viewingMktL1Idx);
+        }
+
+        function renderMktL1() {
+            const list = document.getElementById('mktL1List');
+            if (!list) return;
+            list.innerHTML = MKT_STATUS_DATA.map((item, idx) => {
+                const hasSelected = item.l1 !== '不限状态' && tempMkts.some(s => s.l1 === item.l1);
+                return `
+            <div class="dd-city-item ${idx === viewingMktL1Idx ? 'on' : ''} ${hasSelected ? 'has-val' : ''}" onclick="changeViewingMktL1(${idx})">
+                <span>${item.l1}</span>
+                <div class="dd-city-dot"></div>
+            </div>
+            `;
+            }).join('');
+        }
+
+        function changeViewingMktL1(idx) {
+            viewingMktL1Idx = idx;
+            renderMktL1();
+            renderMktL2(idx);
+        }
+
+        function renderMktL2(l1Idx) {
+            const list = document.getElementById('mktL2List');
+            if (!list) return;
+            const l2s = MKT_STATUS_DATA[l1Idx].l2s;
+            const currentL1 = MKT_STATUS_DATA[l1Idx].l1;
+
+            list.innerHTML = l2s.map(l2 => {
+                let isSelected = false;
+                if (l2 === '全部') {
+                    const allL2 = l2s.filter(b => b !== '全部');
+                    isSelected = allL2.length > 0 && allL2.every(b => tempMkts.some(s => s.l1 === currentL1 && s.l2 === b));
+                } else {
+                    isSelected = tempMkts.some(s => s.l1 === currentL1 && s.l2 === l2);
+                }
+                return `
+            <div class="dd-dist-item ${isSelected ? 'on' : ''}" onclick="tempSelectMkt('${currentL1}', '${l2}')">
+                ${l2}
+                <svg class="chk" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            `;
+            }).join('');
+        }
+
+        function tempSelectMkt(l1, l2) {
+            if (l1 === '不限状态' && l2 === '不限状态') {
+                tempMkts = [{ l1: '不限状态', l2: '不限状态' }];
+            } else {
+                tempMkts = tempMkts.filter(s => !(s.l1 === '不限状态' && s.l2 === '不限状态'));
+
+                const allL2s = MKT_STATUS_DATA.find(p => p.l1 === l1).l2s.filter(b => b !== '全部');
+
+                if (l2 === '全部') {
+                    const isAllSelected = allL2s.every(b => tempMkts.some(s => s.l1 === l1 && s.l2 === b));
+                    if (isAllSelected) {
+                        tempMkts = tempMkts.filter(s => s.l1 !== l1);
+                    } else {
+                        tempMkts = tempMkts.filter(s => s.l1 !== l1);
+                        allL2s.forEach(b => tempMkts.push({ l1, l2: b }));
+                    }
+                } else {
+                    const idx = tempMkts.findIndex(s => s.l1 === l1 && s.l2 === l2);
+                    if (idx > -1) {
+                        tempMkts.splice(idx, 1);
+                    } else {
+                        tempMkts.push({ l1, l2 });
+                    }
+                }
+
+                if (tempMkts.length === 0) {
+                    tempMkts = [{ l1: '不限状态', l2: '不限状态' }];
+                }
+            }
+            renderMktL1();
+            renderMktL2(viewingMktL1Idx);
+        }
+
+        function resetMktFilter() {
+            tempMkts = [{ l1: '不限状态', l2: '不限状态' }];
+            selectedMkts = [{ l1: '不限状态', l2: '不限状态' }];
+            document.getElementById('txt-mkt').innerText = '营销状态';
+            document.getElementById('btn-mkt').classList.remove('has-val');
+            viewingMktL1Idx = 0;
+            renderMktL1();
+            renderMktL2(viewingMktL1Idx);
+            closeAllDDrop();
+            doFilter();
+        }
+
+        function confirmMktFilter() {
+            if (tempMkts.length === 0) {
+                showToast('请选择营销状态');
+                return;
+            }
+            selectedMkts = [...tempMkts];
+
+            let displayTxt = '';
+            if (selectedMkts.length === 1) {
+                const s = selectedMkts[0];
+                if (s.l1 === '不限状态') {
+                    displayTxt = '营销状态';
+                    document.getElementById('btn-mkt').classList.remove('has-val');
+                } else {
+                    displayTxt = s.l2 === s.l1 ? s.l1 : s.l2;
+                    document.getElementById('btn-mkt').classList.add('has-val');
+                }
+            } else {
+                displayTxt = '营销状态(' + selectedMkts.length + ')';
+                document.getElementById('btn-mkt').classList.add('has-val');
+            }
+            document.getElementById('txt-mkt').innerText = displayTxt;
+            closeAllDDrop();
+            doFilter();
+        }
+
+        function toggleAdvTag(el) {
+            el.classList.toggle('on');
+            doFilter();
+        }
+
+        function openAdvFilter() {
+            document.getElementById('advFilterOverlay').classList.add('on');
+            document.getElementById('advFilterPanel').classList.add('on');
+            document.body.classList.add('no-scroll');
+        }
+
+        function closeAdvFilter() {
+            document.getElementById('advFilterOverlay').classList.remove('on');
+            document.getElementById('advFilterPanel').classList.remove('on');
+            document.body.classList.remove('no-scroll');
+        }
+
+        function resetAdvFilter() {
+            document.querySelectorAll('#advFilterPanel .chip').forEach(el => el.classList.remove('on'));
+        }
+
+        function doFilter() {
+            const input = document.getElementById('searchInput');
+            searchVal = input ? input.value.toLowerCase() : '';
+            
+            // Check if there is a pending filter from URL
+            const params = new URLSearchParams(window.location.search);
+            const isPendingFilter = params.get('filter') === 'pending';
+
+            let list = data.filter(c => {
+                if (searchVal && !c.name.toLowerCase().includes(searchVal)) return false;
+                if (isPendingFilter && c.rs !== 'PENDING') return false;
+                return true;
+            });
+            render(list);
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        function openContactSheet(id) {
+            document.getElementById('contactOverlay').classList.add('on');
+            document.getElementById('contactPanel').classList.add('on');
+            renderAllContactPaths();
+        }
+
+        function csTab(el, index) {
+            const tabs = el.parentElement.querySelectorAll('.cs-tab');
+            const panels = el.parentElement.parentElement.querySelectorAll('.cs-panel');
+            tabs.forEach(t => t.classList.remove('on'));
+            panels.forEach(p => p.classList.remove('on'));
+            el.classList.add('on');
+            panels[index].classList.add('on');
+        }
+
+        function renderAllContactPaths() {
+            let p0 = `<div class="cs-hint">以下角色及排序由系统基于多源大数据综合预测，仅供参考</div>` + CONTACT_PATHS.map((p, i) => {
+                const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+                return `<div class="cp-card">
+                    <div class="cp-top">
+                        <span class="cp-phone">${p.phone} <span style="cursor:pointer;opacity:0.5;font-size:13px;" onclick="this.previousElementSibling||void 0">${medal}</span></span>
+                        <span class="cp-role" style="background:rgba(37, 99, 235, 0.08);color:var(--brand-primary);"><span style="opacity:0.5;">预测</span> ${p.role}</span>
+                    </div>
+                    <div class="cp-tips" style="display:flex;align-items:flex-start;gap:6px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;color:var(--brand-primary);opacity:0.7;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                        ${p.tips}
+                    </div>
+                    <div class="cp-actions-main">
+                        <button class="cp-btn-fb" onclick="toggleFb(this)">联系不上？反馈一下 ▾</button>
+                        <button class="cp-btn-call" onclick="showToast('拨号中...')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>拨打</button>
+                    </div>
+                    <div class="cp-actions-expand hidden">
+                        <button class="cp-action-btn positive" onclick="markFeedback(this, '拨通有效')">拨通有效</button>
+                        <button class="cp-action-btn negative" onclick="markFeedback(this, '空号')">空号</button>
+                        <button class="cp-action-btn negative" onclick="markFeedback(this, '非本人')">非本人</button>
+                        <button class="cp-action-btn negative" onclick="markFeedback(this, '拒绝')">拒绝</button>
+                    </div>
+                </div>`;
+            }).join('');
+
+            // 2. 关联企业 (无拨打按钮，新增假数据)
+            let p1 = `<div class="cp-card">
+                    <div style="margin-bottom:12px;">
+                        <div style="font-size:15px;font-weight:700;color:var(--gray-900);">无锡市智云科技有限公司</div>
+                        <span style="font-size:11px;padding:4px 8px;border-radius:6px;background:rgba(139,92,246,0.1);color:var(--info);margin-top:6px;display:inline-block;font-weight:600;">控股股东 (持股65%)</span>
+                    </div>
+                    <div style="border-top:1px dashed var(--gray-200);padding-top:12px;margin-top:12px;">
+                        <div class="cp-top" style="margin-bottom:0;">
+                            <span class="cp-phone">139****8888</span>
+                            <span style="font-size:13px;color:var(--gray-500);font-weight:500;">联系方式</span>
+                        </div>
+                    </div>
+                </div>`;
+                
+            p1 += `<div class="cp-card">
+                    <div style="margin-bottom:12px;">
+                        <div style="font-size:15px;font-weight:700;color:var(--gray-900);">苏州蓝天商贸有限公司</div>
+                        <span style="font-size:11px;padding:4px 8px;border-radius:6px;background:rgba(245,158,11,0.1);color:var(--warning);margin-top:6px;display:inline-block;font-weight:600;">法定代表人其他企业</span>
+                    </div>
+                    <div style="border-top:1px dashed var(--gray-200);padding-top:12px;margin-top:12px;">
+                        <div class="cp-top" style="margin-bottom:0;">
+                            <span class="cp-phone">137****1111</span>
+                            <span style="font-size:13px;color:var(--gray-500);font-weight:500;">联系方式</span>
+                        </div>
+                    </div>
+                </div>`;
+
+            // 3. 行内关联 (绝美旧版样式还原)
+            let p2 = `<div style="padding:16px;background:linear-gradient(135deg,rgba(37,99,235,0.06),rgba(139,92,246,0.06));border:1px solid rgba(37,99,235,0.15);border-radius:12px;">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+                        <span style="width:40px;height:40px;background:var(--brand-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:600;box-shadow:0 4px 10px rgba(37,99,235,0.2);">关</span>
+                        <div>
+                            <div style="font-size:16px;font-weight:700;color:var(--gray-900);">苏州创芯微电子有限公司</div>
+                            <div style="font-size:12px;color:var(--gray-500);margin-top:4px;">行内授信 · 贷款余额800万 · 经理：王强</div>
+                        </div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.6);border-radius:8px;padding:12px;font-size:13px;color:var(--gray-700);line-height:1.6;border:1px solid rgba(255,255,255,0.8);">
+                        <div style="margin-bottom:6px;"><b>关联关系：</b>该企业法人 <span style="color:var(--brand-primary);font-weight:600;">张明</span> 同时担任行内存量客户的股东（持股32%）</div>
+                        <div><b>触达建议：</b>可通过存量客户经理王强引荐，或以关联企业授信为切入点沟通</div>
+                    </div>
+                </div>`;
+
+            document.getElementById('csP0').innerHTML = p0;
+            document.getElementById('csP1').innerHTML = p1;
+            document.getElementById('csP2').innerHTML = p2;
+        }
+
+        function closeContactSheet() {
+            document.getElementById('contactOverlay').classList.remove('on');
+            document.getElementById('contactPanel').classList.remove('on');
+        }
+
+
+        function toggleFb(btn) {
+            const expand = btn.parentElement.nextElementSibling;
+            if (expand.classList.contains('hidden')) {
+                expand.classList.remove('hidden');
+                btn.innerHTML = '收起反馈 ▴';
+            } else {
+                expand.classList.add('hidden');
+                btn.innerHTML = '联系不上？反馈一下 ▾';
+            }
+        }
+
+        function markFeedback(btn, type) {
+            const expand = btn.parentElement;
+            const fbBtn = expand.previousElementSibling.querySelector('.cp-btn-fb');
+            fbBtn.innerHTML = `✓ 已标记 (${type})`;
+            if (type === '拨通有效') {
+                fbBtn.style.color = 'var(--success)';
+                fbBtn.style.background = 'var(--success-bg)';
+            } else {
+                fbBtn.style.color = 'var(--danger)';
+                fbBtn.style.background = 'var(--danger-bg)';
+            }
+            expand.classList.add('hidden');
+            showToast('已标记：' + type);
+        }
+
+        // ===== 状态标记弹窗逻辑 (与详情页一致) =====
+        const MKT = [
+            { code:'00', label:'待触达', subs:[{code:'01',label:'待触达', tags:[]}] },
+            { code:'10', label:'触达失败', subs:[
+                {code:'11',label:'号码无效 (空/错/停机)', tags:['号码有误','空号','停机']},
+                {code:'12',label:'无人接听/未接通', tags:['未接通','无人接听','多次拨打无人接听']},
+                {code:'13',label:'拒绝沟通/秒挂', tags:['挂断','拒接','接听后挂断']},
+                {code:'14',label:'触达受阻/找错人', tags:['分机号','总机','前台']}
+            ]},
+            { code:'20', label:'无意向', subs:[
+                {code:'21',label:'暂无资金需求', tags:['不需要贷款','无意向','暂时不需要']},
+                {code:'22',label:'他行已营销', tags:['已有他行授信','有授信额度']},
+                {code:'23',label:'条件不匹配', tags:['利息高','额度低','期限不合适']}
+            ]},
+            { code:'30', label:'跟进中', subs:[
+                {code:'31',label:'意向沟通中', tags:['还需再了解下','处于摇摆期']},
+                {code:'32',label:'待后续联系', tags:['有询问老板，后期再跟','现在忙稍后打','已留电话/加微信']},
+                {code:'33',label:'待线下拜访', tags:['约见上门','待面谈']}
+            ]},
+            { code:'40', label:'有意向', subs:[
+                {code:'41',label:'明确有意向', tags:['客户已口头同意','有意向待推进转化']}
+            ]}
+        ];
+
+        let currentMarkBtn = null;
+        function openMarkSheet(btn) {
+            currentMarkBtn = btn;
+            document.getElementById('markOverlay').classList.add('on');
+            document.getElementById('markPanel').classList.add('on');
+            stTab(document.querySelector('#markPanel .st-tab'), 0);
+            renderL1('00');
+        }
+        function closeMarkSheet() {
+            document.getElementById('markOverlay').classList.remove('on');
+            document.getElementById('markPanel').classList.remove('on');
+        }
+
+        function stTab(el, idx) {
+            document.querySelectorAll('#markPanel .st-tab').forEach(e => e.classList.remove('on'));
+            document.querySelectorAll('#markPanel .st-pane').forEach(e => e.classList.remove('on'));
+            el.classList.add('on');
+            document.getElementById('stP'+idx).classList.add('on');
+        }
+
+        function renderL1(selected) {
+            const g = document.getElementById('fL1Group');
+            g.innerHTML = MKT.map(m =>
+                `<div class="chip${m.code===selected?' on':''}" data-val="${m.code}" onclick="selectL1('${m.code}')">${m.label}</div>`
+            ).join('');
+            document.getElementById('fL1').value = selected;
+            selectL1(selected, true);
+        }
+        function selectL1(code, skipHL) {
+            document.getElementById('fL1').value = code;
+            if (!skipHL) document.querySelectorAll('#fL1Group .chip').forEach(el => el.classList.toggle('on', el.dataset.val === code));
+            const mkt = MKT.find(m => m.code === code);
+            const l2w = document.getElementById('l2Wrap'), l2g = document.getElementById('fL2Group');
+            if (mkt && mkt.subs.length > 1) {
+                l2w.style.display = 'block';
+                l2g.innerHTML = mkt.subs.map((s,i) => `<div class="chip${i===0?' on':''}" data-val="${s.code}" onclick="selectL2('${code}','${s.code}')">${s.label}</div>`).join('');
+                selectL2(code, mkt.subs[0].code);
+            } else if (mkt && mkt.subs.length === 1) {
+                l2w.style.display = 'none';
+                selectL2(code, mkt.subs[0].code);
+            } else {
+                l2w.style.display = 'none';
+                document.getElementById('quickTags').innerHTML = '';
+            }
+        }
+        function selectL2(l1code, code) {
+            document.getElementById('fL2').value = code;
+            document.querySelectorAll('#fL2Group .chip').forEach(el => el.classList.toggle('on', el.dataset.val === code));
+            const mkt = MKT.find(m => m.code === l1code);
+            const sub = mkt ? mkt.subs.find(s => s.code === code) : null;
+            const qt = document.getElementById('quickTags');
+            if (sub && sub.tags && sub.tags.length) {
+                qt.innerHTML = sub.tags.map(t => `<div class="quick-tag" onclick="appendTag(this,'${t}')">${t}</div>`).join('');
+            } else {
+                qt.innerHTML = '';
+            }
+        }
+        function appendTag(el, text) {
+            const ta = document.getElementById('reachNote');
+            ta.value = ta.value ? ta.value + '；' + text : text;
+            el.style.background = 'rgba(37,99,235,0.08)'; el.style.color = 'var(--brand-primary)'; el.style.borderColor = 'rgba(37,99,235,0.2)';
+        }
+
+        function selectBiz(val) {
+            document.getElementById('fBiz').value = val;
+            document.querySelectorAll('#fBizGroup .chip').forEach(el => el.classList.toggle('on', el.dataset.val === val));
+            renderBizDynamic(val);
+        }
+        function renderBizDynamic(val) {
+            const box = document.getElementById('bizDynamic');
+            if (val === 'APPLIED') {
+                box.innerHTML = `<div class="dyn-box"><div class="dyn-row"><div class="dyn-field"><label>申请日期 (选填)</label><input type="date" id="applyDate"></div></div></div>`;
+            } else if (val === 'APPROVED') {
+                box.innerHTML = `<div class="dyn-box"><div class="dyn-row"><div class="dyn-field"><label>授信金额 (万元)</label><input type="number" id="creditAmt" placeholder="选填"></div><div class="dyn-field"><label>授信日期 (选填)</label><input type="date" id="creditDate"></div></div></div>`;
+            } else if (val === 'DISBURSED') {
+                box.innerHTML = `<div class="dyn-box"><div class="dyn-row"><div class="dyn-field"><label>放款金额 (万元)</label><input type="number" id="loanAmt" placeholder="请输入"></div><div class="dyn-field"><label>放款日期</label><input type="date" id="loanDate"></div></div></div>`;
+            } else if (val === 'SETTLED') {
+                box.innerHTML = `<div class="dyn-box"><div class="dyn-row"><div class="dyn-field"><label>结清日期 (选填)</label><input type="date" id="settleDate"></div></div></div>`;
+            } else { box.innerHTML = ''; }
+        }
+
+        function saveMarkStatus() {
+            if (currentMarkBtn) {
+                currentMarkBtn.textContent = '✓ 已标记';
+                currentMarkBtn.style.color = 'var(--danger)';
+                currentMarkBtn.style.background = 'var(--danger-bg)';
+            }
+            showToast('✓ 状态已更新');
+            closeMarkSheet();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initRegionFilter();
+            initSourceFilter();
+            initMktFilter();
+            
+            const params = new URLSearchParams(window.location.search);
+            if (params.get('filter') === 'pending') {
+                // Update UI visually
+                document.getElementById('txt-mkt').innerText = '待触达';
+                document.getElementById('btn-mkt').classList.add('has-val');
+                // Execute filter
+                doFilter();
+            } else {
+                render(data);
+            }
+        });
+    </script>
+</body>
+
+</html>

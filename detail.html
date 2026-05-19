@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>客户详情 - 智能营销</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body { background: #f9fafb; }
+        .page { padding-bottom: calc(100px + var(--safe-bottom)); }
+        
+        .header { background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; padding-bottom: 8px; }
+        .header-bg {
+            position: absolute; top: 0; left: 0; right: 0; height: 180px;
+            background: linear-gradient(180deg, rgba(37, 99, 235, 0.08) 0%, rgba(255,255,255,0) 100%);
+            z-index: -1;
+        }
+
+        .hero-card {
+            background: #fff;
+            border-radius: 20px;
+            padding: 24px 20px;
+            margin: 0 20px 24px;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .ai-insight {
+            margin: 0 20px 24px;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            border-radius: 16px;
+            padding: 16px;
+            border: 1px solid #bae6fd;
+        }
+
+        .detail-tabs {
+            display: flex; gap: 24px; margin: 0 20px 16px; overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-width: none; border-bottom: 1px solid var(--gray-200);
+            padding: 0 4px;
+        }
+        .detail-tabs::-webkit-scrollbar { display: none; }
+        .d-tab {
+            padding: 12px 0; font-size: 15px; font-weight: 500;
+            white-space: nowrap; color: var(--gray-500); background: transparent;
+            transition: all 0.2s; cursor: pointer; position: relative;
+        }
+        .d-tab.active {
+            color: var(--brand-primary); font-weight: 700;
+        }
+        .d-tab.active::after {
+            content: ''; position: absolute; bottom: -1px; left: 10%; right: 10%;
+            height: 3px; background: var(--brand-primary); border-radius: 3px 3px 0 0;
+        }
+
+        .tab-pane { display: none; padding: 0 20px; }
+        .tab-pane.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        .info-card {
+            background: #fff; border-radius: 16px; padding: 16px;
+            box-shadow: var(--shadow-sm); border: 1px solid var(--border);
+            margin-bottom: 16px;
+        }
+        .info-row {
+            display: flex; justify-content: space-between; padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100); font-size: 14px;
+        }
+        .info-row:last-child { border-bottom: none; padding-bottom: 0; }
+        .info-row:first-child { padding-top: 0; }
+        .info-label { color: var(--gray-500); flex-shrink: 0; width: 90px; }
+        .info-value { color: var(--gray-900); font-weight: 500; text-align: right; word-break: break-all; }
+
+        .history-item {
+            position: relative; padding-left: 20px; padding-bottom: 20px;
+            border-left: 2px solid var(--gray-200); margin-left: 10px;
+        }
+        .history-item:last-child { border-left-color: transparent; padding-bottom: 0; }
+        .history-dot {
+            position: absolute; left: -6px; top: 0; width: 10px; height: 10px;
+            border-radius: 50%; background: var(--gray-300); border: 2px solid #fff;
+        }
+        .history-item.primary .history-dot { background: var(--brand-primary); }
+        .history-date { font-size: 12px; color: var(--gray-400); margin-bottom: 4px; font-weight: 500; }
+        .history-content { background: var(--gray-50); padding: 12px; border-radius: 12px; font-size: 13px; color: var(--gray-700); }
+        .history-user { font-size: 12px; color: var(--brand-primary); font-weight: 600; margin-bottom: 4px; display:flex; align-items:center; gap:4px; }
+
+        .fixed-bottom {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            padding: 12px 20px calc(12px + var(--safe-bottom));
+            display: flex; gap: 12px;
+            border-top: 1px solid var(--border);
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <!-- Blue Header Background & Content -->
+        <div class="blue-header" style="background: var(--brand-primary); color: #fff; padding: 20px 20px 60px 20px; padding-top: max(20px, env(safe-area-inset-top));">
+            <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom: 12px;">
+                <div style="display:flex; align-items:flex-start; gap: 12px; flex: 1;">
+                    <div style="margin-top: 2px; cursor: pointer;" onclick="history.back()">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                    </div>
+                    <div>
+                        <h1 class="cc-name" style="margin:0; font-size:20px; font-weight:800; line-height: 1.2; color: #fff;">苏州智云科技有限公司</h1>
+                        <div class="cc-uscc" style="margin-top: 6px; font-size: 13px; color: rgba(255,255,255,0.8);">91320594MA1EXAMPLE1</div>
+                        <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:12px;">
+                            <span class="cc-badge" style="background:rgba(255,255,255,0.15); color:#fff; border: 1px solid rgba(255,255,255,0.3); border-radius:4px; font-size:11px; padding:2px 8px; font-weight:600; backdrop-filter: blur(4px);">民营企业</span>
+                            <span class="cc-badge" style="background:rgba(255,255,255,0.15); color:#fff; border: 1px solid rgba(255,255,255,0.3); border-radius:4px; font-size:11px; padding:2px 8px; font-weight:600; backdrop-filter: blur(4px);">专精特新小巨人</span>
+                            <span class="cc-badge" style="background:rgba(255,255,255,0.15); color:#fff; border: 1px solid rgba(255,255,255,0.3); border-radius:4px; font-size:11px; padding:2px 8px; font-weight:600; backdrop-filter: blur(4px);">高新技术企业</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- 状态区域 -->
+                <div id="detailStatus" class="cc-status" style="background:linear-gradient(135deg, rgba(255,255,255,0.3), rgba(255,255,255,0.1)); color:#fff; border: 1px solid rgba(255,255,255,0.4); padding:4px 10px; border-radius:100px; font-size:12px; font-weight:600; flex-shrink:0; margin-left: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); backdrop-filter: blur(2.5px);">
+                    有意向 · 已申请
+                </div>
+            </div>
+        </div>
+
+        <!-- 核心信息卡片 -->
+        <div style="background: #fff; border-radius: 16px; padding: 20px; margin: -40px 20px 24px; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04); position: relative; z-index: 10;">
+            <div class="score-group" style="width:100%; display: flex; align-items: center;">
+                <div style="flex: 1; display:flex; flex-direction:column; gap:4px; align-items: center;">
+                    <div style="font-size:12px; color:var(--gray-500); font-weight:600;">资金需求</div>
+                    <div style="font-size:18px; font-weight:800; color:var(--brand-primary);">高意向</div>
+                </div>
+                <div style="width:1px; height:32px; background:var(--gray-100);"></div>
+                <div style="flex: 1; display:flex; flex-direction:column; gap:4px; align-items: center;">
+                    <div style="font-size:12px; color:var(--gray-500); font-weight:600;">综合信用评级</div>
+                    <div style="font-size:18px; font-weight:800; color:var(--gray-900);">A+</div>
+                </div>
+                <div style="width:1px; height:32px; background:var(--gray-100);"></div>
+                <div style="flex: 1; display:flex; flex-direction:column; gap:4px; align-items: center;">
+                    <div style="font-size:12px; color:var(--gray-500); font-weight:600;">违约风险</div>
+                    <div style="font-size:18px; font-weight:800; color:var(--success);">低风险</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AI营销洞察 -->
+        <!-- 暂时注释：明天演示用
+        <div class="ai-insight" style="background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%); border: 1px solid var(--border-strong); border-radius: 16px; padding: 16px; margin: 0 20px 24px;">
+            <div style="display:flex; align-items:center; gap:8px; margin-bottom: 12px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"></path><path d="M12 18v4"></path><path d="M4.93 4.93l2.83 2.83"></path><path d="M16.24 16.24l2.83 2.83"></path><path d="M2 12h4"></path><path d="M18 12h4"></path><path d="M4.93 19.07l2.83-2.83"></path><path d="M16.24 7.76l2.83-2.83"></path><rect x="9" y="9" width="6" height="6" rx="1"></rect></svg>
+                <span style="font-size:15px; font-weight:700; color:var(--gray-900);">AI营销洞察</span>
+            </div>
+            <div style="font-size:13px; color:var(--gray-700); line-height:1.6; display: flex; flex-direction: column; gap: 8px;">
+                <div>
+                    <span style="color:var(--gray-900); font-weight:600;">资质洞察：</span>该企业近期新增 3 项发明专利，且具备“专精特新”属性，触发贷款资金需求高分 (92分)。
+                </div>
+                <div>
+                    <span style="color:var(--gray-900); font-weight:600;">跟进断点：</span>根据 5 天前跟进记录，客户对科技贷有初步意向，但因顾虑融资成本处于观望状态。
+                </div>
+                <div style="background: #fff; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(37, 99, 235, 0.15); margin-top: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                    <span style="color:var(--brand-primary); font-weight:600;">下一步建议：</span>建议立即介入跟进。可以“恭喜企业新获专利/资质”为破冰点，利用系统输出的高优科创分 (85分)，向客户传达我行可给予最高 <span style="font-weight:700; color:var(--gray-900);">500万</span> 的预估准入额度，吸引客户进行线下或系统测额。
+                </div>
+            </div>
+        </div>
+
+        <div style="margin: 0 20px 24px;">
+            <div style="font-size: 15px; font-weight:700; color:var(--gray-900); margin-bottom: 12px;">作业助手</div>
+            <div style="background:#fff; border-radius:16px; padding:16px 4px; border:1px solid var(--border); box-shadow:var(--shadow-sm); display:grid; grid-template-columns:repeat(4, 1fr); gap:2px;">
+                <div style="display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer;">
+                    <div style="width:44px; height:44px; border-radius:12px; background:var(--gray-50); color:var(--brand-primary); display:flex; align-items:center; justify-content:center;">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                    </div>
+                    <span style="font-size:12px; font-weight:600; color:var(--gray-700); text-align:center;">企业画像</span>
+                </div>
+                <div style="display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer;">
+                    <div style="width:44px; height:44px; border-radius:12px; background:var(--gray-50); color:var(--brand-primary); display:flex; align-items:center; justify-content:center;">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                    </div>
+                    <span style="font-size:12px; font-weight:600; color:var(--gray-700); text-align:center;">AI尽调报告</span>
+                </div>
+                <div style="display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer;">
+                    <div style="width:44px; height:44px; border-radius:12px; background:var(--gray-50); color:var(--brand-primary); display:flex; align-items:center; justify-content:center;">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                    </div>
+                    <span style="font-size:12px; font-weight:600; color:var(--gray-700); text-align:center;">智能流水分析</span>
+                </div>
+                <div style="display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer;">
+                    <div style="width:44px; height:44px; border-radius:12px; background:var(--gray-50); color:var(--brand-primary); display:flex; align-items:center; justify-content:center;">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    </div>
+                    <span style="font-size:12px; font-weight:600; color:var(--gray-700); text-align:center;">客户访谈助手</span>
+                </div>
+            </div>
+        </div>
+        -->
+
+        <!-- Tabs -->
+        <div class="detail-tabs">
+            <div class="d-tab active" onclick="switchTab('basic', this)">基本信息</div>
+            <div class="d-tab" onclick="switchTab('data', this)">关键数据</div>
+            <!-- 当前版本暂不包含模型评分模块，保留代码以便后续恢复
+            <div class="d-tab" onclick="switchTab('models', this)">模型评分</div>
+            -->
+            <div class="d-tab" onclick="switchTab('history', this)">营销轨迹</div>
+        </div>
+
+        <!-- Tab 内容 -->
+        <div id="tab-data" class="tab-pane">
+            <!-- 策略命中提示 -->
+            <div style="background: rgba(37, 99, 235, 0.05); border-radius: 12px; padding: 12px 16px; margin-bottom: 20px; display: flex; align-items: flex-start; gap: 10px; border: 1px solid rgba(37, 99, 235, 0.1);">
+                <div style="width: 24px; height: 24px; background: rgba(37, 99, 235, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--brand-primary); flex-shrink: 0; margin-top: 1px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                </div>
+                <div style="font-size: 13px; color: var(--brand-primary); line-height: 1.6; font-weight: 500;">
+                    该客户已命中「平安银行橙业贷」核心获客策略，以下为触发名单准入建议的关键业务指标：
+                </div>
+            </div>
+
+            <div class="info-card" style="position: relative; overflow: hidden;">
+                <!-- 模糊遮罩 -->
+                <div id="authOverlayMask" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255,255,255,0.3); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; transition: opacity 0.4s ease;">
+                    <div style="width: 48px; height: 48px; background: #fff; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; color: var(--brand-primary);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    </div>
+                    <div style="font-size: 16px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px;">获取企业电子授权</div>
+                    <div style="font-size: 13px; color: var(--gray-600); margin-bottom: 24px; line-height: 1.5; padding: 0 10px;">授权后即可解锁企业的详细经营及税务数据，用于精准准入评估。</div>
+                    <button onclick="openAuthQR()" style="background: var(--brand-primary); color: #fff; border: none; border-radius: 8px; padding: 10px 28px; font-size: 14px; font-weight: 600; box-shadow: 0 4px 12px rgba(37,99,235,0.25); cursor: pointer;">立即获取授权</button>
+                </div>
+
+                <div class="info-row">
+                    <div class="info-label">经营时长</div>
+                    <div class="info-value">5.8 年 (符合 > 2年)</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">纳税评级</div>
+                    <div class="info-value">A 级</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">近一年营收</div>
+                    <div class="info-value">4,250 万</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">实控人变更</div>
+                    <div class="info-value">2.5 年内无变更</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">开票稳定性</div>
+                    <div class="info-value">优 (近12月无断票)</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">开票同比变动</div>
+                    <div class="info-value">+12.5%</div>
+                </div>
+                <div class="info-row">
+                    <div class="info-label">近期中标</div>
+                    <div class="info-value">苏州市智慧医疗平台项目 (350万)</div>
+                </div>
+                <div class="info-row" style="border-bottom:none; padding-bottom:0;">
+                    <div class="info-label">专利新增</div>
+                    <div class="info-value">近半年新增 3 项发明专利</div>
+                </div>
+            </div>
+            
+            <!-- 占位填充，确保底部不被遮挡 -->
+            <div style="height: 100px;"></div>
+        </div>
+
+        <!-- 当前版本暂不包含模型评分模块，保留代码以便后续恢复
+        <div id="tab-models" class="tab-pane">
+            <style>
+                .model-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding-top: 4px; }
+                .model-card {
+                    background: #fff; border-radius: 16px; padding: 18px 12px;
+                    box-shadow: 0 4px 15px -2px rgba(0,0,0,0.03);
+                    border: 1px solid var(--border);
+                    display: flex; flex-direction: column; align-items: center;
+                    position: relative; transition: all 0.2s;
+                }
+                .model-card:active { transform: scale(0.96); background: #fafafa; }
+                
+                .mc-top {
+                    display: flex; width: 100%; justify-content: center; align-items: center;
+                    margin-bottom: 10px;
+                }
+                .mc-name {
+                    font-size: 13px; font-weight: 700; color: #1e293b; line-height: 1.3;
+                    text-align: center;
+                }
+
+                
+                .mc-ring-wrap {
+                    position: relative; width: 90px; height: 90px; margin-bottom: 12px;
+                }
+                .mc-ring { width: 100%; height: 100%; transform: rotate(-90deg); }
+                .mc-ring .bg { fill: none; stroke: #f1f5f9; stroke-width: 2.5; }
+                .mc-ring .fg { fill: none; stroke-width: 2.5; stroke-linecap: round; }
+                
+                .mc-score {
+                    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+                    display: flex; flex-direction: column; align-items: center; justify-content: center;
+                }
+                .mc-score-val { font-size: 22px; font-weight: 800; color: #1e293b; line-height: 1; letter-spacing: -0.5px; }
+                .mc-score-divider { width: 16px; height: 1.5px; background: #cbd5e1; border-radius: 1px; margin: 4px 0 3px; }
+                .mc-score-total { font-size: 10px; color: #94a3b8; font-weight: 600; letter-spacing: 0.5px; }
+                
+                .mc-level {
+                    font-size: 11px; font-weight: 700; padding: 3px 12px; border-radius: 100px;
+                    white-space: nowrap; width: 100%; text-align: center;
+                }
+                .mc-level.success { background: #ecfdf5; color: #059669; }
+                .mc-level.warning { background: #fffbeb; color: #d97706; }
+                .mc-level.danger { background: #fef2f2; color: #dc2626; }
+            </style>
+            
+            <div class="model-grid">
+                <!- - 资金需求评分 - ->
+                <div class="model-card" onclick="showModelIntro('demand')" style="cursor:pointer;">
+                    <div class="mc-top">
+                        <div class="mc-name">资金需求</div>
+                    </div>
+                    <div class="mc-ring-wrap">
+                        <svg viewBox="0 0 36 36" class="mc-ring">
+                            <path class="bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                            <path class="fg" stroke-dasharray="92, 100" stroke="#10b981" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                        </svg>
+                        <div class="mc-score">
+                            <div class="mc-score-val">92</div>
+                            <div class="mc-score-divider"></div>
+                            <div class="mc-score-total">100</div>
+                        </div>
+                    </div>
+                    <div class="mc-level success">高意向</div>
+                </div>
+                
+                <!- - 苏信分 - ->
+                <div class="model-card" onclick="showModelIntro('suxin')" style="cursor:pointer;">
+                    <div class="mc-top">
+                        <div class="mc-name">苏信分</div>
+                    </div>
+                    <div class="mc-ring-wrap">
+                        <svg viewBox="0 0 36 36" class="mc-ring">
+                            <path class="bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                            <path class="fg" stroke-dasharray="87, 100" stroke="#10b981" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                        </svg>
+                        <div class="mc-score">
+                            <div class="mc-score-val">740</div>
+                            <div class="mc-score-divider"></div>
+                            <div class="mc-score-total">850</div>
+                        </div>
+                    </div>
+                    <div class="mc-level success">A+ 级</div>
+                </div>
+
+                <!- - 科创评分 - ->
+                <div class="model-card" onclick="showModelIntro('tech')" style="cursor:pointer;">
+                    <div class="mc-top">
+                        <div class="mc-name">科创评分</div>
+                    </div>
+                    <div class="mc-ring-wrap">
+                        <svg viewBox="0 0 36 36" class="mc-ring">
+                            <path class="bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                            <path class="fg" stroke-dasharray="85, 100" stroke="#10b981" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                        </svg>
+                        <div class="mc-score">
+                            <div class="mc-score-val">85</div>
+                            <div class="mc-score-divider"></div>
+                            <div class="mc-score-total">100</div>
+                        </div>
+                    </div>
+                    <div class="mc-level success">优秀</div>
+                </div>
+
+                <!- - 企业成长评分 - ->
+                <div class="model-card" onclick="showModelIntro('growth')" style="cursor:pointer;">
+                    <div class="mc-top">
+                        <div class="mc-name">企业成长</div>
+                    </div>
+                    <div class="mc-ring-wrap">
+                        <svg viewBox="0 0 36 36" class="mc-ring">
+                            <path class="bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                            <path class="fg" stroke-dasharray="88, 100" stroke="#10b981" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                        </svg>
+                        <div class="mc-score">
+                            <div class="mc-score-val">88</div>
+                            <div class="mc-score-divider"></div>
+                            <div class="mc-score-total">100</div>
+                        </div>
+                    </div>
+                    <div class="mc-level success">优</div>
+                </div>
+
+                <!- - 违约预测模型 - ->
+                <div class="model-card" onclick="showModelIntro('default')" style="cursor:pointer;">
+                    <div class="mc-top">
+                        <div class="mc-name">违约预测</div>
+                    </div>
+                    <div class="mc-ring-wrap">
+                        <svg viewBox="0 0 36 36" class="mc-ring">
+                            <path class="bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                            <path class="fg" stroke-dasharray="15, 100" stroke="#10b981" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                        </svg>
+                        <div class="mc-score">
+                            <div class="mc-score-val">15</div>
+                            <div class="mc-score-divider"></div>
+                            <div class="mc-score-total">100</div>
+                        </div>
+                    </div>
+                    <div class="mc-level success">低风险</div>
+                </div>
+            </div>
+            
+            <!- - 占位填充，确保底部不被遮挡 - ->
+            <div style="height: 100px;"></div>
+        </div>
+        -->
+
+        <div id="tab-history" class="tab-pane">
+            <div class="info-card" style="padding-top:24px;">
+                <!-- Record 1：今天 业务状态 - 已放款（第二次） -->
+                <div class="history-item primary">
+                    <div class="history-dot"></div>
+                    <div class="history-date">今天 14:30 (2026-05-13)</div>
+                    <div class="history-content">
+                        <div class="history-user">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            李经理
+                        </div>
+                        <div style="display:flex; gap:6px; margin-bottom:8px;">
+                            <span style="background:var(--success-bg); color:var(--success); padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">业务状态</span>
+                            <span style="background:var(--gray-100); color:var(--gray-700); padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">已放款</span>
+                        </div>
+                        <div style="font-weight:600; color:var(--gray-900); margin-bottom:4px; font-size:13px;">放款金额：<span style="color:var(--brand-primary);">300万</span> | 放款日期：2026-05-13</div>
+                        <div style="color:var(--gray-600); line-height:1.5;">客户提取了剩余授信额度用于采购支付，目前该笔500万授信已全额提款。</div>
+                    </div>
+                </div>
+
+                <!-- Record 2：1周前 业务状态 - 已放款（第一次） -->
+                <div class="history-item">
+                    <div class="history-dot"></div>
+                    <div class="history-date">1周前 (2026-05-06)</div>
+                    <div class="history-content">
+                        <div class="history-user" style="color:var(--gray-600);">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            李经理
+                        </div>
+                        <div style="display:flex; gap:6px; margin-bottom:8px;">
+                            <span style="background:var(--success-bg); color:var(--success); padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">业务状态</span>
+                            <span style="background:var(--gray-100); color:var(--gray-700); padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">已放款</span>
+                        </div>
+                        <div style="font-weight:600; color:var(--gray-900); margin-bottom:4px; font-size:13px;">放款金额：<span style="color:var(--brand-primary);">200万</span> | 放款日期：2026-05-06</div>
+                        <div style="color:var(--gray-600); line-height:1.5;">首次提款200万元，资金已到账。</div>
+                    </div>
+                </div>
+
+                <!-- Record 3：10天前 业务状态 - 已授信 -->
+                <div class="history-item">
+                    <div class="history-dot"></div>
+                    <div class="history-date">10天前 (2026-05-03)</div>
+                    <div class="history-content">
+                        <div class="history-user" style="color:var(--gray-600);">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            李经理
+                        </div>
+                        <div style="display:flex; gap:6px; margin-bottom:8px;">
+                            <span style="background:var(--success-bg); color:var(--success); padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">业务状态</span>
+                            <span style="background:var(--gray-100); color:var(--gray-700); padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">已授信</span>
+                        </div>
+                        <div style="font-weight:600; color:var(--gray-900); margin-bottom:4px; font-size:13px;">授信金额：<span style="color:var(--brand-primary);">500万</span> | 授信日期：2026-05-03</div>
+                        <div style="color:var(--gray-600); line-height:1.5;">系统审批通过，最终核定授信额度500万。客户对额度非常满意。</div>
+                    </div>
+                </div>
+
+                <!-- Record 4：15天前 业务状态 - 已申请 -->
+                <div class="history-item">
+                    <div class="history-dot"></div>
+                    <div class="history-date">15天前 (2026-04-28)</div>
+                    <div class="history-content">
+                        <div class="history-user" style="color:var(--gray-600);">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            李经理
+                        </div>
+                        <div style="display:flex; gap:6px; margin-bottom:8px;">
+                            <span style="background:var(--success-bg); color:var(--success); padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">业务状态</span>
+                            <span style="background:var(--gray-100); color:var(--gray-700); padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">已申请</span>
+                        </div>
+                        <div style="font-weight:600; color:var(--gray-900); margin-bottom:4px; font-size:13px;">申请日期：2026-04-28</div>
+                        <div style="color:var(--gray-600); line-height:1.5;">客户已在企业网银端提交正式额度测算申请，系统初审中。</div>
+                    </div>
+                </div>
+                
+                <!-- Record 5：20天前 营销状态 - 已触达·有意向 -->
+                <div class="history-item">
+                    <div class="history-dot"></div>
+                    <div class="history-date">20天前 (2026-04-23)</div>
+                    <div class="history-content">
+                        <div class="history-user" style="color:var(--gray-600);">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            李经理
+                        </div>
+                        <div style="display:flex; gap:6px; margin-bottom:8px;">
+                            <span style="background:#eff6ff; color:var(--brand-primary); padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">营销状态</span>
+                            <span style="background:var(--gray-100); color:var(--gray-700); padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">已触达 · 有意向</span>
+                        </div>
+                        <div style="color:var(--gray-600); line-height:1.5;">上门拜访了张总，详细展示了科技信用贷的产品优势和初步额度方案，客户承诺安排财务在网银提单。</div>
+                    </div>
+                </div>
+
+                <!-- Record 6：25天前 营销状态 - 已触达·跟进中 -->
+                <div class="history-item">
+                    <div class="history-dot"></div>
+                    <div class="history-date">25天前 (2026-04-18)</div>
+                    <div class="history-content">
+                        <div class="history-user" style="color:var(--gray-600);">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            李经理
+                        </div>
+                        <div style="display:flex; gap:6px; margin-bottom:8px;">
+                            <span style="background:#eff6ff; color:var(--brand-primary); padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">营销状态</span>
+                            <span style="background:var(--gray-100); color:var(--gray-700); padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">已触达 · 跟进中</span>
+                        </div>
+                        <div style="color:var(--gray-600); line-height:1.5;">与财务李总电话沟通，对方表示近期有一笔设备采购款需要垫资，对产品有初步兴趣，已加微信并发送产品折页。</div>
+                    </div>
+                </div>
+
+                <!-- Record 7：28天前 营销状态 - 已触达·跟进中 -->
+                <div class="history-item">
+                    <div class="history-dot"></div>
+                    <div class="history-date">28天前 (2026-04-15)</div>
+                    <div class="history-content">
+                        <div class="history-user" style="color:var(--gray-600);">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            李经理
+                        </div>
+                        <div style="display:flex; gap:6px; margin-bottom:8px;">
+                            <span style="background:#eff6ff; color:var(--brand-primary); padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">营销状态</span>
+                            <span style="background:var(--gray-100); color:var(--gray-700); padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">已触达 · 跟进中</span>
+                        </div>
+                        <div style="color:var(--gray-600); line-height:1.5;">陌拜上门，在前台留了宣传资料，未能直接见到决策人。互加了前台微信，后续试图对接财务。</div>
+                    </div>
+                </div>
+
+                <!-- Record 8：1个月前 营销状态 - 未触达·未接通 -->
+                <div class="history-item">
+                    <div class="history-dot"></div>
+                    <div class="history-date">1个月前 (2026-04-10)</div>
+                    <div class="history-content">
+                        <div class="history-user" style="color:var(--gray-600);">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            李经理
+                        </div>
+                        <div style="display:flex; gap:6px; margin-bottom:8px;">
+                            <span style="background:#eff6ff; color:var(--brand-primary); padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">营销状态</span>
+                            <span style="background:var(--gray-100); color:var(--gray-700); padding:2px 6px; border-radius:4px; font-size:11px; font-weight:600;">未触达 · 未接通</span>
+                        </div>
+                        <div style="color:var(--gray-600); line-height:1.5;">首次致电企业工商预留电话，处于无人接听状态，计划换个时间段再次尝试。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-basic" class="tab-pane active">
+            <!-- 工商核心卡片 -->
+            <div class="info-card" style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                <div>
+                    <div style="font-size:12px; color:var(--gray-500); margin-bottom:4px; font-weight:600;">法定代表人</div>
+                    <div style="font-size:16px; font-weight:700; color:var(--gray-900);">张智明</div>
+                </div>
+                <div>
+                    <div style="font-size:12px; color:var(--gray-500); margin-bottom:4px; font-weight:600;">注册资本</div>
+                    <div style="font-size:16px; font-weight:700; color:var(--gray-900);">1000 万人民币</div>
+                </div>
+                <div>
+                    <div style="font-size:12px; color:var(--gray-500); margin-bottom:4px; font-weight:600;">成立日期</div>
+                    <div style="font-size:16px; font-weight:700; color:var(--gray-900);">2018-05-20</div>
+                </div>
+                <div>
+                    <div style="font-size:12px; color:var(--gray-500); margin-bottom:4px; font-weight:600;">所属行业</div>
+                    <div style="font-size:16px; font-weight:700; color:var(--gray-900);">软件信息服务</div>
+                </div>
+            </div>
+
+            <!-- 注册地址与实际地址卡片 -->
+            <div class="info-card">
+                <div class="info-row" style="flex-direction:column; gap:8px; align-items:flex-start; padding-top:0;">
+                    <div class="info-label" style="width:auto; display:flex; gap:6px; align-items:center;">注册地址</div>
+                    <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+                        <div class="info-value" style="text-align:left; color:var(--gray-600); line-height:1.5; padding-right:16px; font-weight:400;">江苏省苏州市工业园区星湖街5号创意产业园 A 栋 8 楼</div>
+                        <div style="width:32px; height:32px; border-radius:50%; background:#eff6ff; color:var(--brand-primary); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-row" style="flex-direction:column; gap:8px; align-items:flex-start; border-bottom:none; padding-bottom:0;">
+                    <div class="info-label" style="width:auto; display:flex; gap:6px; align-items:center;">实际经营地址 <span style="background: rgba(37,99,235,0.08); color: var(--brand-primary); padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 600;">年报</span></div>
+                    <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+                        <div class="info-value" style="text-align:left; color:var(--gray-900); line-height:1.5; padding-right:16px; font-weight:400;">江苏省苏州市姑苏区平江街道干将东路178号苏大科技园 2 期 3 楼</div>
+                        <div style="width:32px; height:32px; border-radius:50%; background:#eff6ff; color:var(--brand-primary); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"></polygon></svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部悬浮操作栏 -->
+    <div class="fixed-bottom">
+        <button class="btn-fill ghost" style="flex:1; color: var(--brand-primary); border: 1.2px solid var(--brand-primary); background: transparent;" onclick="openStatusSheet()">状态标记</button>
+        <button class="btn-fill primary" style="flex:2;" onclick="openContactSheet()">智能触达</button>
+    </div>
+
+    <!-- 弹窗部分 (从 customers.html 复用) -->
+    <!-- 1. 触达面板 -->
+    <div class="sheet-overlay" id="contactOverlay" onclick="closeContactSheet()"></div>
+    <div class="sheet-panel" id="contactPanel">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+            <div class="sheet-title">触达路径</div>
+            <button class="sheet-close" onclick="closeContactSheet()">✕</button>
+        </div>
+        <div class="sheet-body" id="contactSheetBody">
+            <div class="cs-tabs">
+                <div class="cs-tab on" onclick="csTab(this, 0)">本企触达</div>
+                <div class="cs-tab" onclick="csTab(this, 1)">关联企业</div>
+                <div class="cs-tab" onclick="csTab(this, 2)">行内关联</div>
+            </div>
+            <div id="csP0" class="cs-panel on"></div>
+            <div id="csP1" class="cs-panel"></div>
+            <div id="csP2" class="cs-panel"></div>
+        </div>
+    </div>
+
+    <!-- 2. 状态标记面板 (恢复) -->
+    <div class="sheet-overlay" id="statusOverlay" onclick="closeStatusSheet()"></div>
+    <div class="sheet-panel" id="statusPanel" style="max-height:85vh;">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+            <div class="sheet-title">状态更新</div>
+            <div class="sheet-close" onclick="closeStatusSheet()">✕</div>
+        </div>
+        <div class="sheet-body" style="overflow-y:auto; max-height:calc(85vh - 140px);">
+            <div class="st-tabs">
+                <div class="st-tab on" onclick="stTab(this,0)">营销状态</div>
+                <div class="st-tab" onclick="stTab(this,1)">业务状态</div>
+            </div>
+            <div class="st-pane on" id="stP0">
+                <div class="form-group">
+                    <div class="form-label">营销状态</div>
+                    <div class="chip-group" id="fL1Group"></div>
+                    <input type="hidden" id="fL1" value="00">
+                </div>
+                <div class="form-group" id="l2Wrap" style="display:none;">
+                    <div class="form-label">详细情况</div>
+                    <div class="chip-group" id="fL2Group"></div>
+                    <input type="hidden" id="fL2" value="">
+                </div>
+                <div class="form-group">
+                    <div class="form-label">营销跟进备注</div>
+                    <div class="note-wrapper">
+                        <textarea class="form-textarea" id="reachNote" rows="3" placeholder="选填，记录营销跟进情况"></textarea>
+                        <div class="quick-tags" id="quickTags"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="st-pane" id="stP1">
+                <div class="form-group">
+                    <div class="form-label">业务状态</div>
+                    <div class="chip-group" id="fBizGroup">
+                        <div class="chip on" data-val="NONE" onclick="selectBiz('NONE')">未申请</div>
+                        <div class="chip" data-val="APPLIED" onclick="selectBiz('APPLIED')">已申请</div>
+                        <div class="chip" data-val="REVIEWING" onclick="selectBiz('REVIEWING')">审批中</div>
+                        <div class="chip" data-val="APPROVED" onclick="selectBiz('APPROVED')">已授信</div>
+                        <div class="chip" data-val="DISBURSED" onclick="selectBiz('DISBURSED')">已放款</div>
+                        <div class="chip" data-val="SETTLED" onclick="selectBiz('SETTLED')">已结清</div>
+                        <div class="chip" data-val="REJECTED_BIZ" onclick="selectBiz('REJECTED_BIZ')">已拒绝</div>
+                    </div>
+                    <input type="hidden" id="fBiz" value="NONE">
+                </div>
+                <div id="bizDynamic"></div>
+                <div class="form-group">
+                    <div class="form-label">业务备注</div>
+                    <textarea class="form-textarea" id="bizNote" rows="3" placeholder="记录业务关键信息"></textarea>
+                </div>
+            </div>
+            <div class="btn-row" style="padding:16px 0 0;">
+                <button class="btn-fill ghost" onclick="closeStatusSheet()">取消</button>
+                <button class="btn-fill primary" onclick="saveDetailStatus()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. 模型说明面板 (新) -->
+    <div class="sheet-overlay" id="introOverlay" onclick="closeIntroSheet()"></div>
+    <div class="sheet-panel" id="introPanel">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+            <div class="sheet-title" id="introTitle">模型说明</div>
+            <button class="sheet-close" onclick="closeIntroSheet()">✕</button>
+        </div>
+        <div class="sheet-body" id="introBody" style="padding: 24px; line-height: 1.8; color: #475569; font-size: 15px;">
+            <!-- 内容动态填充 -->
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(0,0,0,0.75); color:#fff; padding:12px 24px; border-radius:12px; font-size:14px; z-index:9999;"></div>
+
+
+
+    <!-- 授权二维码弹窗 -->
+    <div class="sheet-overlay" id="authOverlay" onclick="closeAuthQR()"></div>
+    <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); background: #fff; border-radius: 16px; z-index: 1001; width: 310px; opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 16px 40px rgba(0,0,0,0.12);" id="authModal">
+        <div style="padding: 24px 24px 16px; text-align: center;">
+            <h3 style="margin: 0 0 6px; font-size: 18px; color: var(--gray-900);">扫码完成授权</h3>
+            <p style="margin: 0 0 20px; font-size: 13px; color: var(--gray-500);">请企业法人或授权人使用微信扫码</p>
+            
+            <div style="width: 200px; height: 200px; margin: 0 auto; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+                <img src="img/auth-qrcode.png" alt="授权二维码" style="width: 170px; height: 170px; object-fit: contain;">
+            </div>
+        </div>
+        
+        <div style="display: flex; border-top: 1px solid var(--gray-100); padding: 8px 16px;">
+            <button style="flex: 1; background: transparent; border: none; color: var(--gray-600); font-size: 14px; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px;" onclick="showToast('请长按上方二维码图片保存或转发');">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <span>长按保存</span>
+            </button>
+            <div style="width: 1px; background: var(--gray-100); margin: 12px 0;"></div>
+            <button style="flex: 1; background: transparent; border: none; color: #07c160; font-size: 14px; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px;" onclick="showWxShareGuide()">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                <span>分享微信</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const MODEL_INTROS = {
+            demand: {
+                title: '资金需求评分',
+                content: '<div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:16px;">模型定义</div>基于企业近期税务活跃度、开票波动及工商变更频率，预测企业未来3-6个月的潜在资金贷款需求。<br><br><div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:16px;">评分规则</div>采用0-100分制。85分以上为“高意向”，代表企业正处于扩张期或有大额进项抵扣需求，是重点营销对象。'
+            },
+            suxin: {
+                title: '苏信分',
+                content: '<div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:16px;">模型定义</div>综合企业税务、公共信用、司法风险等维度的全量大数据评分，是评价企业整体信用质量的核心指标。<br><br><div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:16px;">评分规则</div>分值区间0-850分。700分以上（A+级）代表信用极佳，具备极强的抗风险能力和准入优势。'
+            },
+            tech: {
+                title: '科创评分',
+                content: '<div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:16px;">模型定义</div>评估企业的科技含量与创新潜力，涵盖发明专利、软著数量、研发投入强度及高新企业资质等。<br><br><div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:16px;">评分规则</div>0-100分制。高分代表企业拥有核心技术壁垒，是“专精特新贷”等科技金融产品的首选目标。'
+            },
+            growth: {
+                title: '企业成长评分',
+                content: '<div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:16px;">模型定义</div>通过对企业连续三年的营收增长率、利润率及纳税规模变动趋势进行建模，评估其经营稳定性和扩张潜力。<br><br><div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:16px;">评分规则</div>分值越高代表增长动能越足。持续盈利且纳税增长的企业将获得高分。'
+            },
+            default: {
+                title: '违约预测模型',
+                content: '<div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:16px;">模型定义</div>深度挖掘关联方风险、法律诉讼、负面舆情等负面特征，预测企业未来12个月内发生实质性违约的概率。<br><br><div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:16px;">评分规则</div>采用反向评分。分值越低（如低于20分）代表发生风险的概率极低，安全性越高。'
+            }
+        };
+
+        window.showModelIntro = function(id) {
+            try {
+                const data = MODEL_INTROS[id];
+                document.getElementById('introTitle').textContent = data.title;
+                document.getElementById('introBody').innerHTML = data.content;
+                
+                const overlay = document.getElementById('introOverlay');
+                const panel = document.getElementById('introPanel');
+                
+                overlay.style.opacity = '1';
+                overlay.style.pointerEvents = 'auto';
+                panel.style.transform = 'translateY(0)';
+                
+                document.body.classList.add('no-scroll');
+            } catch (err) {
+                console.error("Popup Error: ", err);
+            }
+        };
+
+        window.closeIntroSheet = function() {
+            const overlay = document.getElementById('introOverlay');
+            const panel = document.getElementById('introPanel');
+            
+            overlay.style.opacity = '0';
+            overlay.style.pointerEvents = 'none';
+            panel.style.transform = 'translateY(100%)';
+            
+            document.body.classList.remove('no-scroll');
+        };
+
+        function switchTab(id, el) {
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            document.getElementById('tab-' + id).classList.add('active');
+            
+            document.querySelectorAll('.d-tab').forEach(t => t.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function showToast(msg) {
+            const el = document.getElementById('toast');
+            el.textContent = msg;
+            el.style.display = 'block';
+            setTimeout(() => { el.style.display = 'none'; }, 2000);
+        }
+
+        // 触达路径 Mock Data
+        const CONTACT_PATHS = [
+            { phone: '138****1234', full: '13812341234', role: '财务负责人', tips: '企业财税核心负责人，熟悉资金流向，信贷和结算类产品的关键对接人。', tier: 1 },
+            { phone: '186****8888', full: '18688888888', role: '融资对接人', tips: '曾主导企业融资项目，有明确资金需求，转化意向高。', tier: 2 },
+            { phone: '139****5678', full: '13956785678', role: '资质项目申报人', tips: '高新/专精特新资质申报负责人，多为高管或核心骨干。', tier: 3 },
+            { phone: '135****0000', full: '13500000000', role: '董监高/核心股东', tips: '核心管理层或重要股东，法人失联时的最佳替代路径。', tier: 4 },
+            { phone: '0512-6888****', full: '0512-68881234', role: '工商预留固话', tips: '工商注册预留固话，接通率较低，建议作兜底使用。', tier: 7 },
+        ];
+
+        window.openContactSheet = function() {
+            const overlay = document.getElementById('contactOverlay');
+            const panel = document.getElementById('contactPanel');
+            overlay.style.opacity = '1';
+            overlay.style.pointerEvents = 'auto';
+            panel.style.transform = 'translateY(0)';
+            document.body.classList.add('no-scroll');
+            renderContactPaths();
+        }
+
+        window.closeContactSheet = function() {
+            const overlay = document.getElementById('contactOverlay');
+            const panel = document.getElementById('contactPanel');
+            overlay.style.opacity = '0';
+            overlay.style.pointerEvents = 'none';
+            panel.style.transform = 'translateY(100%)';
+            document.body.classList.remove('no-scroll');
+        }
+
+        window.openStatusSheet = function() {
+            const overlay = document.getElementById('statusOverlay');
+            const panel = document.getElementById('statusPanel');
+            overlay.style.opacity = '1';
+            overlay.style.pointerEvents = 'auto';
+            panel.style.transform = 'translateY(0)';
+            document.body.classList.add('no-scroll');
+            stTab(document.querySelector('#statusPanel .st-tab'), 0);
+        }
+
+        window.closeStatusSheet = function() {
+            const overlay = document.getElementById('statusOverlay');
+            const panel = document.getElementById('statusPanel');
+            overlay.style.opacity = '0';
+            overlay.style.pointerEvents = 'none';
+            panel.style.transform = 'translateY(100%)';
+            document.body.classList.remove('no-scroll');
+        }
+
+        function csTab(el, index) {
+            const tabs = el.parentElement.querySelectorAll('.cs-tab');
+            const panels = el.parentElement.parentElement.querySelectorAll('.cs-panel');
+            tabs.forEach(t => t.classList.remove('on'));
+            panels.forEach(p => p.classList.remove('on'));
+            el.classList.add('on');
+            panels[index].classList.add('on');
+        }
+
+        function renderContactPaths() {
+            let p0 = `<div class="cs-hint">以下角色及排序由系统基于多源大数据综合预测，仅供参考</div>` + CONTACT_PATHS.map((p, i) => {
+                const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+                return `<div class="cp-card">
+                    <div class="cp-top">
+                        <span class="cp-phone">${p.phone} <span style="cursor:pointer;opacity:0.5;font-size:13px;" onclick="this.previousElementSibling||void 0">${medal}</span></span>
+                        <span class="cp-role" style="background:rgba(37, 99, 235, 0.08);color:var(--brand-primary);"><span style="opacity:0.5;">预测</span> ${p.role}</span>
+                    </div>
+                    <div class="cp-tips" style="display:flex;align-items:flex-start;gap:6px;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;margin-top:2px;color:var(--brand-primary);opacity:0.7;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                        ${p.tips}
+                    </div>
+                    <div class="cp-actions-main">
+                        <button class="cp-btn-fb" onclick="toggleFb(this)">联系不上？反馈一下 ▾</button>
+                        <button class="cp-btn-call" onclick="showToast('拨号中...')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>拨打</button>
+                    </div>
+                    <div class="cp-actions-expand hidden">
+                        <button class="cp-action-btn positive" onclick="markFeedback(this, '拨通有效')">拨通有效</button>
+                        <button class="cp-action-btn negative" onclick="markFeedback(this, '空号')">空号</button>
+                        <button class="cp-action-btn negative" onclick="markFeedback(this, '非本人')">非本人</button>
+                        <button class="cp-action-btn negative" onclick="markFeedback(this, '拒绝')">拒绝</button>
+                    </div>
+                </div>`;
+            }).join('');
+
+            // 2. 关联企业 (无拨打按钮，新增假数据)
+            let p1 = `<div class="cp-card">
+                    <div style="margin-bottom:12px;">
+                        <div style="font-size:15px;font-weight:700;color:var(--gray-900);">无锡市智云科技有限公司</div>
+                        <span style="font-size:11px;padding:4px 8px;border-radius:6px;background:rgba(139,92,246,0.1);color:var(--info);margin-top:6px;display:inline-block;font-weight:600;">控股股东 (持股65%)</span>
+                    </div>
+                    <div style="border-top:1px dashed var(--gray-200);padding-top:12px;margin-top:12px;">
+                        <div class="cp-top" style="margin-bottom:0;">
+                            <span class="cp-phone">139****8888</span>
+                            <span style="font-size:13px;color:var(--gray-500);font-weight:500;">联系方式</span>
+                        </div>
+                    </div>
+                </div>`;
+                
+            p1 += `<div class="cp-card">
+                    <div style="margin-bottom:12px;">
+                        <div style="font-size:15px;font-weight:700;color:var(--gray-900);">苏州蓝天商贸有限公司</div>
+                        <span style="font-size:11px;padding:4px 8px;border-radius:6px;background:rgba(245,158,11,0.1);color:var(--warning);margin-top:6px;display:inline-block;font-weight:600;">法定代表人其他企业</span>
+                    </div>
+                    <div style="border-top:1px dashed var(--gray-200);padding-top:12px;margin-top:12px;">
+                        <div class="cp-top" style="margin-bottom:0;">
+                            <span class="cp-phone">137****1111</span>
+                            <span style="font-size:13px;color:var(--gray-500);font-weight:500;">联系方式</span>
+                        </div>
+                    </div>
+                </div>`;
+
+            // 3. 行内关联 (绝美旧版样式还原)
+            let p2 = `<div style="padding:16px;background:linear-gradient(135deg,rgba(37,99,235,0.06),rgba(139,92,246,0.06));border:1px solid rgba(37,99,235,0.15);border-radius:12px;">
+                    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+                        <span style="width:40px;height:40px;background:var(--brand-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:600;box-shadow:0 4px 10px rgba(37,99,235,0.2);">关</span>
+                        <div>
+                            <div style="font-size:16px;font-weight:700;color:var(--gray-900);">苏州创芯微电子有限公司</div>
+                            <div style="font-size:12px;color:var(--gray-500);margin-top:4px;">行内授信 · 贷款余额800万 · 经理：王强</div>
+                        </div>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.6);border-radius:8px;padding:12px;font-size:13px;color:var(--gray-700);line-height:1.6;border:1px solid rgba(255,255,255,0.8);">
+                        <div style="margin-bottom:6px;"><b>关联关系：</b>该企业法人 <span style="color:var(--brand-primary);font-weight:600;">张明</span> 同时担任行内存量客户的股东（持股32%）</div>
+                        <div><b>触达建议：</b>可通过存量客户经理王强引荐，或以关联企业授信为切入点沟通</div>
+                    </div>
+                </div>`;
+
+            document.getElementById('csP0').innerHTML = p0;
+            document.getElementById('csP1').innerHTML = p1;
+            document.getElementById('csP2').innerHTML = p2;
+        }
+
+
+
+        // ===== 营销状态一二级数据 =====
+        const MKT = [
+            { code:'00', label:'待触达', subs:[{code:'01',label:'待触达', tags:[]}] },
+            { code:'10', label:'触达失败', subs:[
+                {code:'11',label:'号码无效 (空/错/停机)', tags:['号码有误','空号','停机']},
+                {code:'12',label:'无人接听/未接通', tags:['未接通','无人接听','多次拨打无人接听']},
+                {code:'13',label:'拒绝沟通/秒挂', tags:['挂断','拒接','接听后挂断']},
+                {code:'14',label:'触达受阻/找错人', tags:['分机号','总机','前台']}
+            ]},
+            { code:'20', label:'无意向', subs:[
+                {code:'21',label:'暂无资金需求', tags:['不需要贷款','无意向','暂时不需要']},
+                {code:'22',label:'他行已营销', tags:['已有他行授信','有授信额度']},
+                {code:'23',label:'条件不匹配', tags:['利息高','额度低','期限不合适']}
+            ]},
+            { code:'30', label:'跟进中', subs:[
+                {code:'31',label:'意向沟通中', tags:['还需再了解下','处于摇摆期']},
+                {code:'32',label:'待后续联系', tags:['有询问老板，后期再跟','现在忙稍后打','已留电话/加微信']},
+                {code:'33',label:'待线下拜访', tags:['约见上门','待面谈']}
+            ]},
+            { code:'40', label:'有意向', subs:[
+                {code:'41',label:'明确有意向', tags:['客户已口头同意','有意向待推进转化']}
+            ]}
+        ];
+        const L1_DISPLAY = {
+            '00': { l:'待触达', c:'var(--brand-primary)', bg:'rgba(37,99,235,0.08)' },
+            '10': { l:'触达失败', c:'var(--danger)', bg:'var(--danger-bg)' },
+            '20': { l:'无意向', c:'var(--gray-500)', bg:'var(--gray-100)' },
+            '30': { l:'跟进中', c:'var(--warning)', bg:'var(--warning-bg)' },
+            '40': { l:'有意向', c:'var(--success)', bg:'var(--success-bg)' },
+        };
+        const BIZ_MAP = {
+            NONE: { l:'' }, APPLIED: { l:'已申请' }, REVIEWING: { l:'审批中' },
+            APPROVED: { l:'已授信' }, DISBURSED: { l:'已放款' }, SETTLED: { l:'已结清' }, REJECTED_BIZ: { l:'已拒绝' },
+        };
+        const REJECT_REASONS = [
+            '征信不良','负债过高','经营年限不足','流水不达标',
+            '抵押物不足','行业限制','资料不齐全','关联企业风险','法律诉讼/执行','其他'
+        ];
+        let loanRecords = [];
+
+        // Tab 切换
+        function stTab(el, idx) {
+            document.querySelectorAll('#statusPanel .st-tab').forEach(e => e.classList.remove('on'));
+            document.querySelectorAll('#statusPanel .st-pane').forEach(e => e.classList.remove('on'));
+            el.classList.add('on');
+            document.getElementById('stP'+idx).classList.add('on');
+        }
+
+        // 营销状态
+        function renderL1(selected) {
+            const g = document.getElementById('fL1Group');
+            g.innerHTML = MKT.map(m =>
+                `<div class="chip${m.code===selected?' on':''}" data-val="${m.code}" onclick="selectL1('${m.code}')">${m.label}</div>`
+            ).join('');
+            document.getElementById('fL1').value = selected;
+            selectL1(selected, true);
+        }
+        function selectL1(code, skipHL) {
+            document.getElementById('fL1').value = code;
+            if (!skipHL) document.querySelectorAll('#fL1Group .chip').forEach(el => el.classList.toggle('on', el.dataset.val === code));
+            const mkt = MKT.find(m => m.code === code);
+            const l2w = document.getElementById('l2Wrap'), l2g = document.getElementById('fL2Group');
+            
+            if (mkt && mkt.subs.length > 1) {
+                l2w.style.display = 'block';
+                l2g.innerHTML = mkt.subs.map((s,i) => `<div class="chip${i===0?' on':''}" data-val="${s.code}" onclick="selectL2('${code}','${s.code}')">${s.label}</div>`).join('');
+                selectL2(code, mkt.subs[0].code);
+            } else if (mkt && mkt.subs.length === 1) {
+                l2w.style.display = 'none';
+                selectL2(code, mkt.subs[0].code);
+            } else {
+                l2w.style.display = 'none';
+                document.getElementById('quickTags').innerHTML = '';
+            }
+        }
+        function selectL2(l1code, code) {
+            document.getElementById('fL2').value = code;
+            document.querySelectorAll('#fL2Group .chip').forEach(el => el.classList.toggle('on', el.dataset.val === code));
+            
+            const mkt = MKT.find(m => m.code === l1code);
+            const sub = mkt ? mkt.subs.find(s => s.code === code) : null;
+            const qt = document.getElementById('quickTags');
+            
+            if (sub && sub.tags && sub.tags.length) {
+                qt.innerHTML = sub.tags.map(t => `<div class="quick-tag" onclick="appendTag(this,'${t}')">${t}</div>`).join('');
+            } else {
+                qt.innerHTML = '';
+            }
+        }
+        function appendTag(el, text) {
+            const ta = document.getElementById('reachNote');
+            ta.value = ta.value ? ta.value + '；' + text : text;
+            el.style.background = 'rgba(37,99,235,0.08)'; el.style.color = 'var(--brand-primary)'; el.style.borderColor = 'rgba(37,99,235,0.2)';
+        }
+
+        // 业务状态
+        function selectBiz(val) {
+            document.getElementById('fBiz').value = val;
+            document.querySelectorAll('#fBizGroup .chip').forEach(el => el.classList.toggle('on', el.dataset.val === val));
+            renderBizDynamic(val);
+        }
+        function renderBizDynamic(val) {
+            const box = document.getElementById('bizDynamic');
+            if (val === 'APPLIED') {
+                box.innerHTML = `<div class="dyn-box"><div class="dyn-row"><div class="dyn-field"><label>申请日期 (选填)</label><input type="date" id="applyDate"></div></div></div>`;
+            } else if (val === 'APPROVED') {
+                box.innerHTML = `<div class="dyn-box"><div class="dyn-row"><div class="dyn-field"><label>授信金额 (万元)</label><input type="number" id="creditAmt" placeholder="选填"></div><div class="dyn-field"><label>授信日期 (选填)</label><input type="date" id="creditDate"></div></div></div>`;
+            } else if (val === 'DISBURSED') {
+                box.innerHTML = `<div class="dyn-box">
+                    <div class="dyn-row"><div class="dyn-field"><label>放款金额 (万元)</label><input type="number" id="loanAmt" placeholder="请输入"></div><div class="dyn-field"><label>放款日期</label><input type="date" id="loanDate"></div></div>
+                    <button class="loan-add-btn" onclick="addLoan()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>添加放款记录</button>
+                    <div class="loan-list" id="loanList">${renderLoans()}</div></div>`;
+            } else if (val === 'SETTLED') {
+                box.innerHTML = `<div class="dyn-box"><div class="dyn-row"><div class="dyn-field"><label>结清日期 (选填)</label><input type="date" id="settleDate"></div></div></div>`;
+            } else if (val === 'REJECTED_BIZ') {
+                box.innerHTML = `<div class="dyn-box"><div class="form-label" style="font-size:13px;margin-bottom:8px;">拒绝原因</div>
+                    <div class="chip-group" id="rejectGroup" style="flex-wrap:wrap;">${REJECT_REASONS.map(r => `<div class="chip" data-val="${r}" onclick="toggleReject(this)">${r}</div>`).join('')}</div></div>`;
+            } else { box.innerHTML = ''; }
+        }
+        function addLoan() {
+            const amt = document.getElementById('loanAmt'), dt = document.getElementById('loanDate');
+            if (!amt.value) { showToast('请输入放款金额'); return; }
+            loanRecords.push({ amt: amt.value, date: dt.value || '未填写', id: Date.now() });
+            amt.value = ''; dt.value = '';
+            document.getElementById('loanList').innerHTML = renderLoans();
+        }
+        function renderLoans() {
+            return loanRecords.map((ln,i) => `<div class="loan-item">
+                <div class="loan-info"><span>${ln.amt}万</span><span style="color:var(--gray-400);">${ln.date}</span></div>
+                <div class="loan-acts">
+                    <button class="edit-btn" onclick="editLoan(${i})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>
+                    <button class="del-btn" onclick="delLoan(${i})"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
+                </div></div>`).join('');
+        }
+        function delLoan(i) { loanRecords.splice(i, 1); document.getElementById('loanList').innerHTML = renderLoans(); }
+        function editLoan(i) {
+            const ln = loanRecords[i];
+            document.getElementById('loanAmt').value = ln.amt;
+            document.getElementById('loanDate').value = ln.date === '未填写' ? '' : ln.date;
+            loanRecords.splice(i, 1);
+            document.getElementById('loanList').innerHTML = renderLoans();
+        }
+        function toggleReject(el) { el.classList.toggle('on'); }
+
+        // 初始化
+        renderL1('40');
+        selectBiz('APPLIED');
+
+        function saveDetailStatus() {
+            let l1 = document.getElementById('fL1').value;
+            const bsVal = document.getElementById('fBiz').value;
+
+            // 自动晋升纠错：如果业务状态大于 NONE，且营销状态是待触达或触达失败，自动纠错为“有意向” (代码 40)
+            if (bsVal !== 'NONE' && bsVal !== 'REJECTED_BIZ' && (l1 === '00' || l1 === '10')) {
+                l1 = '40';
+                selectL1('40'); // 同步更新 UI 状态芯片和二级状态
+            }
+
+            const rs = L1_DISPLAY[l1] || L1_DISPLAY['00'];
+            const bs = BIZ_MAP[bsVal] || BIZ_MAP.NONE;
+            const badge = document.getElementById('detailStatus');
+
+            // 终态样式覆盖
+            if (bsVal === 'DISBURSED') {
+                badge.textContent = '已放款';
+                badge.style.background = 'var(--info-bg)';
+                badge.style.color = 'var(--info)';
+            } else if (bsVal === 'SETTLED') {
+                badge.textContent = '已结清';
+                badge.style.background = 'var(--gray-100)';
+                badge.style.color = 'var(--gray-500)';
+            } else if (bsVal === 'REJECTED_BIZ') {
+                badge.textContent = '审批拒绝';
+                badge.style.background = 'var(--danger-bg)';
+                badge.style.color = 'var(--danger)';
+            } else {
+                const label = bs.l ? `${rs.l} · ${bs.l}` : rs.l;
+                badge.textContent = label;
+                badge.style.background = rs.bg;
+                badge.style.color = rs.c;
+            }
+
+            closeStatusSheet();
+            showToast('✓ 状态已更新');
+        }
+
+        function saveMarkStatus() {
+            showToast('✓ 状态已更新');
+            closeMarkSheet();
+        }
+
+        // ===== 授权二维码逻辑 =====
+        function openAuthQR() {
+            document.getElementById('authOverlay').classList.add('on');
+            const modal = document.getElementById('authModal');
+            modal.style.opacity = '1';
+            modal.style.pointerEvents = 'auto';
+            modal.style.transform = 'translate(-50%, -50%) scale(1)';
+        }
+        function closeAuthQR() {
+            document.getElementById('authOverlay').classList.remove('on');
+            const modal = document.getElementById('authModal');
+            modal.style.opacity = '0';
+            modal.style.pointerEvents = 'none';
+            modal.style.transform = 'translate(-50%, -50%) scale(0.9)';
+        }
+        
+        function simulateAuthComplete() {
+            closeAuthQR();
+            showToast('已模拟：企业完成授权');
+            const mask = document.getElementById('authOverlayMask');
+            if (mask) {
+                mask.style.opacity = '0';
+                setTimeout(() => {
+                    mask.style.display = 'none';
+                }, 400); // Wait for transition to complete
+            }
+        }
+
+        function toggleFb(btn) {
+            const expand = btn.parentElement.nextElementSibling;
+            if (expand.classList.contains('hidden')) {
+                expand.classList.remove('hidden');
+                btn.innerHTML = '收起反馈 ▴';
+            } else {
+                expand.classList.add('hidden');
+                btn.innerHTML = '联系不上？反馈一下 ▾';
+            }
+        }
+
+        function markFeedback(btn, type) {
+            const expand = btn.parentElement;
+            const fbBtn = expand.previousElementSibling.querySelector('.cp-btn-fb');
+            fbBtn.innerHTML = `✓ 已标记 (${type})`;
+            if (type === '拨通有效') {
+                fbBtn.style.color = 'var(--success)';
+                fbBtn.style.background = 'var(--success-bg)';
+            } else {
+                fbBtn.style.color = 'var(--danger)';
+                fbBtn.style.background = 'var(--danger-bg)';
+            }
+            expand.classList.add('hidden');
+            showToast('已标记：' + type);
+        }
+
+        // ===== 微信分享引导逻辑 =====
+        function showWxShareGuide() {
+            closeAuthQR();
+            document.getElementById('wxShareGuide').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('wxShareGuide').style.opacity = '1';
+            }, 10);
+        }
+
+        function hideWxShareGuide() {
+            document.getElementById('wxShareGuide').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('wxShareGuide').style.display = 'none';
+                // 引导层消失后，顺便执行之前的模拟授权成功逻辑，方便演示
+                simulateAuthComplete();
+            }, 300);
+        }
+    </script>
+
+    <!-- 微信分享右上角引导遮罩 -->
+    <div id="wxShareGuide" onclick="hideWxShareGuide()" style="display: none; opacity: 0; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 9999; transition: opacity 0.3s ease;">
+        <div style="position: absolute; top: 20px; right: 30px; text-align: right;">
+            <svg width="60" height="80" viewBox="0 0 60 80" fill="none" style="margin-right: 10px; margin-bottom: 10px;">
+                <path d="M50 10 Q 55 10 50 20 Q 30 50 10 50" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" style="stroke-dasharray: 4 4;" />
+                <path d="M45 5 L 55 10 L 45 15" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+            </svg>
+            <div style="color: #fff; font-size: 18px; font-weight: 500; line-height: 1.6; padding-right: 10px;">
+                请点击右上角 <span style="font-size: 24px; font-weight: 700; margin: 0 4px; vertical-align: middle;">···</span><br>
+                发送给微信好友
+            </div>
+            <div style="color: rgba(255,255,255,0.6); font-size: 14px; margin-top: 16px; padding-right: 10px;">
+                (点击任意区域关闭)
+            </div>
+        </div>
+    </div>
+</body>
+</html>
