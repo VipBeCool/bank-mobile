@@ -14,9 +14,9 @@
 
 <body>
     <div class="page">
-        <div class="header" style="padding-bottom:8px;">
-            <div class="header-row">
-                <div class="header-title" style="margin-top:0;">客户名单</div>
+        <div class="header header-dup" style="padding-bottom:8px;">
+            <div class="header-row header-row-dup">
+                <div class="header-title page-title-dup" style="margin-top:0;">客户名单</div>
                 <span id="countBadge" style="font-size:14px;color:var(--brand-primary);font-weight:600;background:#eff6ff;padding:4px 10px;border-radius:100px;"><span id="countLabel">10</span> 家企业</span>
             </div>
         </div>
@@ -76,7 +76,7 @@
             }
 
             .f-ctab {
-                font-size: 14px;
+                font-size: 13px;
                 color: var(--gray-600);
                 cursor: pointer;
                 transition: all 0.2s;
@@ -196,7 +196,7 @@
 
             .dd-item {
                 padding: 14px 20px;
-                font-size: 14px;
+                font-size: 13px;
                 color: var(--gray-800);
                 display: flex;
                 justify-content: space-between;
@@ -223,7 +223,7 @@
 
             .dd-side-item {
                 padding: 14px 20px;
-                font-size: 14px;
+                font-size: 13px;
                 color: var(--gray-600);
                 transition: all 0.2s;
             }
@@ -271,7 +271,7 @@
 
             .dd-dist-item {
                 padding: 14px 20px;
-                font-size: 14px;
+                font-size: 13px;
                 color: var(--gray-800);
                 display: flex;
                 justify-content: space-between;
@@ -331,7 +331,7 @@
                 border: 1px solid var(--gray-200);
                 background: #fff;
                 color: var(--gray-600);
-                font-size: 14px;
+                font-size: 13px;
                 font-weight: 600;
             }
 
@@ -342,7 +342,7 @@
                 background: var(--brand-primary);
                 color: #fff;
                 border: none;
-                font-size: 14px;
+                font-size: 13px;
                 font-weight: 600;
             }
 
@@ -814,18 +814,21 @@
             REJECTED_BIZ: { l: '已拒绝', c: 'var(--danger)', bg: 'var(--danger-bg)' },
         };
 
-        // Mock 数据
+        // Mock 数据 — 完整覆盖双维度状态体系交叉矩阵及边界校正测试
         const data = [
             { id: 1, name: '苏州智云科技有限公司', addr: '江苏省苏州市工业园区星湖街5号', ds: 92, uscc: '91320594MA1EXAMPLE1', rs: 'PENDING', bs: 'NONE', src: '' },
-            { id: 2, name: '南京创新智造集团有限公司', addr: '江苏省南京市江宁区将军大道100号', ds: 88, uscc: '91320115MA2EXAMPLE2', rs: 'PENDING', bs: 'NONE', src: '' },
-            { id: 3, name: '无锡光电半导体有限公司', addr: '江苏省无锡市新吴区太湖国际科技园', ds: 95, uscc: '91320214MA3EXAMPLE3', rs: 'REACHED_INTERESTED', bs: 'APPLIED', src: '手动' },
-            { id: 4, name: '常州新能源科技股份有限公司', addr: '江苏省常州市武进区高新区南区', ds: 72, uscc: '91320412MA4EXAMPLE4', rs: 'REACHED_NO_INTEREST', bs: 'NONE', src: '手动' },
-            { id: 5, name: '苏州生物医药研究院有限公司', addr: '江苏省苏州市工业园区独墅湖大道88号', ds: 81, uscc: '91320594MA5EXAMPLE5', rs: 'UNREACHED_NO_ANSWER', bs: 'NONE', src: '手动' },
-            { id: 6, name: '南通精密机械制造有限公司', addr: '江苏省南通市崇川区工农路23号', ds: 86, uscc: '91320602MA6EXAMPLE6', rs: 'REACHED_INTERESTED', bs: 'DISBURSED', src: 'API' },
-            { id: 7, name: '苏州纳米智能装备有限公司', addr: '江苏省苏州市高新区科技城锦峰路10号', ds: 78, uscc: '91320594MA7EXAMPLE7', rs: 'PENDING', bs: 'NONE', src: '' },
+            { id: 2, name: '苏州生物医药研究院有限公司', addr: '江苏省苏州市工业园区独墅湖大道88号', ds: 81, uscc: '91320594MA5EXAMPLE5', rs: 'UNREACHED_NO_ANSWER', bs: 'NONE', src: '手动' },
+            { id: 3, name: '常州新能源科技股份有限公司', addr: '江苏省常州市武进区高新区南区', ds: 72, uscc: '91320412MA4EXAMPLE4', rs: 'REACHED_NO_INTEREST', bs: 'NONE', src: '手动' },
+            { id: 4, name: '南京创新智造集团有限公司', addr: '江苏省南京市江宁区将军大道100号', ds: 88, uscc: '91320115MA2EXAMPLE2', rs: 'FOLLOWING', bs: 'NONE', src: '手动' },
+            { id: 5, name: '苏州纳米智能装备有限公司', addr: '江苏省苏州市高新区科技城锦峰路10号', ds: 78, uscc: '91320594MA7EXAMPLE7', rs: 'REACHED_INTERESTED', bs: 'NONE', src: '手动' },
+            { id: 6, name: '无锡光电半导体有限公司', addr: '江苏省无锡市新吴区太湖国际科技园', ds: 95, uscc: '91320214MA3EXAMPLE3', rs: 'REACHED_INTERESTED', bs: 'APPLIED', src: '手动' },
+            { id: 7, name: '常州智能制造系统有限公司', addr: '江苏省常州市新北区通江南路88号', ds: 76, uscc: '91320402MAAEXAMPLEC', rs: 'FOLLOWING', bs: 'REVIEWING', src: '手动' },
             { id: 8, name: '南京云端数据技术有限公司', addr: '江苏省南京市雨花台区软件大道1号', ds: 90, uscc: '91320114MA8EXAMPLE8', rs: 'REACHED_INTERESTED', bs: 'APPROVED', src: 'API' },
-            { id: 9, name: '无锡集成电路设计有限公司', addr: '江苏省无锡市滨湖区建筑路32号', ds: 83, uscc: '91320214MA9EXAMPLEB', rs: 'UNREACHED_REJECTED', bs: 'NONE', src: '手动' },
-            { id: 10, name: '常州智能制造系统有限公司', addr: '江苏省常州市新北区通江南路88号', ds: 76, uscc: '91320402MAAEXAMPLEC', rs: 'REACHED_INTERESTED', bs: 'REVIEWING', src: '手动' },
+            { id: 9, name: '南通精密机械制造有限公司', addr: '江苏省南通市崇川区工农路23号', ds: 86, uscc: '91320602MA6EXAMPLE6', rs: 'REACHED_INTERESTED', bs: 'DISBURSED', src: 'API' },
+            { id: 10, name: '泰州华科电子科技有限公司', addr: '江苏省泰州市高港区科技大道8号', ds: 65, uscc: '91321203MA3EXAMPLED', rs: 'REACHED_INTERESTED', bs: 'SETTLED', src: 'API' },
+            { id: 11, name: '无锡集成电路设计有限公司', addr: '江苏省无锡市滨湖区建筑路32号', ds: 83, uscc: '91320214MA9EXAMPLEB', rs: 'REACHED_INTERESTED', bs: 'REJECTED_BIZ', src: '手动' },
+            { id: 12, name: '扬州苏仪自控系统有限公司', addr: '江苏省扬州市广陵区新城路12号', ds: 58, uscc: '91321002MA4EXAMPLEE', rs: 'PENDING', bs: 'REVIEWING', src: 'API' },
+            { id: 13, name: '盐城大丰金属制品有限公司', addr: '江苏省盐城市大丰区工业园2号', ds: 49, uscc: '91320982MABEXAMPLEF', rs: 'REACHED_NO_INTEREST', bs: 'APPLIED', src: '手动' },
         ];
 
         // 触达路径 Mock Data
@@ -883,28 +886,33 @@
             wrap.innerHTML = list.map(c => {
                 return `
         <div class="cust-card" onclick="location.href='detail.html?id=${c.id}'">
-            <div style="display: flex; gap: 12px; align-items: flex-start; margin-bottom: 12px;">
-                <!-- 图标衬底 -->
-                <div style="width: 40px; height: 40px; border-radius: 50%; background: #f0f7ff; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22v-4h6v4"></path><path d="M8 6h.01"></path><path d="M16 6h.01"></path><path d="M12 6h.01"></path><path d="M12 10h.01"></path><path d="M12 14h.01"></path><path d="M16 10h.01"></path><path d="M16 14h.01"></path><path d="M8 10h.01"></path><path d="M8 14h.01"></path></svg>
-                </div>
+            <div style="display: flex; gap: 12px; align-items: flex-start; margin-bottom: 8px;">
                 <!-- 文字信息 -->
                 <div style="flex: 1; min-width: 0;">
-                    <div class="cc-top" style="margin-bottom: 4px;">
-                        <div class="cc-name" style="margin-bottom: 0;">${c.name}</div>
+                    <div class="cc-top" style="margin-bottom: 2px; align-items: center;">
+                        <div class="cc-name" style="margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
+                            <div style="width: 20px; height: 20px; border-radius: 50%; background: #eff6ff; color: var(--brand-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22V10h6v12"></path></svg>
+                            </div>
+                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${c.name}</span>
+                        </div>
                         ${getCombinedBadge(c.rs, c.bs)}
                     </div>
-                    <div class="cc-uscc">${c.uscc}</div>
+                    <div class="cc-uscc" style="margin-bottom: 0;">${c.uscc}</div>
                 </div>
             </div>
             <div class="cc-foot">
-                <div class="cc-addr">
+                <div class="cc-addr" style="display:flex; align-items:center; gap:6px; flex:1; min-width:0;">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    0.45km | ${c.addr}
+                    <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0;">0.45km | ${c.addr}</span>
                 </div>
-                <div class="cc-actions">
-                    <button class="cc-btn secondary" onclick="event.stopPropagation();openMarkSheet(this)">标记</button>
-                    <button class="cc-btn primary" onclick="event.stopPropagation();openContactSheet(${c.id})">触达</button>
+                <div class="cc-actions" style="display:flex; gap:8px;">
+                    <button class="cc-btn secondary" style="width:32px; height:32px; padding:0; display:flex; align-items:center; justify-content:center;" onclick="event.stopPropagation();openMarkSheet(this)">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>
+                    </button>
+                    <button class="cc-btn primary" style="width:32px; height:32px; padding:0; display:flex; align-items:center; justify-content:center;" onclick="event.stopPropagation();openContactSheet(${c.id})">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                    </button>
                 </div>
             </div>
         </div>`;
@@ -1107,6 +1115,10 @@
             renderCities();
             renderDistricts(viewingCityIdx);
             closeAllDDrop();
+            
+            currentMktFilter = null;
+            clearUrlParams();
+            
             doFilter();
         }
 
@@ -1234,6 +1246,10 @@
             renderProducts();
             renderBatches(viewingProductIdx);
             closeAllDDrop();
+            
+            currentMktFilter = null;
+            clearUrlParams();
+            
             doFilter();
         }
 
@@ -1276,6 +1292,19 @@
         let viewingMktL1Idx = 0;
         let selectedMkts = [{ l1: '不限状态', l2: '不限状态' }];
         let tempMkts = [{ l1: '不限状态', l2: '不限状态' }];
+        let currentMktFilter = null;
+
+        function clearUrlParams() {
+            try {
+                const url = new URL(window.location);
+                if (url.searchParams.has('filter')) {
+                    url.searchParams.delete('filter');
+                    window.history.replaceState({}, '', url.pathname + url.search);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
 
         function initMktFilter() {
             renderMktL1();
@@ -1367,6 +1396,10 @@
             renderMktL1();
             renderMktL2(viewingMktL1Idx);
             closeAllDDrop();
+            
+            currentMktFilter = null;
+            clearUrlParams();
+            
             doFilter();
         }
 
@@ -1376,6 +1409,9 @@
                 return;
             }
             selectedMkts = [...tempMkts];
+
+            currentMktFilter = null;
+            clearUrlParams();
 
             let displayTxt = '';
             if (selectedMkts.length === 1) {
@@ -1415,19 +1451,20 @@
 
         function resetAdvFilter() {
             document.querySelectorAll('#advFilterPanel .chip').forEach(el => el.classList.remove('on'));
+            
+            currentMktFilter = null;
+            clearUrlParams();
+            
+            doFilter();
         }
 
         function doFilter() {
             const input = document.getElementById('searchInput');
             searchVal = input ? input.value.toLowerCase() : '';
             
-            // Check if there is a pending filter from URL
-            const params = new URLSearchParams(window.location.search);
-            const isPendingFilter = params.get('filter') === 'pending';
-
             let list = data.filter(c => {
                 if (searchVal && !c.name.toLowerCase().includes(searchVal)) return false;
-                if (isPendingFilter && c.rs !== 'PENDING') return false;
+                if (currentMktFilter === 'pending' && c.rs !== 'PENDING') return false;
                 return true;
             });
             render(list);
@@ -1684,13 +1721,29 @@
                 // Update UI visually
                 document.getElementById('txt-mkt').innerText = '待触达';
                 document.getElementById('btn-mkt').classList.add('has-val');
+                currentMktFilter = 'pending';
                 // Execute filter
                 doFilter();
             } else {
+                currentMktFilter = null;
                 render(data);
             }
         });
     </script>
+
+<!-- 小程序环境检测 -->
+<script>
+(function() {
+    var ua = navigator.userAgent.toLowerCase();
+    var isMiniProgram = ua.indexOf('miniprogram') > -1
+        || window.__wxjs_environment === 'miniprogram';
+    if (isMiniProgram) {
+        document.documentElement.classList.add('in-miniprogram');
+    }
+})();
+</script>
+<!-- 设计稿导出模式（URL 加 ?design=mp 启用） -->
+<script src="js/design-mode.js"></script>
 </body>
 
 </html>

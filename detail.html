@@ -44,7 +44,7 @@
         }
         .detail-tabs::-webkit-scrollbar { display: none; }
         .d-tab {
-            padding: 12px 0; font-size: 15px; font-weight: 500;
+            padding: 12px 0; font-size: 14px; font-weight: 500;
             white-space: nowrap; color: var(--gray-500); background: transparent;
             transition: all 0.2s; cursor: pointer; position: relative;
         }
@@ -105,13 +105,13 @@
         <div class="blue-header" style="background: var(--brand-primary); color: #fff; padding: 20px 20px 60px 20px; padding-top: max(20px, env(safe-area-inset-top));">
             <div style="display:flex; align-items:flex-start; justify-content:space-between; margin-bottom: 12px;">
                 <div style="display:flex; align-items:flex-start; gap: 12px; flex: 1;">
-                    <div style="margin-top: 2px; cursor: pointer;" onclick="history.back()">
+                    <div class="blue-header-back" style="margin-top: 2px; cursor: pointer;" onclick="history.back()">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="15 18 9 12 15 6"></polyline>
                         </svg>
                     </div>
                     <div>
-                        <h1 class="cc-name" style="margin:0; font-size:20px; font-weight:800; line-height: 1.2; color: #fff;">苏州智云科技有限公司</h1>
+                        <h1 class="cc-name" style="margin:0; font-size:17px; font-weight:800; line-height: 1.2; color: #fff;">苏州智云科技有限公司</h1>
                         <div class="cc-uscc" style="margin-top: 6px; font-size: 13px; color: rgba(255,255,255,0.8);">91320594MA1EXAMPLE1</div>
                         <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:12px;">
                             <span class="cc-badge" style="background:rgba(255,255,255,0.15); color:#fff; border: 1px solid rgba(255,255,255,0.3); border-radius:4px; font-size:11px; padding:2px 8px; font-weight:600; backdrop-filter: blur(4px);">民营企业</span>
@@ -132,17 +132,17 @@
             <div class="score-group" style="width:100%; display: flex; align-items: center;">
                 <div style="flex: 1; display:flex; flex-direction:column; gap:4px; align-items: center;">
                     <div style="font-size:12px; color:var(--gray-500); font-weight:600;">资金需求</div>
-                    <div style="font-size:18px; font-weight:800; color:var(--brand-primary);">高意向</div>
+                    <div style="font-size:16px; font-weight:800; color:var(--brand-primary);">高意向</div>
                 </div>
                 <div style="width:1px; height:32px; background:var(--gray-100);"></div>
                 <div style="flex: 1; display:flex; flex-direction:column; gap:4px; align-items: center;">
                     <div style="font-size:12px; color:var(--gray-500); font-weight:600;">综合信用评级</div>
-                    <div style="font-size:18px; font-weight:800; color:var(--gray-900);">A+</div>
+                    <div style="font-size:16px; font-weight:800; color:var(--gray-900);">A+</div>
                 </div>
                 <div style="width:1px; height:32px; background:var(--gray-100);"></div>
                 <div style="flex: 1; display:flex; flex-direction:column; gap:4px; align-items: center;">
                     <div style="font-size:12px; color:var(--gray-500); font-weight:600;">违约风险</div>
-                    <div style="font-size:18px; font-weight:800; color:var(--success);">低风险</div>
+                    <div style="font-size:16px; font-weight:800; color:var(--success);">低风险</div>
                 </div>
             </div>
         </div>
@@ -152,7 +152,7 @@
         <div class="ai-insight" style="background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%); border: 1px solid var(--border-strong); border-radius: 16px; padding: 16px; margin: 0 20px 24px;">
             <div style="display:flex; align-items:center; gap:8px; margin-bottom: 12px;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"></path><path d="M12 18v4"></path><path d="M4.93 4.93l2.83 2.83"></path><path d="M16.24 16.24l2.83 2.83"></path><path d="M2 12h4"></path><path d="M18 12h4"></path><path d="M4.93 19.07l2.83-2.83"></path><path d="M16.24 7.76l2.83-2.83"></path><rect x="9" y="9" width="6" height="6" rx="1"></rect></svg>
-                <span style="font-size:15px; font-weight:700; color:var(--gray-900);">AI营销洞察</span>
+                <span style="font-size:14px; font-weight:700; color:var(--gray-900);">AI营销洞察</span>
             </div>
             <div style="font-size:13px; color:var(--gray-700); line-height:1.6; display: flex; flex-direction: column; gap: 8px;">
                 <div>
@@ -168,7 +168,7 @@
         </div>
 
         <div style="margin: 0 20px 24px;">
-            <div style="font-size: 15px; font-weight:700; color:var(--gray-900); margin-bottom: 12px;">作业助手</div>
+            <div style="font-size: 14px; font-weight:700; color:var(--gray-900); margin-bottom: 12px;">作业助手</div>
             <div style="background:#fff; border-radius:16px; padding:16px 4px; border:1px solid var(--border); box-shadow:var(--shadow-sm); display:grid; grid-template-columns:repeat(4, 1fr); gap:2px;">
                 <div style="display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer;">
                     <div style="width:44px; height:44px; border-radius:12px; background:var(--gray-50); color:var(--brand-primary); display:flex; align-items:center; justify-content:center;">
@@ -226,7 +226,7 @@
                     <div style="width: 48px; height: 48px; background: #fff; border-radius: 50%; box-shadow: 0 4px 12px rgba(0,0,0,0.06); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; color: var(--brand-primary);">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                     </div>
-                    <div style="font-size: 16px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px;">获取企业电子授权</div>
+                    <div style="font-size: 14px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px;">获取企业电子授权</div>
                     <div style="font-size: 13px; color: var(--gray-600); margin-bottom: 24px; line-height: 1.5; padding: 0 10px;">授权后即可解锁企业的详细经营及税务数据，用于精准准入评估。</div>
                     <button onclick="openAuthQR()" style="background: var(--brand-primary); color: #fff; border: none; border-radius: 8px; padding: 10px 28px; font-size: 14px; font-weight: 600; box-shadow: 0 4px 12px rgba(37,99,235,0.25); cursor: pointer;">立即获取授权</button>
                 </div>
@@ -303,7 +303,7 @@
                     position: absolute; top: 0; left: 0; right: 0; bottom: 0;
                     display: flex; flex-direction: column; align-items: center; justify-content: center;
                 }
-                .mc-score-val { font-size: 22px; font-weight: 800; color: #1e293b; line-height: 1; letter-spacing: -0.5px; }
+                .mc-score-val { font-size: 20px; font-weight: 800; color: #1e293b; line-height: 1; letter-spacing: -0.5px; }
                 .mc-score-divider { width: 16px; height: 1.5px; background: #cbd5e1; border-radius: 1px; margin: 4px 0 3px; }
                 .mc-score-total { font-size: 10px; color: #94a3b8; font-weight: 600; letter-spacing: 0.5px; }
                 
@@ -567,19 +567,19 @@
             <div class="info-card" style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
                 <div>
                     <div style="font-size:12px; color:var(--gray-500); margin-bottom:4px; font-weight:600;">法定代表人</div>
-                    <div style="font-size:16px; font-weight:700; color:var(--gray-900);">张智明</div>
+                    <div style="font-size:14px; font-weight:700; color:var(--gray-900);">张智明</div>
                 </div>
                 <div>
                     <div style="font-size:12px; color:var(--gray-500); margin-bottom:4px; font-weight:600;">注册资本</div>
-                    <div style="font-size:16px; font-weight:700; color:var(--gray-900);">1000 万人民币</div>
+                    <div style="font-size:14px; font-weight:700; color:var(--gray-900);">1000 万人民币</div>
                 </div>
                 <div>
                     <div style="font-size:12px; color:var(--gray-500); margin-bottom:4px; font-weight:600;">成立日期</div>
-                    <div style="font-size:16px; font-weight:700; color:var(--gray-900);">2018-05-20</div>
+                    <div style="font-size:14px; font-weight:700; color:var(--gray-900);">2018-05-20</div>
                 </div>
                 <div>
                     <div style="font-size:12px; color:var(--gray-500); margin-bottom:4px; font-weight:600;">所属行业</div>
-                    <div style="font-size:16px; font-weight:700; color:var(--gray-900);">软件信息服务</div>
+                    <div style="font-size:14px; font-weight:700; color:var(--gray-900);">软件信息服务</div>
                 </div>
             </div>
 
@@ -701,7 +701,7 @@
             <div class="sheet-title" id="introTitle">模型说明</div>
             <button class="sheet-close" onclick="closeIntroSheet()">✕</button>
         </div>
-        <div class="sheet-body" id="introBody" style="padding: 24px; line-height: 1.8; color: #475569; font-size: 15px;">
+        <div class="sheet-body" id="introBody" style="padding: 24px; line-height: 1.8; color: #475569; font-size: 14px;">
             <!-- 内容动态填充 -->
         </div>
     </div>
@@ -715,7 +715,7 @@
     <div class="sheet-overlay" id="authOverlay" onclick="closeAuthQR()"></div>
     <div style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); background: #fff; border-radius: 16px; z-index: 1001; width: 310px; opacity: 0; pointer-events: none; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 16px 40px rgba(0,0,0,0.12);" id="authModal">
         <div style="padding: 24px 24px 16px; text-align: center;">
-            <h3 style="margin: 0 0 6px; font-size: 18px; color: var(--gray-900);">扫码完成授权</h3>
+            <h3 style="margin: 0 0 6px; font-size: 16px; color: var(--gray-900);">扫码完成授权</h3>
             <p style="margin: 0 0 20px; font-size: 13px; color: var(--gray-500);">请企业法人或授权人使用微信扫码</p>
             
             <div style="width: 200px; height: 200px; margin: 0 auto; background: #fff; border: 1px solid #e2e8f0; border-radius: 12px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
@@ -740,23 +740,23 @@
         const MODEL_INTROS = {
             demand: {
                 title: '资金需求评分',
-                content: '<div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:16px;">模型定义</div>基于企业近期税务活跃度、开票波动及工商变更频率，预测企业未来3-6个月的潜在资金贷款需求。<br><br><div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:16px;">评分规则</div>采用0-100分制。85分以上为“高意向”，代表企业正处于扩张期或有大额进项抵扣需求，是重点营销对象。'
+                content: '<div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:14px;">模型定义</div>基于企业近期税务活跃度、开票波动及工商变更频率，预测企业未来3-6个月的潜在资金贷款需求。<br><br><div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:14px;">评分规则</div>采用0-100分制。85分以上为“高意向”，代表企业正处于扩张期或有大额进项抵扣需求，是重点营销对象。'
             },
             suxin: {
                 title: '苏信分',
-                content: '<div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:16px;">模型定义</div>综合企业税务、公共信用、司法风险等维度的全量大数据评分，是评价企业整体信用质量的核心指标。<br><br><div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:16px;">评分规则</div>分值区间0-850分。700分以上（A+级）代表信用极佳，具备极强的抗风险能力和准入优势。'
+                content: '<div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:14px;">模型定义</div>综合企业税务、公共信用、司法风险等维度的全量大数据评分，是评价企业整体信用质量的核心指标。<br><br><div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:14px;">评分规则</div>分值区间0-850分。700分以上（A+级）代表信用极佳，具备极强的抗风险能力和准入优势。'
             },
             tech: {
                 title: '科创评分',
-                content: '<div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:16px;">模型定义</div>评估企业的科技含量与创新潜力，涵盖发明专利、软著数量、研发投入强度及高新企业资质等。<br><br><div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:16px;">评分规则</div>0-100分制。高分代表企业拥有核心技术壁垒，是“专精特新贷”等科技金融产品的首选目标。'
+                content: '<div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:14px;">模型定义</div>评估企业的科技含量与创新潜力，涵盖发明专利、软著数量、研发投入强度及高新企业资质等。<br><br><div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:14px;">评分规则</div>0-100分制。高分代表企业拥有核心技术壁垒，是“专精特新贷”等科技金融产品的首选目标。'
             },
             growth: {
                 title: '企业成长评分',
-                content: '<div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:16px;">模型定义</div>通过对企业连续三年的营收增长率、利润率及纳税规模变动趋势进行建模，评估其经营稳定性和扩张潜力。<br><br><div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:16px;">评分规则</div>分值越高代表增长动能越足。持续盈利且纳税增长的企业将获得高分。'
+                content: '<div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:14px;">模型定义</div>通过对企业连续三年的营收增长率、利润率及纳税规模变动趋势进行建模，评估其经营稳定性和扩张潜力。<br><br><div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:14px;">评分规则</div>分值越高代表增长动能越足。持续盈利且纳税增长的企业将获得高分。'
             },
             default: {
                 title: '违约预测模型',
-                content: '<div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:16px;">模型定义</div>深度挖掘关联方风险、法律诉讼、负面舆情等负面特征，预测企业未来12个月内发生实质性违约的概率。<br><br><div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:16px;">评分规则</div>采用反向评分。分值越低（如低于20分）代表发生风险的概率极低，安全性越高。'
+                content: '<div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:14px;">模型定义</div>深度挖掘关联方风险、法律诉讼、负面舆情等负面特征，预测企业未来12个月内发生实质性违约的概率。<br><br><div style="color:#1e293b;font-weight:700;margin-bottom:8px;font-size:14px;">评分规则</div>采用反向评分。分值越低（如低于20分）代表发生风险的概率极低，安全性越高。'
             }
         };
 
@@ -889,7 +889,7 @@
             // 2. 关联企业 (无拨打按钮，新增假数据)
             let p1 = `<div class="cp-card">
                     <div style="margin-bottom:12px;">
-                        <div style="font-size:15px;font-weight:700;color:var(--gray-900);">无锡市智云科技有限公司</div>
+                        <div style="font-size:14px;font-weight:700;color:var(--gray-900);">无锡市智云科技有限公司</div>
                         <span style="font-size:11px;padding:4px 8px;border-radius:6px;background:rgba(139,92,246,0.1);color:var(--info);margin-top:6px;display:inline-block;font-weight:600;">控股股东 (持股65%)</span>
                     </div>
                     <div style="border-top:1px dashed var(--gray-200);padding-top:12px;margin-top:12px;">
@@ -902,7 +902,7 @@
                 
             p1 += `<div class="cp-card">
                     <div style="margin-bottom:12px;">
-                        <div style="font-size:15px;font-weight:700;color:var(--gray-900);">苏州蓝天商贸有限公司</div>
+                        <div style="font-size:14px;font-weight:700;color:var(--gray-900);">苏州蓝天商贸有限公司</div>
                         <span style="font-size:11px;padding:4px 8px;border-radius:6px;background:rgba(245,158,11,0.1);color:var(--warning);margin-top:6px;display:inline-block;font-weight:600;">法定代表人其他企业</span>
                     </div>
                     <div style="border-top:1px dashed var(--gray-200);padding-top:12px;margin-top:12px;">
@@ -918,7 +918,7 @@
                     <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
                         <span style="width:40px;height:40px;background:var(--brand-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;font-weight:600;box-shadow:0 4px 10px rgba(37,99,235,0.2);">关</span>
                         <div>
-                            <div style="font-size:16px;font-weight:700;color:var(--gray-900);">苏州创芯微电子有限公司</div>
+                            <div style="font-size:14px;font-weight:700;color:var(--gray-900);">苏州创芯微电子有限公司</div>
                             <div style="font-size:12px;color:var(--gray-500);margin-top:4px;">行内授信 · 贷款余额800万 · 经理：王强</div>
                         </div>
                     </div>
@@ -1215,5 +1215,19 @@
             </div>
         </div>
     </div>
+
+<!-- 小程序环境检测 -->
+<script>
+(function() {
+    var ua = navigator.userAgent.toLowerCase();
+    var isMiniProgram = ua.indexOf('miniprogram') > -1
+        || window.__wxjs_environment === 'miniprogram';
+    if (isMiniProgram) {
+        document.documentElement.classList.add('in-miniprogram');
+    }
+})();
+</script>
+<!-- 设计稿导出模式（URL 加 ?design=mp 启用） -->
+<script src="js/design-mode.js"></script>
 </body>
 </html>

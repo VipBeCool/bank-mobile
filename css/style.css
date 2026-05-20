@@ -52,7 +52,7 @@
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { font-size: 16px; -webkit-text-size-adjust: 100%; }
+html { font-size: 14px; -webkit-text-size-adjust: 100%; }
 body {
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Helvetica Neue", sans-serif;
   background: var(--bg-app);
@@ -67,15 +67,6 @@ a { color: inherit; text-decoration: none; -webkit-tap-highlight-color: transpar
 button { font: inherit; cursor: pointer; border: none; background: none; -webkit-tap-highlight-color: transparent; }
 input, select, textarea { font: inherit; border: none; outline: none; background: none; }
 
-/* 页面顶部背景光晕效果 */
-.page::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; height: 300px;
-  background: radial-gradient(circle at 50% 0%, rgba(37, 99, 235, 0.06) 0%, transparent 70%);
-  z-index: -1;
-  pointer-events: none;
-}
 
 .page {
   position: relative;
@@ -84,13 +75,13 @@ input, select, textarea { font: inherit; border: none; outline: none; background
 }
 
 /* --- Typography Classes --- */
-.display-sm { font-size: 24px; font-weight: 700; line-height: 1.2; letter-spacing: -0.5px; }
-.display-xs { font-size: 20px; font-weight: 700; line-height: 1.2; letter-spacing: -0.3px; }
-.body-md { font-size: 16px; font-weight: 400; line-height: 1.5; }
-.body-emphasis { font-size: 16px; font-weight: 600; line-height: 1.5; }
-.caption-md { font-size: 14px; font-weight: 400; line-height: 1.5; }
-.caption-bold { font-size: 14px; font-weight: 600; line-height: 1.4; }
-.caption-sm { font-size: 12px; font-weight: 500; line-height: 1.4; }
+.display-sm { font-size: 20px; font-weight: 700; line-height: 1.2; letter-spacing: -0.5px; }
+.display-xs { font-size: 18px; font-weight: 700; line-height: 1.2; letter-spacing: -0.3px; }
+.body-md { font-size: 14px; font-weight: 400; line-height: 1.5; }
+.body-emphasis { font-size: 14px; font-weight: 600; line-height: 1.5; }
+.caption-md { font-size: 13px; font-weight: 400; line-height: 1.5; }
+.caption-bold { font-size: 13px; font-weight: 600; line-height: 1.4; }
+.caption-sm { font-size: 11px; font-weight: 500; line-height: 1.4; }
 
 /* --- Header --- */
 .header {
@@ -107,7 +98,7 @@ input, select, textarea { font: inherit; border: none; outline: none; background
   align-items: center;
   justify-content: space-between;
 }
-.header-title { font-size: 28px; font-weight: 800; letter-spacing: -0.5px; color: var(--gray-900); }
+.header-title { font-size: 20px; font-weight: 800; letter-spacing: -0.3px; color: var(--gray-900); }
 .header-avatar {
   width: 40px; height: 40px; border-radius: 50%;
   background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
@@ -119,7 +110,7 @@ input, select, textarea { font: inherit; border: none; outline: none; background
 
 /* --- Search Bar --- */
 .search-bar {
-  margin: 8px 20px 16px;
+  margin: 12px 20px 12px;
   display: flex; align-items: center; gap: 10px;
   background: var(--surface);
   border: 1px solid var(--border-strong);
@@ -133,7 +124,7 @@ input, select, textarea { font: inherit; border: none; outline: none; background
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); 
 }
 .search-bar svg { flex-shrink: 0; color: var(--gray-400); width: 18px; height: 18px; }
-.search-bar input { flex: 1; font-size: 15px; color: var(--gray-900); font-weight: 500; }
+.search-bar input { flex: 1; font-size: 14px; color: var(--gray-900); font-weight: 500; }
 .search-bar input::placeholder { color: var(--gray-400); font-weight: 400; }
 
 /* --- Segment Control --- */
@@ -143,7 +134,7 @@ input, select, textarea { font: inherit; border: none; outline: none; background
 }
 .segment::-webkit-scrollbar { display: none; }
 .seg-btn {
-  padding: 8px 20px; border-radius: var(--r-pill); font-size: 14px; font-weight: 600;
+  padding: 8px 18px; border-radius: var(--r-pill); font-size: 13px; font-weight: 600;
   white-space: nowrap; color: var(--gray-600);
   background: var(--gray-200); 
   transition: all 0.2s;
@@ -183,9 +174,9 @@ input, select, textarea { font: inherit; border: none; outline: none; background
   transition: transform 0.2s;
 }
 .metric-card:active { transform: scale(0.96); }
-.metric-label { font-size: 13px; color: var(--gray-500); font-weight: 600; margin-bottom: 8px; }
+.metric-label { font-size: 12px; color: var(--gray-500); font-weight: 600; margin-bottom: 6px; }
 .metric-value { 
-  font-size: 32px; font-weight: 800; letter-spacing: -1px; line-height: 1; 
+  font-size: 28px; font-weight: 800; letter-spacing: -1px; line-height: 1; 
   color: var(--gray-900);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
 }
@@ -201,8 +192,8 @@ input, select, textarea { font: inherit; border: none; outline: none; background
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 24px 12px;
 }
-.section-title { font-size: 18px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.3px; }
-.section-action { font-size: 14px; color: var(--brand-primary); font-weight: 600; }
+.section-title { font-size: 16px; font-weight: 700; color: var(--gray-900); letter-spacing: -0.2px; }
+.section-action { font-size: 13px; color: var(--brand-primary); font-weight: 600; }
 
 /* --- Customer Card --- */
 .card-list { padding: 12px 20px 0; }
@@ -216,10 +207,10 @@ input, select, textarea { font: inherit; border: none; outline: none; background
 .cust-card:active { transform: scale(0.97); box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
 .cc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
 .cc-name {
-  font-size: 16px; font-weight: 700; color: var(--gray-900); line-height: 1.4;
-  flex: 1; min-width: 0; padding-right: 12px;
+  font-size: 14px; font-weight: 700; color: var(--gray-900); line-height: 1.4;
+  flex: 1; min-width: 0; padding-right: 8px;
 }
-.cc-uscc { font-size: 12px; color: var(--gray-400); font-family: "SF Mono", "Menlo", monospace; letter-spacing: 0.5px; margin-bottom: 12px; }
+.cc-uscc { font-size: 11px; color: var(--gray-400); font-family: "SF Mono", "Menlo", monospace; letter-spacing: 0.5px; margin-bottom: 10px; }
 
 .cc-score-wrap {
   display: flex; align-items: center; gap: 12px; flex-shrink: 0;
@@ -236,7 +227,7 @@ input, select, textarea { font: inherit; border: none; outline: none; background
   font-size: 12px; font-weight: 700; color: var(--gray-700);
 }
 .score-num {
-  font-size: 18px; font-weight: 800; color: var(--gray-800);
+  font-size: 16px; font-weight: 800; color: var(--gray-800);
   font-family: "SF Pro Display", sans-serif;
 }
 
@@ -251,16 +242,16 @@ input, select, textarea { font: inherit; border: none; outline: none; background
   padding-top: 12px; border-top: 1px dashed var(--gray-200);
 }
 .cc-addr {
-  font-size: 13px; color: var(--gray-500); flex: 1; min-width: 0;
+  font-size: 12px; color: var(--gray-500); flex: 1; min-width: 0;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  display: flex; align-items: center; gap: 6px; font-weight: 500;
+  display: flex; align-items: center; gap: 5px; font-weight: 500;
 }
 .cc-addr svg { flex-shrink: 0; color: var(--gray-400); }
 .cc-actions { display: flex; gap: 8px; flex-shrink: 0; margin-left: 12px; }
 
 /* Buttons */
 .cc-btn {
-  padding: 8px 16px; border-radius: var(--r-pill); font-size: 13px; font-weight: 600;
+  padding: 6px 14px; border-radius: var(--r-pill); font-size: 12px; font-weight: 600;
   display: flex; align-items: center; gap: 4px; transition: opacity 0.2s;
 }
 .cc-btn:active { opacity: 0.7; }
@@ -274,18 +265,32 @@ input, select, textarea { font: inherit; border: none; outline: none; background
 /* --- Follow Items (跟进页) --- */
 .follow-stat-grid {
   display: flex; gap: 12px; padding: 0 20px 24px;
+  /* 隐藏滚动条 */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.follow-stat-grid::-webkit-scrollbar {
+  display: none;
 }
 .follow-stat-item {
   flex: 1; background: var(--surface); border-radius: var(--r-md); padding: 16px 0;
   text-align: center; border: 1px solid var(--border); box-shadow: var(--shadow-sm);
 }
-.follow-stat-val { font-size: 24px; font-weight: 800; font-family: "SF Pro Display", sans-serif; line-height: 1; margin-bottom: 4px; color: var(--gray-900); }
-.follow-stat-label { font-size: 12px; color: var(--gray-500); font-weight: 600; }
+.follow-stat-val { font-size: 20px; font-weight: 800; font-family: "SF Pro Display", sans-serif; line-height: 1; margin-bottom: 4px; color: var(--brand-primary); }
+.follow-stat-label { font-size: 11px; color: var(--gray-500); font-weight: 600; }
 
 .follow-group { padding: 0 20px; margin-bottom: 24px; }
 .follow-group-title {
   font-size: 14px; font-weight: 700; color: var(--gray-900);
-  padding: 0 0 12px; display: flex; align-items: center; gap: 12px;
+  padding: 0 0 10px; display: flex; align-items: center; gap: 8px;
+}
+.follow-group-title::before {
+  content: '';
+  display: block;
+  width: 3px;
+  height: 14px;
+  background: var(--brand-primary);
+  border-radius: 2px;
 }
 .follow-item {
   display: flex; align-items: center; gap: 16px;
@@ -302,8 +307,8 @@ input, select, textarea { font: inherit; border: none; outline: none; background
 }
 
 .fi-body { flex: 1; min-width: 0; }
-.fi-name { font-size: 15px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
-.fi-info { font-size: 13px; color: var(--gray-500); display: flex; align-items: center; gap: 6px; font-weight: 500;}
+.fi-name { font-size: 14px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
+.fi-info { font-size: 12px; color: var(--gray-500); display: flex; align-items: center; gap: 6px; font-weight: 500;}
 .fi-chevron { color: var(--gray-300); font-size: 18px; flex-shrink: 0; margin-left: 8px; }
 
 /* --- Premium Floating Tab Bar (恢复毛玻璃效果) --- */
@@ -328,7 +333,7 @@ input, select, textarea { font: inherit; border: none; outline: none; background
   color: var(--gray-500); text-decoration: none; flex: 1;
 }
 .tab-item svg { width: 18px; height: 18px; transition: color 0.3s; }
-.tab-item span { font-size: 13px; font-weight: 600; transition: all 0.3s; display: block; }
+.tab-item span { font-size: 12px; font-weight: 600; transition: all 0.3s; display: block; }
 .tab-item.on { 
   background: var(--brand-primary); 
   color: #fff; 
@@ -362,7 +367,7 @@ input, select, textarea { font: inherit; border: none; outline: none; background
   display: flex; align-items: center; justify-content: space-between;
   padding: 16px 24px 20px;
 }
-.sheet-title { font-size: 18px; font-weight: 700; color: var(--gray-900); }
+.sheet-title { font-size: 16px; font-weight: 700; color: var(--gray-900); }
 .sheet-close {
   width: 32px; height: 32px; border-radius: 50%; background: var(--gray-100);
   display: flex; align-items: center; justify-content: center;
@@ -373,10 +378,10 @@ input, select, textarea { font: inherit; border: none; outline: none; background
 
 /* --- Form Elements --- */
 .form-group { margin-bottom: 20px; }
-.form-label { font-size: 14px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px; }
+.form-label { font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px; }
 .form-select, .form-textarea {
-  width: 100%; padding: 14px 16px; border-radius: 12px;
-  background: var(--gray-50); font-size: 15px; color: var(--gray-900);
+  width: 100%; padding: 12px 14px; border-radius: 12px;
+  background: var(--gray-50); font-size: 14px; color: var(--gray-900);
   border: 1px solid var(--border-strong);
 }
 .form-select:focus, .form-textarea:focus {
@@ -414,7 +419,7 @@ input, select, textarea { font: inherit; border: none; outline: none; background
 }
 .st-tab {
   flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
-  padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 600;
+  padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600;
   text-align: center; color: var(--gray-500); transition: all 0.2s; cursor: pointer;
 }
 .st-tab svg { flex-shrink: 0; }
@@ -493,7 +498,7 @@ input, select, textarea { font: inherit; border: none; outline: none; background
 
 .btn-row { display: flex; gap: 12px; padding: 16px 24px; border-top: 1px solid var(--border); }
 .btn-fill {
-  flex: 1; padding: 14px; border-radius: var(--r-pill); font-size: 16px; font-weight: 700;
+  flex: 1; padding: 14px; border-radius: var(--r-pill); font-size: 15px; font-weight: 700;
   text-align: center; transition: opacity 0.2s;
 }
 .btn-fill:active { opacity: 0.8; }
@@ -507,7 +512,7 @@ input, select, textarea { font: inherit; border: none; outline: none; background
   box-shadow: 0 2px 8px rgba(0,0,0,0.02);
 }
 .cp-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
-.cp-phone { font-size: 18px; font-weight: 700; font-family: "SF Mono", monospace; color: var(--gray-900); }
+.cp-phone { font-size: 16px; font-weight: 700; font-family: "SF Mono", monospace; color: var(--gray-900); }
 .cp-role {
   font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 8px;
 }
@@ -532,7 +537,7 @@ input, select, textarea { font: inherit; border: none; outline: none; background
   background: var(--gray-100); border-radius: 12px; padding: 4px;
 }
 .cs-tab {
-  flex: 1; padding: 10px; border-radius: 8px; font-size: 14px; font-weight: 600;
+  flex: 1; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 600;
   text-align: center; color: var(--gray-500); transition: all 0.2s;
 }
 .cs-tab.on { background: var(--surface); color: var(--gray-900); box-shadow: var(--shadow-sm); }
@@ -570,7 +575,46 @@ input, select, textarea { font: inherit; border: none; outline: none; background
 .sheet-panel.on { transform: translateY(0); }
 .sheet-handle { width: 36px; height: 4px; background: var(--gray-300); border-radius: 2px; margin: 12px auto; flex-shrink: 0; }
 .sheet-header { display: flex; justify-content: space-between; align-items: center; padding: 0 20px 16px; border-bottom: 1px solid var(--gray-100); flex-shrink: 0; }
-.sheet-title { font-size: 18px; font-weight: 700; color: var(--gray-900); }
+.sheet-title { font-size: 16px; font-weight: 700; color: var(--gray-900); }
 .sheet-close { font-size: 20px; color: var(--gray-400); border: none; background: transparent; cursor: pointer; padding: 4px; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
 .sheet-close:active { background: var(--gray-100); color: var(--gray-600); }
 .sheet-body { flex: 1; min-height: 0; padding: 20px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+
+/* ==============================================
+   微信小程序 web-view 内嵌适配
+   当 html 元素带有 .in-miniprogram class 时生效。
+   小程序使用 navigationStyle: default 模式，
+   H5 内容渲染在原生导航栏下方，无需自行预留安全区。
+   ============================================== */
+
+/* 通用 Header：去掉顶部安全区 padding，改为普通定位 */
+.in-miniprogram .header {
+  padding-top: 12px !important;
+  position: relative !important;
+  background: var(--bg-app) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* 详情页蓝色 Header：去掉顶部安全区 padding */
+.in-miniprogram .blue-header {
+  padding-top: 16px !important;
+}
+
+/* 隐藏与小程序导航栏重复的页面标题 */
+.in-miniprogram .page-title-dup {
+  display: none !important;
+}
+.in-miniprogram .header-dup {
+  display: none !important;
+}
+
+/* 详情页：隐藏 H5 自定义返回按钮（小程序原生导航栏已有） */
+.in-miniprogram .blue-header-back {
+  display: none !important;
+}
+
+/* 解决模拟器模式下 sticky 吸顶被覆盖的问题 */
+.design-mode-mp .filter-wrap {
+  top: 88px !important;
+}
