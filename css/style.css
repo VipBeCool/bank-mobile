@@ -176,8 +176,8 @@ input, select, textarea { font: inherit; border: none; outline: none; background
 .metric-card:active { transform: scale(0.96); }
 .metric-label { font-size: 12px; color: var(--gray-500); font-weight: 600; margin-bottom: 6px; }
 .metric-value { 
-  font-size: 28px; font-weight: 800; letter-spacing: -1px; line-height: 1; 
-  color: var(--gray-900);
+  font-size: 28px; font-weight: 700; letter-spacing: -1px; line-height: 1; 
+  color: var(--gray-800);
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
 }
 .metric-trend {
@@ -207,7 +207,7 @@ input, select, textarea { font: inherit; border: none; outline: none; background
 .cust-card:active { transform: scale(0.97); box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
 .cc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 4px; }
 .cc-name {
-  font-size: 14px; font-weight: 700; color: var(--gray-900); line-height: 1.4;
+  font-size: 14px; font-weight: 600; color: var(--gray-900); line-height: 1.4;
   flex: 1; min-width: 0; padding-right: 8px;
 }
 .cc-uscc { font-size: 11px; color: var(--gray-400); font-family: "SF Mono", "Menlo", monospace; letter-spacing: 0.5px; margin-bottom: 10px; }
@@ -273,7 +273,7 @@ input, select, textarea { font: inherit; border: none; outline: none; background
   display: none;
 }
 .follow-stat-item {
-  flex: 1; background: var(--surface); border-radius: var(--r-md); padding: 16px 0;
+  flex: 1; background: var(--surface); border-radius: var(--r-md); padding: 12px 0;
   text-align: center; border: 1px solid var(--border); box-shadow: var(--shadow-sm);
 }
 .follow-stat-val { font-size: 20px; font-weight: 800; font-family: "SF Pro Display", sans-serif; line-height: 1; margin-bottom: 4px; color: var(--brand-primary); }
@@ -293,18 +293,19 @@ input, select, textarea { font: inherit; border: none; outline: none; background
   border-radius: 2px;
 }
 .follow-item {
-  display: flex; align-items: center; gap: 16px;
-  background: var(--surface); border-radius: var(--r-md); padding: 16px;
-  margin-bottom: 8px; border: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+  background: var(--surface); border-radius: var(--r-md); padding: 10px 14px;
+  margin-bottom: 6px; border: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
   transition: transform 0.2s;
 }
 .follow-item:active { transform: scale(0.97); }
 .fi-icon {
-  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+  width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
   display: flex; align-items: center; justify-content: center;
   background: #f0f7ff; color: var(--brand-primary);
 }
+.fi-icon svg { width: 16px; height: 16px; }
 
 .fi-body { flex: 1; min-width: 0; }
 .fi-name { font-size: 14px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
@@ -462,9 +463,10 @@ input, select, textarea { font: inherit; border: none; outline: none; background
 }
 .dyn-row { display: flex; gap: 12px; margin-bottom: 12px; }
 .dyn-row:last-child { margin-bottom: 0; }
-.dyn-field { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.dyn-field { flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .dyn-field label { font-size: 12px; font-weight: 600; color: var(--gray-500); }
 .dyn-field input {
+  width: 100%; min-width: 0;
   height: 40px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--border-strong);
   background: #fff; font-size: 14px; color: var(--gray-900); font-weight: 500;
 }
@@ -521,8 +523,20 @@ input, select, textarea { font: inherit; border: none; outline: none; background
 .cp-btn-call { display: inline-flex; align-items: center; justify-content: center; padding: 6px 16px; border-radius: var(--r-pill); font-size: 13px; font-weight: 600; color: #fff; background: var(--brand-primary); border: none; cursor: pointer; }
 .cp-btn-fb { padding: 6px 12px; border-radius: var(--r-pill); font-size: 12px; font-weight: 500; color: var(--gray-600); background: var(--gray-100); border: none; cursor: pointer; }
 
-.cp-actions-expand { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.cp-actions-expand {
+  display: flex;
+  gap: 8px;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  margin-top: 12px;
+  scrollbar-width: none; /* Firefox 隐藏滚动条 */
+  -ms-overflow-style: none; /* IE 隐藏滚动条 */
+}
+.cp-actions-expand::-webkit-scrollbar {
+  display: none; /* Chrome/Safari 隐藏滚动条 */
+}
 .cp-action-btn {
+  flex-shrink: 0;
   padding: 6px 14px; border-radius: 100px; font-size: 12px; font-weight: 600;
   border: 1px solid var(--border-strong); color: var(--gray-600);
   background: var(--surface); transition: all 0.2s; cursor: pointer;
@@ -612,6 +626,11 @@ input, select, textarea { font: inherit; border: none; outline: none; background
 /* 详情页：隐藏 H5 自定义返回按钮（小程序原生导航栏已有） */
 .in-miniprogram .blue-header-back {
   display: none !important;
+}
+
+/* 小程序模式下，因为返回按钮隐藏，荣誉标签取消左边距以保持与企业名称靠左对齐 */
+.in-miniprogram .cc-badges-row {
+  margin-left: 0 !important;
 }
 
 /* 解决模拟器模式下 sticky 吸顶被覆盖的问题 */

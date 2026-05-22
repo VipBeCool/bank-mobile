@@ -5,6 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>跟进 - 智能营销</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* 吸顶覆盖层：统计卡片 */
+        #fixedStatBar {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 101;
+            background: rgba(244, 246, 248, 0.96);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            padding: 10px 20px 10px;
+        }
+        #fixedStatBar .follow-stat-grid {
+            padding: 0; margin: 0;
+        }
+        /* 吸顶覆盖层：分组标题 */
+        #fixedGroupTitle {
+            display: none;
+            position: fixed;
+            left: 0; right: 0;
+            z-index: 100;
+            padding: 10px 20px 8px;
+            font-size: 14px; font-weight: 700; color: var(--gray-900);
+            background: rgba(244, 246, 248, 0.96);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+        }
+        #fixedGroupTitle::before {
+            content: '';
+            display: inline-block;
+            width: 3px; height: 14px;
+            background: var(--brand-primary);
+            border-radius: 2px;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+    </style>
 </head>
 <body>
 <div class="page">
@@ -16,24 +55,24 @@
     </div>
 
     <!-- 快速统计 (可点击锚点) -->
-    <div class="follow-stat-grid" style="overflow-x: auto; white-space: nowrap; padding-bottom: 8px; margin-bottom: 16px; margin-top: 16px;">
-        <div class="follow-stat-item" onclick="document.getElementById('grp-confirm').scrollIntoView({behavior:'smooth',block:'start'})">
+    <div class="follow-stat-grid" id="statGrid" style="overflow-x: auto; white-space: nowrap; padding-bottom: 8px; margin-bottom: 12px; margin-top: 12px;">
+        <div class="follow-stat-item" onclick="scrollToGroup('grp-confirm')">
             <div class="follow-stat-val" style="color: var(--danger);">1</div>
             <div class="follow-stat-label">确认意向</div>
         </div>
-        <div class="follow-stat-item" onclick="document.getElementById('grp-retry').scrollIntoView({behavior:'smooth',block:'start'})">
+        <div class="follow-stat-item" onclick="scrollToGroup('grp-retry')">
             <div class="follow-stat-val" style="color: var(--warning);">2</div>
             <div class="follow-stat-label">再次联系</div>
         </div>
-        <div class="follow-stat-item" onclick="document.getElementById('grp-push').scrollIntoView({behavior:'smooth',block:'start'})">
+        <div class="follow-stat-item" onclick="scrollToGroup('grp-push')">
             <div class="follow-stat-val" style="color: var(--success);">1</div>
             <div class="follow-stat-label">推进转化</div>
         </div>
-        <div class="follow-stat-item" onclick="document.getElementById('grp-credit').scrollIntoView({behavior:'smooth',block:'start'})">
+        <div class="follow-stat-item" onclick="scrollToGroup('grp-credit')">
             <div class="follow-stat-val" style="color: var(--brand-primary);">2</div>
             <div class="follow-stat-label">跟进授信</div>
         </div>
-        <div class="follow-stat-item" onclick="document.getElementById('grp-drawdown').scrollIntoView({behavior:'smooth',block:'start'})">
+        <div class="follow-stat-item" onclick="scrollToGroup('grp-drawdown')">
             <div class="follow-stat-val" style="color: #8b5cf6;">1</div>
             <div class="follow-stat-label">引导提款</div>
         </div>
@@ -46,7 +85,7 @@
         <!-- 南京创新智造 — 跟进中·意向沟通中 -->
         <div class="follow-item" onclick="location.href='detail.html?id=2'">
             <div class="fi-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22V10h6v12"></path></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"></path><path d="M6 12H4a2 2 0 0 0-2 2v8"></path><path d="M18 16h2a2 2 0 0 1 2 2v4"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
             </div>
             <div class="fi-body">
                 <div class="fi-name">南京创新智造集团有限公司</div>
@@ -67,7 +106,7 @@
         <!-- 苏州生物医药 — 触达失败·无人接听 -->
         <div class="follow-item" onclick="location.href='detail.html?id=5'">
             <div class="fi-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22V10h6v12"></path></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"></path><path d="M6 12H4a2 2 0 0 0-2 2v8"></path><path d="M18 16h2a2 2 0 0 1 2 2v4"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
             </div>
             <div class="fi-body">
                 <div class="fi-name">苏州生物医药研究院有限公司</div>
@@ -83,7 +122,7 @@
         <!-- 无锡集成电路 — 触达失败·拒绝沟通 -->
         <div class="follow-item" onclick="location.href='detail.html?id=9'">
             <div class="fi-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22V10h6v12"></path></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"></path><path d="M6 12H4a2 2 0 0 0-2 2v8"></path><path d="M18 16h2a2 2 0 0 1 2 2v4"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
             </div>
             <div class="fi-body">
                 <div class="fi-name">无锡集成电路设计有限公司</div>
@@ -104,7 +143,7 @@
         <!-- 南京艾科微电子 — 有意向·未申请 (作为兜底卡片演示) -->
         <div class="follow-item" onclick="location.href='detail.html?id=12'">
             <div class="fi-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22V10h6v12"></path></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"></path><path d="M6 12H4a2 2 0 0 0-2 2v8"></path><path d="M18 16h2a2 2 0 0 1 2 2v4"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
             </div>
             <div class="fi-body">
                 <div class="fi-name">南京艾科微电子有限公司</div>
@@ -125,7 +164,7 @@
         <!-- 无锡光电半导体 — 有意向·已申请 -->
         <div class="follow-item" onclick="location.href='detail.html?id=3'">
             <div class="fi-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22V10h6v12"></path></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"></path><path d="M6 12H4a2 2 0 0 0-2 2v8"></path><path d="M18 16h2a2 2 0 0 1 2 2v4"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
             </div>
             <div class="fi-body">
                 <div class="fi-name">无锡光电半导体有限公司</div>
@@ -141,7 +180,7 @@
         <!-- 常州智能制造 — 有意向·审批中 -->
         <div class="follow-item" onclick="location.href='detail.html?id=10'">
             <div class="fi-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22V10h6v12"></path></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"></path><path d="M6 12H4a2 2 0 0 0-2 2v8"></path><path d="M18 16h2a2 2 0 0 1 2 2v4"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
             </div>
             <div class="fi-body">
                 <div class="fi-name">常州智能制造系统有限公司</div>
@@ -162,7 +201,7 @@
         <!-- 南京云端数据 — 已授信 -->
         <div class="follow-item" onclick="location.href='detail.html?id=8'">
             <div class="fi-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22V10h6v12"></path></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"></path><path d="M6 12H4a2 2 0 0 0-2 2v8"></path><path d="M18 16h2a2 2 0 0 1 2 2v4"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
             </div>
             <div class="fi-body">
                 <div class="fi-name">南京云端数据技术有限公司</div>
@@ -183,7 +222,7 @@
         <!-- 常州新能源 — 无意向 -->
         <div class="follow-item" style="opacity:0.6;" onclick="location.href='detail.html?id=4'">
             <div class="fi-icon">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22V10h6v12"></path></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"></path><path d="M6 12H4a2 2 0 0 0-2 2v8"></path><path d="M18 16h2a2 2 0 0 1 2 2v4"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
             </div>
             <div class="fi-body">
                 <div class="fi-name">常州新能源科技股份有限公司</div>
@@ -198,6 +237,34 @@
     </div>
 
 </div>
+
+<!-- 吸顶覆盖层：统计卡片（独立于文档流，不影响原始布局） -->
+<div id="fixedStatBar">
+    <div class="follow-stat-grid" style="padding:0; margin:0;">
+        <div class="follow-stat-item" onclick="scrollToGroup('grp-confirm')" style="padding:10px 0;">
+            <div class="follow-stat-val" style="color: var(--danger); font-size:18px;">1</div>
+            <div class="follow-stat-label">确认意向</div>
+        </div>
+        <div class="follow-stat-item" onclick="scrollToGroup('grp-retry')" style="padding:10px 0;">
+            <div class="follow-stat-val" style="color: var(--warning); font-size:18px;">2</div>
+            <div class="follow-stat-label">再次联系</div>
+        </div>
+        <div class="follow-stat-item" onclick="scrollToGroup('grp-push')" style="padding:10px 0;">
+            <div class="follow-stat-val" style="color: var(--success); font-size:18px;">1</div>
+            <div class="follow-stat-label">推进转化</div>
+        </div>
+        <div class="follow-stat-item" onclick="scrollToGroup('grp-credit')" style="padding:10px 0;">
+            <div class="follow-stat-val" style="color: var(--brand-primary); font-size:18px;">2</div>
+            <div class="follow-stat-label">跟进授信</div>
+        </div>
+        <div class="follow-stat-item" onclick="scrollToGroup('grp-drawdown')" style="padding:10px 0;">
+            <div class="follow-stat-val" style="color: #8b5cf6; font-size:18px;">1</div>
+            <div class="follow-stat-label">引导提款</div>
+        </div>
+    </div>
+</div>
+<!-- 吸顶覆盖层：分组标题 -->
+<div id="fixedGroupTitle"></div>
 
 <!-- 悬浮Tab栏 -->
 <nav class="tab-bar">
@@ -227,6 +294,87 @@
         document.documentElement.classList.add('in-miniprogram');
     }
 })();
+</script>
+
+<!-- 吸顶逻辑（覆盖层方案，不修改原始DOM布局） -->
+<script>
+(function() {
+    var statGrid = document.getElementById('statGrid');
+    var fixedBar = document.getElementById('fixedStatBar');
+    var fixedTitle = document.getElementById('fixedGroupTitle');
+    var groups = document.querySelectorAll('.follow-group');
+
+    if (!statGrid || !fixedBar) return;
+
+    var ticking = false;
+
+    function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function() {
+            ticking = false;
+
+            // 小程序模式下 header-dup 隐藏，页面从 top=0 开始渲染
+            // 用 statGrid 自身的 bottom 位置判断是否需要统计卡片吸顶
+            var statRect = statGrid.getBoundingClientRect();
+            var barVisible = statRect.bottom < 2; // 容差2px防止抖动
+
+            if (barVisible) {
+                fixedBar.style.display = 'block';
+            } else {
+                fixedBar.style.display = 'none';
+            }
+
+            // 固定统计卡片高度（显示时动态取，不显示时为0）
+            var fixedBarH = barVisible ? fixedBar.offsetHeight : 0;
+
+            // 分组标题吸顶：独立于统计卡片，只要分组顶部压过当前吸顶线即显示
+            var currentTitle = null;
+            for (var i = 0; i < groups.length; i++) {
+                var g = groups[i];
+                var rect = g.getBoundingClientRect();
+                var stickyLine = fixedBarH; // 统计卡片高度（可能为0）
+                // 分组顶部已滚到吸顶线以上，且底部还未完全滚出（至少留40px）
+                if (rect.top <= stickyLine && rect.bottom > stickyLine + 36) {
+                    currentTitle = g.querySelector('.follow-group-title').textContent;
+                }
+            }
+
+            if (currentTitle) {
+                fixedTitle.textContent = currentTitle;
+                fixedTitle.style.display = 'block';
+                fixedTitle.style.top = fixedBarH + 'px';
+            } else {
+                fixedTitle.style.display = 'none';
+            }
+        });
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    // 首次检测（延迟稍长以等待小程序WebView完成布局）
+    setTimeout(onScroll, 150);
+    // 再做一次兜底，防止小程序环境初始化慢
+    setTimeout(onScroll, 500);
+})();
+
+// 带偏移量的分组锚点滚动
+function scrollToGroup(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    var fixedBar = document.getElementById('fixedStatBar');
+    var fixedTitle = document.getElementById('fixedGroupTitle');
+    // 动态计算当前两个吸顶层的总高度，加8px喘息空间
+    var offset = 0;
+    if (fixedBar && fixedBar.style.display !== 'none') {
+        offset += fixedBar.offsetHeight;
+    }
+    if (fixedTitle && fixedTitle.style.display !== 'none') {
+        offset += fixedTitle.offsetHeight;
+    }
+    if (offset === 0) offset = 48; // 兜底偏移
+    var y = el.getBoundingClientRect().top + window.pageYOffset - offset - 4;
+    window.scrollTo({ top: y, behavior: 'smooth' });
+}
 </script>
 <!-- 设计稿导出模式（URL 加 ?design=mp 启用） -->
 <script src="js/design-mode.js"></script>

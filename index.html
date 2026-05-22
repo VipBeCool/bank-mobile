@@ -35,7 +35,7 @@
             <div class="metric-value" style="color: #fff; font-size: 40px; margin: 8px 0 16px;">156</div>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-right: 24px;">
                 <div class="metric-trend" style="background: rgba(255,255,255,0.15); color: #fff; border: none; font-size: 12px; padding: 4px 8px; margin-top: 0;">
-                    <span style="font-size: 10px;">▲</span> 12% 较上周
+                    <span style="font-size: 10px;">▼</span> 较上周 -5 家
                 </div>
                 <div style="color: rgba(255,255,255,0.9); font-size: 13px; font-weight: 500;">
                     我的客户 <span style="font-size: 13px; font-family: 'SF Mono', monospace; font-weight: 700; color: #fff;">1,280</span>
@@ -44,39 +44,27 @@
         </div>
         
         <!-- 小卡片：本周触达 -->
-        <div class="metric-card" style="padding: 16px; box-shadow: none; border: 1px solid var(--gray-100); background: #f8fafc;">
+        <div class="metric-card" style="padding: 14px 16px; box-shadow: none; border: 1px solid var(--gray-100); background: #f8fafc;">
             <div class="metric-label">本周触达</div>
-            <div class="metric-value" style="font-size: 28px; margin: 4px 0 12px;">45</div>
-            <div class="metric-trend up" style="background: var(--success-bg); color: var(--success); border: none; padding: 4px 8px;">
-                <span style="font-size: 10px;">▲</span> 8% 较上周
-            </div>
+            <div class="metric-value" style="font-size: 26px; margin: 4px 0 0;">45</div>
         </div>
 
-        <!-- 小卡片：本周意向 (持平样式) -->
-        <div class="metric-card" style="padding: 16px; box-shadow: none; border: 1px solid var(--gray-100); background: #f8fafc;">
+        <!-- 小卡片：本周意向 -->
+        <div class="metric-card" style="padding: 14px 16px; box-shadow: none; border: 1px solid var(--gray-100); background: #f8fafc;">
             <div class="metric-label">本周意向</div>
-            <div class="metric-value" style="font-size: 28px; margin: 4px 0 12px;">23</div>
-            <div class="metric-trend flat" style="background: var(--gray-100); color: var(--gray-500); border: none; padding: 4px 8px; display: inline-flex; align-items: center; gap: 4px; border-radius: 4px; font-weight: 600; font-size: 12px; width: fit-content;">
-                <span style="font-size: 10px; font-weight: bold; transform: scale(1.2);">—</span> 较上周持平
-            </div>
+            <div class="metric-value" style="font-size: 26px; margin: 4px 0 0;">23</div>
         </div>
 
         <!-- 小卡片：本月授信 -->
-        <div class="metric-card" style="padding: 16px; box-shadow: none; border: 1px solid var(--gray-100); background: #f8fafc;">
+        <div class="metric-card" style="padding: 14px 16px; box-shadow: none; border: 1px solid var(--gray-100); background: #f8fafc;">
             <div class="metric-label">本月授信</div>
-            <div class="metric-value" style="font-size: 28px; margin: 4px 0 12px;">1,850<span style="font-size: 12px; font-weight: 500; color: var(--gray-500); margin-left: 2px;">万</span></div>
-            <div class="metric-trend up" style="background: var(--success-bg); color: var(--success); border: none; padding: 4px 8px;">
-                <span style="font-size: 10px;">▲</span> 22% 较上月
-            </div>
+            <div class="metric-value" style="font-size: 26px; margin: 4px 0 0;">1,850<span style="font-size: 12px; font-weight: 500; color: var(--gray-500); margin-left: 2px;">万</span></div>
         </div>
 
-        <!-- 小卡片：本月放款 (下降样式) -->
-        <div class="metric-card" style="padding: 16px; box-shadow: none; border: 1px solid var(--gray-100); background: #f8fafc;">
+        <!-- 小卡片：本月放款 -->
+        <div class="metric-card" style="padding: 14px 16px; box-shadow: none; border: 1px solid var(--gray-100); background: #f8fafc;">
             <div class="metric-label">本月放款</div>
-            <div class="metric-value" style="font-size: 28px; margin: 4px 0 12px;">920<span style="font-size: 12px; font-weight: 500; color: var(--gray-500); margin-left: 2px;">万</span></div>
-            <div class="metric-trend down" style="background: var(--danger-bg); color: var(--danger); border: none; padding: 4px 8px; display: inline-flex; align-items: center; gap: 4px; border-radius: 4px; font-weight: 600; font-size: 12px; width: fit-content;">
-                <span style="font-size: 10px;">▼</span> 2% 较上月
-            </div>
+            <div class="metric-value" style="font-size: 26px; margin: 4px 0 0;">920<span style="font-size: 12px; font-weight: 500; color: var(--gray-500); margin-left: 2px;">万</span></div>
         </div>
     </div>
 
@@ -91,14 +79,16 @@
         
         <!-- P0: 待回访跟进 -->
         <div class="cust-card" onclick="location.href='detail.html?id=3'">
-            <div style="display: flex; gap: 12px; align-items: flex-start; margin-bottom: 8px;">
+            <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 8px;">
+                <!-- 左侧：统一占据两行高度的高级图标 -->
+                <div style="width: 36px; height: 36px; border-radius: 8px; background: #eff6ff; color: var(--brand-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"></path><path d="M6 12H4a2 2 0 0 0-2 2v8"></path><path d="M18 16h2a2 2 0 0 1 2 2v4"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
+                </div>
+                <!-- 右侧：文字信息 -->
                 <div style="flex: 1; min-width: 0;">
                     <div class="cc-top" style="margin-bottom: 2px;">
-                        <div class="cc-name" style="margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
-                            <div style="width: 20px; height: 20px; border-radius: 50%; background: #eff6ff; color: var(--brand-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22V10h6v12"></path></svg>
-                            </div>
-                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">无锡光电半导体有限公司</span>
+                        <div class="cc-name" style="margin-bottom: 0;">
+                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;">无锡光电半导体有限公司</span>
                         </div>
                     </div>
                     <div class="cc-uscc" style="margin-bottom: 0;">91320214MA3EXAMPLE3</div>
@@ -109,9 +99,9 @@
             </div>
             <div style="border-top: 1px dashed var(--gray-200); margin: 8px 0;"></div>
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="font-size: 11px; font-weight: 600; color: var(--danger); display: flex; align-items: center; gap: 5px; height: fit-content; white-space: nowrap;"><span style="width: 6px; height: 6px; border-radius: 50%; background: var(--danger); display: inline-block; flex-shrink: 0;"></span>确认意向</div>
-                <div style="font-size: 13px; color: var(--gray-500); display: flex; align-items: center; gap: 4px;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <div style="font-size: 12px; font-weight: 600; color: var(--danger); display: flex; align-items: center; gap: 5px; height: fit-content; white-space: nowrap;"><span style="width: 6px; height: 6px; border-radius: 50%; background: var(--danger); display: inline-block; flex-shrink: 0;"></span>确认意向</div>
+                <div style="font-size: 12px; color: var(--gray-500); display: flex; align-items: center; gap: 4px;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                     5天前
                 </div>
             </div>
@@ -119,14 +109,16 @@
 
         <!-- P1: 触达失败再拨 -->
         <div class="cust-card" onclick="location.href='detail.html?id=5'">
-            <div style="display: flex; gap: 12px; align-items: flex-start; margin-bottom: 8px;">
+            <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 8px;">
+                <!-- 左侧：统一占据两行高度的高级图标 -->
+                <div style="width: 36px; height: 36px; border-radius: 8px; background: #eff6ff; color: var(--brand-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"></path><path d="M6 12H4a2 2 0 0 0-2 2v8"></path><path d="M18 16h2a2 2 0 0 1 2 2v4"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
+                </div>
+                <!-- 右侧：文字信息 -->
                 <div style="flex: 1; min-width: 0;">
                     <div class="cc-top" style="margin-bottom: 2px;">
-                        <div class="cc-name" style="margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
-                            <div style="width: 20px; height: 20px; border-radius: 50%; background: #eff6ff; color: var(--brand-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22V10h6v12"></path></svg>
-                            </div>
-                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">苏州生物医药研究院有限公司</span>
+                        <div class="cc-name" style="margin-bottom: 0;">
+                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;">苏州生物医药研究院有限公司</span>
                         </div>
                     </div>
                     <div class="cc-uscc" style="margin-bottom: 0;">91320594MA5EXAMPLE5</div>
@@ -137,9 +129,9 @@
             </div>
             <div style="border-top: 1px dashed var(--gray-200); margin: 8px 0;"></div>
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="font-size: 11px; font-weight: 600; color: #f59e0b; display: flex; align-items: center; gap: 5px; height: fit-content; white-space: nowrap;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #f59e0b; display: inline-block; flex-shrink: 0;"></span>再次联系</div>
-                <div style="font-size: 13px; color: var(--gray-500); display: flex; align-items: center; gap: 4px;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <div style="font-size: 12px; font-weight: 600; color: #f59e0b; display: flex; align-items: center; gap: 5px; height: fit-content; white-space: nowrap;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #f59e0b; display: inline-block; flex-shrink: 0;"></span>再次联系</div>
+                <div style="font-size: 12px; color: var(--gray-500); display: flex; align-items: center; gap: 4px;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                     2天前
                 </div>
             </div>
@@ -147,14 +139,16 @@
 
         <!-- P2: 有意向推进 -->
         <div class="cust-card" onclick="location.href='detail.html?id=12'">
-            <div style="display: flex; gap: 12px; align-items: flex-start; margin-bottom: 8px;">
+            <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 8px;">
+                <!-- 左侧：统一占据两行高度的高级图标 -->
+                <div style="width: 36px; height: 36px; border-radius: 8px; background: #eff6ff; color: var(--brand-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"></path><path d="M6 12H4a2 2 0 0 0-2 2v8"></path><path d="M18 16h2a2 2 0 0 1 2 2v4"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
+                </div>
+                <!-- 右侧：文字信息 -->
                 <div style="flex: 1; min-width: 0;">
                     <div class="cc-top" style="margin-bottom: 2px;">
-                        <div class="cc-name" style="margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
-                            <div style="width: 20px; height: 20px; border-radius: 50%; background: #eff6ff; color: var(--brand-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22V10h6v12"></path></svg>
-                            </div>
-                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">南京艾科微电子有限公司</span>
+                        <div class="cc-name" style="margin-bottom: 0; display: block;">
+                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;">南京艾科微电子有限公司</span>
                         </div>
                     </div>
                     <div class="cc-uscc" style="margin-bottom: 0;">91320114MABEXAMPLEA</div>
@@ -165,9 +159,9 @@
             </div>
             <div style="border-top: 1px dashed var(--gray-200); margin: 8px 0;"></div>
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="font-size: 11px; font-weight: 600; color: var(--success); display: flex; align-items: center; gap: 5px; height: fit-content; white-space: nowrap;"><span style="width: 6px; height: 6px; border-radius: 50%; background: var(--success); display: inline-block; flex-shrink: 0;"></span>推进转化</div>
-                <div style="font-size: 13px; color: var(--gray-500); display: flex; align-items: center; gap: 4px;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <div style="font-size: 12px; font-weight: 600; color: var(--success); display: flex; align-items: center; gap: 5px; height: fit-content; white-space: nowrap;"><span style="width: 6px; height: 6px; border-radius: 50%; background: var(--success); display: inline-block; flex-shrink: 0;"></span>推进转化</div>
+                <div style="font-size: 12px; color: var(--gray-500); display: flex; align-items: center; gap: 4px;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                     4天前
                 </div>
             </div>
@@ -175,14 +169,16 @@
 
         <!-- P3: 业务进展跟进 -->
         <div class="cust-card" onclick="location.href='detail.html?id=4'">
-            <div style="display: flex; gap: 12px; align-items: flex-start; margin-bottom: 8px;">
+            <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 8px;">
+                <!-- 左侧：统一占据两行高度的高级图标 -->
+                <div style="width: 36px; height: 36px; border-radius: 8px; background: #eff6ff; color: var(--brand-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"></path><path d="M6 12H4a2 2 0 0 0-2 2v8"></path><path d="M18 16h2a2 2 0 0 1 2 2v4"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
+                </div>
+                <!-- 右侧：文字信息 -->
                 <div style="flex: 1; min-width: 0;">
                     <div class="cc-top" style="margin-bottom: 2px;">
-                        <div class="cc-name" style="margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
-                            <div style="width: 20px; height: 20px; border-radius: 50%; background: #eff6ff; color: var(--brand-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22V10h6v12"></path></svg>
-                            </div>
-                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">江苏中科智能制造研究院有限公司</span>
+                        <div class="cc-name" style="margin-bottom: 0;">
+                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;">江苏中科智能制造研究院有限公司</span>
                         </div>
                     </div>
                     <div class="cc-uscc" style="margin-bottom: 0;">91320211MA1EXAMPLE4</div>
@@ -193,9 +189,9 @@
             </div>
             <div style="border-top: 1px dashed var(--gray-200); margin: 8px 0;"></div>
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="font-size: 11px; font-weight: 600; color: var(--brand-primary); display: flex; align-items: center; gap: 5px; height: fit-content; white-space: nowrap;"><span style="width: 6px; height: 6px; border-radius: 50%; background: var(--brand-primary); display: inline-block; flex-shrink: 0;"></span>跟进授信</div>
-                <div style="font-size: 13px; color: var(--gray-500); display: flex; align-items: center; gap: 4px;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <div style="font-size: 12px; font-weight: 600; color: var(--brand-primary); display: flex; align-items: center; gap: 5px; height: fit-content; white-space: nowrap;"><span style="width: 6px; height: 6px; border-radius: 50%; background: var(--brand-primary); display: inline-block; flex-shrink: 0;"></span>跟进授信</div>
+                <div style="font-size: 12px; color: var(--gray-500); display: flex; align-items: center; gap: 4px;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                     3天前
                 </div>
             </div>
@@ -203,14 +199,16 @@
 
         <!-- P4: 引导提款 -->
         <div class="cust-card" onclick="location.href='detail.html?id=8'">
-            <div style="display: flex; gap: 12px; align-items: flex-start; margin-bottom: 8px;">
+            <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 8px;">
+                <!-- 左侧：统一占据两行高度的高级图标 -->
+                <div style="width: 36px; height: 36px; border-radius: 8px; background: #eff6ff; color: var(--brand-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"></path><path d="M6 12H4a2 2 0 0 0-2 2v8"></path><path d="M18 16h2a2 2 0 0 1 2 2v4"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
+                </div>
+                <!-- 右侧：文字信息 -->
                 <div style="flex: 1; min-width: 0;">
                     <div class="cc-top" style="margin-bottom: 2px;">
-                        <div class="cc-name" style="margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
-                            <div style="width: 20px; height: 20px; border-radius: 50%; background: #eff6ff; color: var(--brand-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22V10h6v12"></path></svg>
-                            </div>
-                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">南京云端数据技术有限公司</span>
+                        <div class="cc-name" style="margin-bottom: 0;">
+                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;">南京云端数据技术有限公司</span>
                         </div>
                     </div>
                     <div class="cc-uscc" style="margin-bottom: 0;">91320114MA1EXAMPLE8</div>
@@ -221,9 +219,9 @@
             </div>
             <div style="border-top: 1px dashed var(--gray-200); margin: 8px 0;"></div>
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="font-size: 11px; font-weight: 600; color: #8b5cf6; display: flex; align-items: center; gap: 5px; height: fit-content; white-space: nowrap;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #8b5cf6; display: inline-block; flex-shrink: 0;"></span>引导提款</div>
-                <div style="font-size: 13px; color: var(--gray-500); display: flex; align-items: center; gap: 4px;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <div style="font-size: 12px; font-weight: 600; color: #8b5cf6; display: flex; align-items: center; gap: 5px; height: fit-content; white-space: nowrap;"><span style="width: 6px; height: 6px; border-radius: 50%; background: #8b5cf6; display: inline-block; flex-shrink: 0;"></span>引导提款</div>
+                <div style="font-size: 12px; color: var(--gray-500); display: flex; align-items: center; gap: 4px;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                     3天前
                 </div>
             </div>
@@ -231,14 +229,16 @@
 
         <!-- P5: 新客待触达 -->
         <div class="cust-card" onclick="location.href='detail.html?id=6'">
-            <div style="display: flex; gap: 12px; align-items: flex-start; margin-bottom: 8px;">
+            <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 8px;">
+                <!-- 左侧：统一占据两行高度的高级图标 -->
+                <div style="width: 36px; height: 36px; border-radius: 8px; background: #eff6ff; color: var(--brand-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"></path><path d="M6 12H4a2 2 0 0 0-2 2v8"></path><path d="M18 16h2a2 2 0 0 1 2 2v4"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
+                </div>
+                <!-- 右侧：文字信息 -->
                 <div style="flex: 1; min-width: 0;">
                     <div class="cc-top" style="margin-bottom: 2px;">
-                        <div class="cc-name" style="margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
-                            <div style="width: 20px; height: 20px; border-radius: 50%; background: #eff6ff; color: var(--brand-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22V10h6v12"></path></svg>
-                            </div>
-                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">常州金能新材料科技有限公司</span>
+                        <div class="cc-name" style="margin-bottom: 0;">
+                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;">常州金能新材料科技有限公司</span>
                         </div>
                     </div>
                     <div class="cc-uscc" style="margin-bottom: 0;">91320411MA3EXAMPLE6</div>
@@ -249,9 +249,9 @@
             </div>
             <div style="border-top: 1px dashed var(--gray-200); margin: 8px 0;"></div>
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <div style="font-size: 11px; font-weight: 600; color: var(--gray-600); display: flex; align-items: center; gap: 5px; height: fit-content; white-space: nowrap;"><span style="width: 6px; height: 6px; border-radius: 50%; background: var(--gray-600); display: inline-block; flex-shrink: 0;"></span>新分配</div>
-                <div style="font-size: 13px; color: var(--gray-500); display: flex; align-items: center; gap: 4px;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                <div style="font-size: 12px; font-weight: 600; color: var(--gray-600); display: flex; align-items: center; gap: 5px; height: fit-content; white-space: nowrap;"><span style="width: 6px; height: 6px; border-radius: 50%; background: var(--gray-600); display: inline-block; flex-shrink: 0;"></span>新分配</div>
+                <div style="font-size: 12px; color: var(--gray-500); display: flex; align-items: center; gap: 4px;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
                     1天前
                 </div>
             </div>

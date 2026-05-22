@@ -790,7 +790,7 @@
         </div>
     </nav>
 
-    <div class="toast" id="toast"></div>
+    <div class="toast" id="toast" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:rgba(0,0,0,0.75); color:#fff; padding:12px 24px; border-radius:12px; font-size:14px; z-index:9999;"></div>
 
     <script>
         // 状态配置
@@ -886,15 +886,16 @@
             wrap.innerHTML = list.map(c => {
                 return `
         <div class="cust-card" onclick="location.href='detail.html?id=${c.id}'">
-            <div style="display: flex; gap: 12px; align-items: flex-start; margin-bottom: 8px;">
+            <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 8px;">
+                <!-- 左侧：统一占据两行高度的高级图标 -->
+                <div style="width: 36px; height: 36px; border-radius: 8px; background: #eff6ff; color: var(--brand-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"></path><path d="M6 12H4a2 2 0 0 0-2 2v8"></path><path d="M18 16h2a2 2 0 0 1 2 2v4"></path><path d="M10 6h4"></path><path d="M10 10h4"></path><path d="M10 14h4"></path><path d="M10 18h4"></path></svg>
+                </div>
                 <!-- 文字信息 -->
                 <div style="flex: 1; min-width: 0;">
                     <div class="cc-top" style="margin-bottom: 2px; align-items: center;">
-                        <div class="cc-name" style="margin-bottom: 0; display: flex; align-items: center; gap: 6px;">
-                            <div style="width: 20px; height: 20px; border-radius: 50%; background: #eff6ff; color: var(--brand-primary); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><path d="M9 22V10h6v12"></path></svg>
-                            </div>
-                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${c.name}</span>
+                        <div class="cc-name" style="margin-bottom: 0;">
+                            <span style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;">${c.name}</span>
                         </div>
                         ${getCombinedBadge(c.rs, c.bs)}
                     </div>
@@ -1473,14 +1474,16 @@
         function showToast(msg) {
             const t = document.getElementById('toast');
             t.textContent = msg;
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 2000);
+            t.style.display = 'block';
+            setTimeout(() => { t.style.display = 'none'; }, 2000);
         }
 
         function openContactSheet(id) {
             document.getElementById('contactOverlay').classList.add('on');
             document.getElementById('contactPanel').classList.add('on');
             renderAllContactPaths();
+            // 锁定背景页面的滚动，防止穿透滚动 Bug
+            document.body.classList.add('no-scroll');
         }
 
         function csTab(el, index) {
@@ -1494,10 +1497,9 @@
 
         function renderAllContactPaths() {
             let p0 = `<div class="cs-hint">以下角色及排序由系统基于多源大数据综合预测，仅供参考</div>` + CONTACT_PATHS.map((p, i) => {
-                const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
                 return `<div class="cp-card">
                     <div class="cp-top">
-                        <span class="cp-phone">${p.phone} <span style="cursor:pointer;opacity:0.5;font-size:13px;" onclick="this.previousElementSibling||void 0">${medal}</span></span>
+                        <span class="cp-phone">${p.phone}</span>
                         <span class="cp-role" style="background:rgba(37, 99, 235, 0.08);color:var(--brand-primary);"><span style="opacity:0.5;">预测</span> ${p.role}</span>
                     </div>
                     <div class="cp-tips" style="display:flex;align-items:flex-start;gap:6px;">
@@ -1509,10 +1511,10 @@
                         <button class="cp-btn-call" onclick="showToast('拨号中...')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>拨打</button>
                     </div>
                     <div class="cp-actions-expand hidden">
-                        <button class="cp-action-btn positive" onclick="markFeedback(this, '拨通有效')">拨通有效</button>
-                        <button class="cp-action-btn negative" onclick="markFeedback(this, '空号')">空号</button>
-                        <button class="cp-action-btn negative" onclick="markFeedback(this, '非本人')">非本人</button>
-                        <button class="cp-action-btn negative" onclick="markFeedback(this, '拒绝')">拒绝</button>
+                        <button class="cp-action-btn positive" onclick="markFeedback(this, '有效')">有效</button>
+                        <button class="cp-action-btn negative" onclick="markFeedback(this, '空号/停机/总机')">空号/停机/总机</button>
+                        <button class="cp-action-btn negative" onclick="markFeedback(this, '非本企业')">非本企业</button>
+                        <button class="cp-action-btn negative" onclick="markFeedback(this, '秒挂')">秒挂</button>
                     </div>
                 </div>`;
             }).join('');
@@ -1567,6 +1569,8 @@
         function closeContactSheet() {
             document.getElementById('contactOverlay').classList.remove('on');
             document.getElementById('contactPanel').classList.remove('on');
+            // 解锁背景页面的滚动
+            document.body.classList.remove('no-scroll');
         }
 
 
@@ -1585,7 +1589,7 @@
             const expand = btn.parentElement;
             const fbBtn = expand.previousElementSibling.querySelector('.cp-btn-fb');
             fbBtn.innerHTML = `✓ 已标记 (${type})`;
-            if (type === '拨通有效') {
+            if (type === '有效') {
                 fbBtn.style.color = 'var(--success)';
                 fbBtn.style.background = 'var(--success-bg)';
             } else {
@@ -1627,10 +1631,14 @@
             document.getElementById('markPanel').classList.add('on');
             stTab(document.querySelector('#markPanel .st-tab'), 0);
             renderL1('00');
+            // 锁定背景页面的滚动，防止穿透滚动 Bug
+            document.body.classList.add('no-scroll');
         }
         function closeMarkSheet() {
             document.getElementById('markOverlay').classList.remove('on');
             document.getElementById('markPanel').classList.remove('on');
+            // 解锁背景页面的滚动
+            document.body.classList.remove('no-scroll');
         }
 
         function stTab(el, idx) {
@@ -1702,11 +1710,6 @@
         }
 
         function saveMarkStatus() {
-            if (currentMarkBtn) {
-                currentMarkBtn.textContent = '✓ 已标记';
-                currentMarkBtn.style.color = 'var(--danger)';
-                currentMarkBtn.style.background = 'var(--danger-bg)';
-            }
             showToast('✓ 状态已更新');
             closeMarkSheet();
         }
