@@ -18,7 +18,7 @@
                 <div style="font-size: 13px; color: var(--gray-500); margin-bottom: 4px; font-weight: 500;">下午好</div>
                 <div class="header-title">工作台</div>
             </div>
-            <div class="header-avatar" style="width: 44px; height: 44px; border-radius: 50%; font-size: 18px;">朱</div>
+            <div class="header-avatar" style="width: 44px; height: 44px; border-radius: 50%; font-size: 18px; cursor: pointer;" onclick="location.href='entry.html'" title="切换角色">朱</div>
         </div>
     </header>
 
@@ -295,16 +295,22 @@
 <!-- 小程序环境检测 -->
 <script>
 (function() {
-    var ua = navigator.userAgent.toLowerCase();
-    var isMiniProgram = ua.indexOf('miniprogram') > -1
-        || window.__wxjs_environment === 'miniprogram';
-    if (isMiniProgram) {
-        document.documentElement.classList.add('in-miniprogram');
+    function detect() {
+        var ua = navigator.userAgent.toLowerCase();
+        var isMiniProgram = ua.indexOf('miniprogram') > -1
+            || window.__wxjs_environment === 'miniprogram';
+        if (isMiniProgram) {
+            document.documentElement.classList.add('in-miniprogram');
+        }
     }
+    detect();
+    document.addEventListener('WeixinJSBridgeReady', detect);
 })();
 </script>
-<!-- 设计稿导出模式（URL 加 ?design=mp 启用） -->
+<!-- 设计模式（URL 加 ?design=mp 启用） -->
 <script src="js/design-mode.js"></script>
+<!-- 角色模拟管理器 -->
+<script src="js/role-manager.js"></script>
 
 </body>
 </html>

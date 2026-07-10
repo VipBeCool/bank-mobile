@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>角色选择 - 智能营销平台</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* 入口页专属样式 */
+        .entry-page {
+            min-height: 100vh;
+            background: linear-gradient(160deg, #0f172a 0%, #1e293b 40%, #1e3a5f 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: max(60px, env(safe-area-inset-top, 60px)) 20px 40px;
+            overflow-y: auto;
+        }
+
+        /* 顶部品牌区 */
+        .entry-brand {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .entry-brand-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            box-shadow: 0 8px 32px rgba(37, 99, 235, 0.3);
+        }
+        .entry-brand-icon svg {
+            width: 32px;
+            height: 32px;
+            color: #fff;
+        }
+        .entry-brand h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 6px;
+            letter-spacing: -0.5px;
+        }
+        .entry-brand p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* 角色选择区 */
+        .role-section-title {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+            align-self: flex-start;
+            padding-left: 4px;
+        }
+
+        .role-cards {
+            width: 100%;
+            display: flex;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+        .role-card {
+            flex: 1;
+            position: relative;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px 16px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            -webkit-tap-highlight-color: transparent;
+            overflow: hidden;
+        }
+        .role-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            border-radius: 16px 16px 0 0;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .role-card--manager::before {
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+        }
+        .role-card--admin::before {
+            background: linear-gradient(90deg, #2563eb, #3b82f6);
+        }
+        .role-card.active {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+        .role-card.active::before {
+            opacity: 1;
+        }
+
+        .role-card-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 24px;
+        }
+        .role-card--manager .role-card-avatar {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(59, 130, 246, 0.3));
+            color: #60a5fa;
+        }
+        .role-card--admin .role-card-avatar {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(59, 130, 246, 0.3));
+            color: #60a5fa;
+        }
+
+        .role-card-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+        .role-card-desc {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.45);
+            line-height: 1.4;
+        }
+        .role-card-check {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        .role-card.active .role-card-check {
+            border-color: transparent;
+            background: var(--brand-primary);
+        }
+        .role-card--admin.active .role-card-check {
+            background: #2563eb;
+        }
+        .role-card-check svg {
+            width: 12px;
+            height: 12px;
+            color: #fff;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.3s;
+        }
+        .role-card.active .role-card-check svg {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* 管理员层级选择 */
+        .admin-levels {
+            width: 100%;
+            margin-bottom: 32px;
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s, margin 0.3s;
+        }
+        .admin-levels.show {
+            max-height: 500px;
+            opacity: 1;
+        }
+        .admin-levels-title {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            padding-left: 4px;
+        }
+        .level-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        .level-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 12px 10px;
+            cursor: pointer;
+            transition: all 0.25s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .level-item:active {
+            transform: scale(0.98);
+        }
+        .level-item.active {
+            background: rgba(37, 99, 235, 0.15);
+            border-color: rgba(37, 99, 235, 0.4);
+        }
+        .level-item-radio {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.25s;
+        }
+        .level-item.active .level-item-radio {
+            border-color: #3b82f6;
+            background: #2563eb;
+        }
+        .level-item-radio::after {
+            content: '';
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #fff;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.25s;
+        }
+        .level-item.active .level-item-radio::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .level-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .level-item-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #fff;
+        }
+        .level-item-meta {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-top: 2px;
+        }
+        .level-item-badge {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.5);
+            flex-shrink: 0;
+        }
+        .level-item.active .level-item-badge {
+            background: rgba(37, 99, 235, 0.3);
+            color: #60a5fa;
+        }
+
+        /* 进入按钮 */
+        .entry-btn {
+            width: 100%;
+            height: 52px;
+            border-radius: 14px;
+            border: none;
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .entry-btn--manager {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
+        }
+        .entry-btn--admin {
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.3);
+        }
+        .entry-btn:active {
+            transform: scale(0.98);
+        }
+        .entry-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* 底部提示 */
+        .entry-footer {
+            margin-top: 24px;
+            text-align: center;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.25);
+            line-height: 1.6;
+        }
+
+        /* 当前角色提示条 */
+        .current-role-bar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 24px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        .current-role-bar .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .current-role-bar .dot--manager {
+            background: #3b82f6;
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+        }
+        .current-role-bar .dot--admin {
+            background: #3b82f6;
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+<div class="entry-page">
+    <!-- 品牌区 -->
+    <div class="entry-brand">
+        <div class="entry-brand-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+            </svg>
+        </div>
+        <h1>智能营销平台</h1>
+    </div>
+
+    <!-- 当前角色提示 -->
+    <div class="current-role-bar" id="currentRoleBar" style="display: none;">
+        <div class="dot" id="currentRoleDot"></div>
+        <span id="currentRoleText"></span>
+    </div>
+
+    <!-- 角色选择 -->
+    <div class="role-section-title">选择角色</div>
+    <div class="role-cards">
+        <!-- 客户经理 -->
+        <div class="role-card role-card--manager" id="cardManager" onclick="selectRole('MANAGER')">
+            <div class="role-card-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+            </div>
+            <div class="role-card-avatar">👤</div>
+            <div class="role-card-title">客户经理</div>
+            <div class="role-card-desc">直接面向企业<br>营销触达获客</div>
+        </div>
+
+        <!-- 管理员 -->
+        <div class="role-card role-card--admin" id="cardAdmin" onclick="selectRole('ADMIN')">
+            <div class="role-card-check">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+            </div>
+            <div class="role-card-avatar">👔</div>
+            <div class="role-card-title">管理员</div>
+            <div class="role-card-desc">管理团队<br>分配名单监控</div>
+        </div>
+    </div>
+
+    <!-- 管理员层级选择（默认隐藏） -->
+    <div class="admin-levels" id="adminLevels">
+        <div class="level-list" id="levelList">
+            <!-- JS 动态生成 -->
+        </div>
+    </div>
+
+    <!-- 进入按钮 -->
+    <button class="entry-btn entry-btn--manager" id="enterBtn" onclick="enterWorkbench()" disabled>
+        进入工作台
+    </button>
+
+    <!-- 底部提示 -->
+</div>
+
+<script src="js/role-manager.js"></script>
+<script>
+(function () {
+    'use strict';
+
+    var selectedRole = null;
+    var selectedProfileIndex = null;
+
+    // 管理员配置列表（从 RoleManager 获取，过滤出管理员）
+    var adminProfiles = RoleManager.MOCK_PROFILES.filter(function (p) {
+        return p.role === RoleManager.ROLE.ADMIN;
+    });
+
+    // 客户经理配置（取第一个）
+    var managerProfile = RoleManager.MOCK_PROFILES.filter(function (p) {
+        return p.role === RoleManager.ROLE.MANAGER;
+    })[0];
+
+    // 初始化时从本地存储加载上次选中的管理员层级（如果不存在，默认是 0 即省分行）
+    var lastAdminIndex = localStorage.getItem('smart_marketing_last_admin_index');
+    if (lastAdminIndex !== null) {
+        selectedProfileIndex = parseInt(lastAdminIndex);
+    } else {
+        selectedProfileIndex = 0; // 第一次默认选中省分行管理员
+    }
+
+    // 显示当前角色（如果有）
+    var current = RoleManager.hasProfile() ? RoleManager.getProfile() : null;
+    if (current) {
+        var bar = document.getElementById('currentRoleBar');
+        var dot = document.getElementById('currentRoleDot');
+        var text = document.getElementById('currentRoleText');
+        bar.style.display = 'flex';
+        dot.className = 'dot dot--' + (current.role === 'ADMIN' ? 'admin' : 'manager');
+        text.textContent = '当前角色：' + current.orgName + '·' + (current.role === 'ADMIN' ? '管理员' : '普通账号');
+    }
+
+    // 渲染管理员层级列表
+    function renderAdminLevels() {
+        var list = document.getElementById('levelList');
+        var html = '';
+        adminProfiles.forEach(function (p, i) {
+            html += '<div class="level-item" data-index="' + i + '" onclick="selectAdminLevel(' + i + ')">' +
+                '<div class="level-item-radio"></div>' +
+                '<div class="level-item-info">' +
+                '<div class="level-item-name">' + p.orgLevelName + '管理员' + '</div>' +
+                '</div>' +
+                '</div>';
+        });
+        list.innerHTML = html;
+    }
+
+    renderAdminLevels();
+
+    // 选择角色
+    window.selectRole = function (role) {
+        var oldRole = selectedRole;
+        selectedRole = role;
+        var cardM = document.getElementById('cardManager');
+        var cardA = document.getElementById('cardAdmin');
+        var levels = document.getElementById('adminLevels');
+        var btn = document.getElementById('enterBtn');
+
+        cardM.classList.toggle('active', role === 'MANAGER');
+        cardA.classList.toggle('active', role === 'ADMIN');
+
+        if (role === 'ADMIN') {
+            levels.classList.add('show');
+            
+            // 规则：若当前选中的是客户经理卡片，则管理员这里被打开时默认回到省分行管理员
+            if (oldRole === 'MANAGER') {
+                selectedProfileIndex = 0;
+            } else if (selectedProfileIndex === null) {
+                selectedProfileIndex = 0;
+            }
+            
+            // 触发并渲染选中管理员等级，避免“双击”痛点
+            window.selectAdminLevel(selectedProfileIndex);
+            btn.className = 'entry-btn entry-btn--admin';
+        } else {
+            levels.classList.remove('show');
+            btn.disabled = false;
+            btn.className = 'entry-btn entry-btn--manager';
+            btn.textContent = '进入客户经理工作台';
+        }
+    };
+
+    // 选择管理员层级
+    window.selectAdminLevel = function (index) {
+        selectedProfileIndex = index;
+        var items = document.querySelectorAll('.level-item');
+        items.forEach(function (el, i) {
+            el.classList.toggle('active', i === index);
+        });
+        var btn = document.getElementById('enterBtn');
+        btn.disabled = false;
+        var p = adminProfiles[index];
+        btn.textContent = '以 ' + p.orgLevelName + '管理员 进入';
+    };
+
+    // 初始化时自动高亮激活当前角色
+    if (current) {
+        if (current.role === RoleManager.ROLE.ADMIN) {
+            var currentIdx = -1;
+            for (var k = 0; k < adminProfiles.length; k++) {
+                if (adminProfiles[k].orgId === current.orgId) {
+                    currentIdx = k;
+                    break;
+                }
+            }
+            if (currentIdx > -1) {
+                selectedProfileIndex = currentIdx;
+                localStorage.setItem('smart_marketing_last_admin_index', currentIdx);
+            }
+            window.selectRole('ADMIN');
+        } else {
+            window.selectRole('MANAGER');
+        }
+    }
+
+    // 进入工作台
+    window.enterWorkbench = function () {
+        var profile;
+        if (selectedRole === 'ADMIN' && selectedProfileIndex !== null) {
+            profile = adminProfiles[selectedProfileIndex];
+            // 记录下管理员这次选择的层级索引
+            localStorage.setItem('smart_marketing_last_admin_index', selectedProfileIndex);
+        } else if (selectedRole === 'MANAGER') {
+            profile = managerProfile;
+        } else {
+            return;
+        }
+
+        RoleManager.setProfile(profile);
+
+        // 跳转到对应首页
+        if (profile.role === RoleManager.ROLE.ADMIN) {
+            location.href = 'admin-dashboard.html';
+        } else {
+            location.href = 'index.html';
+        }
+    };
+})();
+</script>
+</body>
+</html>

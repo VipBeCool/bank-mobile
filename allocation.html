@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>名单分配 - 智能营销</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* ===== 分配工作台专用样式 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--gray-50);
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+        }
+
+        /* 顶部导航栏 */
+        .alloc-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--gray-100);
+            padding: env(safe-area-inset-top, 0) 0 0 0;
+        }
+
+        .alloc-header-inner {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+        }
+
+        .alloc-back {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            border: none;
+            background: var(--gray-100);
+            color: var(--gray-600);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .alloc-back:active {
+            background: var(--gray-200);
+            transform: scale(0.95);
+        }
+
+        .alloc-header-title {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--gray-800);
+            flex: 1;
+        }
+
+        .alloc-header-subtitle {
+            font-size: 12px;
+            color: var(--gray-400);
+            font-weight: 500;
+        }
+
+        /* 小程序模式下：隐藏自定义返回条，标题、返回由系统导航栏提供 */
+        .in-miniprogram .alloc-header-inner {
+            display: none !important;
+        }
+
+        .in-miniprogram .alloc-header {
+            border-bottom: none;
+        }
+
+        /* 进度指示条 */
+        .alloc-progress {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            padding: 8px 16px 12px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .alloc-progress::-webkit-scrollbar {
+            display: none;
+        }
+
+        .alloc-prog-step {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            padding: 4px 0;
+        }
+
+        .alloc-prog-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            font-size: 11px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: var(--gray-200);
+            color: var(--gray-400);
+            transition: all 0.3s;
+        }
+
+        .alloc-prog-dot.done {
+            background: var(--success);
+            color: #fff;
+        }
+
+        .alloc-prog-dot.active {
+            background: var(--brand-primary);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+        }
+
+        .alloc-prog-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray-400);
+            transition: color 0.3s;
+        }
+
+        .alloc-prog-step.done .alloc-prog-label {
+            color: var(--success);
+        }
+
+        .alloc-prog-step.active .alloc-prog-label {
+            color: var(--brand-primary);
+        }
+
+        .alloc-prog-line {
+            width: 20px;
+            height: 2px;
+            background: var(--gray-200);
+            flex-shrink: 0;
+            margin: 0 4px;
+            border-radius: 1px;
+            transition: background 0.3s;
+        }
+
+        .alloc-prog-line.done {
+            background: var(--success);
+        }
+
+        /* 主内容区 */
+        .alloc-content {
+            padding: 16px 16px 120px;
+            min-height: calc(100vh - 120px);
+        }
+
+        /* 信息摘要卡片 */
+        .alloc-info-card {
+            background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            border: 1px solid rgba(37, 99, 235, 0.08);
+        }
+
+        .alloc-info-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: var(--brand-primary);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .alloc-info-text {
+            font-size: 14px;
+            color: var(--gray-700);
+            line-height: 1.6;
+        }
+
+        .alloc-info-text strong {
+            color: var(--brand-primary);
+        }
+
+        .alloc-info-text .sub {
+            font-size: 11px;
+            color: var(--gray-400);
+            margin-top: 4px;
+        }
+
+        /* 区块标题 */
+        .alloc-section {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--gray-800);
+            margin: 20px 0 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .alloc-section-hint {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-400);
+            letter-spacing: 0.5px;
+            margin: 16px 0 8px;
+        }
+
+        /* 选项卡片 */
+        .alloc-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            background: #fff;
+            border: 1.5px solid var(--gray-100);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.25s;
+            margin-bottom: 8px;
+        }
+
+        .alloc-option:active {
+            transform: scale(0.98);
+        }
+
+        .alloc-option.selected {
+            background: #eff6ff;
+            border-color: rgba(37, 99, 235, 0.35);
+        }
+
+        .alloc-option-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .alloc-option-icon.blue {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.12), rgba(59, 130, 246, 0.22));
+            color: var(--brand-primary);
+        }
+
+        .alloc-option-icon.amber {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(251, 191, 36, 0.22));
+            color: #d97706;
+        }
+
+        .alloc-option-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .alloc-option-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .alloc-option-desc {
+            font-size: 12px;
+            color: var(--gray-400);
+            margin-top: 2px;
+        }
+
+        .alloc-option-count {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--brand-primary);
+            white-space: nowrap;
+        }
+
+        /* 模式切换 — 复用 seg-btn 统一样式，此处仅补充 disabled 状态 */
+        .mode-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .mode-tabs .seg-btn {
+            flex: 1;
+            text-align: center;
+            padding: 8px 0;
+            cursor: pointer;
+        }
+
+        .mode-tabs .seg-btn.disabled {
+            opacity: 0.35;
+            pointer-events: none;
+        }
+
+        /* 均分子 tab — 复用 pill 统一样式 */
+        .avg-sub-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        /* 预览列表 */
+        .preview-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .preview-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px solid var(--gray-100);
+            transition: all 0.2s;
+        }
+
+        .preview-item .p-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .preview-item .p-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: #eff6ff;
+            color: var(--brand-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .preview-item .p-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-800);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .preview-item .p-meta {
+            font-size: 11px;
+            color: var(--gray-400);
+            margin-top: 2px;
+        }
+
+        .preview-item .p-count {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--brand-primary);
+            white-space: nowrap;
+        }
+
+        .preview-item .p-count small {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--gray-400);
+        }
+
+        .preview-item.unmatched {
+            background: #fffbeb;
+            border-color: #fde68a;
+        }
+
+        .preview-item.unmatched .p-icon {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .preview-item.unmatched .p-count {
+            color: #d97706;
+        }
+
+        /* 自定义输入框 */
+        .custom-input {
+            width: 64px;
+            padding: 6px 8px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 8px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--brand-primary);
+            transition: border-color 0.2s;
+        }
+
+        .custom-input:focus {
+            outline: none;
+            border-color: var(--brand-primary);
+        }
+
+        /* 固定底部操作栏 */
+        .alloc-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 12px));
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-top: 1px solid var(--gray-100);
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .alloc-footer .f-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .alloc-footer .f-btn.secondary {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+
+        .alloc-footer .f-btn.secondary:active {
+            background: var(--gray-200);
+        }
+
+        .alloc-footer .f-btn.primary {
+            background: var(--brand-primary);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .alloc-footer .f-btn.primary:active {
+            opacity: 0.9;
+            transform: scale(0.98);
+        }
+
+        /* 自定义汇总 */
+        .custom-total {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-top: 8px;
+            text-align: right;
+        }
+
+        .custom-total.over {
+            color: var(--danger);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.75);
+            color: #fff;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        /* 完成状态 */
+        .alloc-done {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .alloc-done-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            background: var(--success);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: scaleIn 0.4s ease;
+        }
+
+        .alloc-done h3 {
+            font-size: 18px;
+            color: var(--gray-800);
+            margin-bottom: 8px;
+        }
+
+        .alloc-done p {
+            font-size: 14px;
+            color: var(--gray-400);
+            line-height: 1.6;
+        }
+
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 顶部导航 -->
+    <header class="alloc-header">
+        <div class="alloc-header-inner">
+            <button class="alloc-back" onclick="goBack()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <polyline points="15 18 9 12 15 6" />
+                </svg>
+            </button>
+            <div>
+                <div class="alloc-header-title" id="headerTitle">名单分配</div>
+                <div class="alloc-header-subtitle" id="headerSubtitle"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容 -->
+    <main class="alloc-content" id="mainContent"></main>
+
+    <!-- 底部操作栏 -->
+    <footer class="alloc-footer" id="footerBar" style="display:none;"></footer>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ===== 数据初始化 =====
+
+        // 从 sessionStorage 读取客户数据
+        var customerData = [];
+        try {
+            customerData = JSON.parse(sessionStorage.getItem('alloc_customers') || '[]');
+        } catch (e) { customerData = []; }
+
+        if (customerData.length === 0) {
+            // 无数据则返回
+            location.href = 'customers.html';
+        }
+
+        // ===== 状态管理 =====
+
+        var state = {
+            phase: 'scope',         // 'scope' | 'alloc' | 'confirm' | 'done'
+            scopeFilter: null,      // null = 全部, {product, batch}
+            filteredCustomers: [],  // 当前操作的名单
+            breadcrumb: [],         // [{orgId, orgName, levelName}]
+            wizardQueue: [],        // [{orgId, orgName, customers}]
+            currentTask: null,      // {orgId, orgName, customers}
+            currentTargets: [],     // 下级机构列表
+            mode: 'region',         // 'region' | 'average' | 'custom'
+            avgMode: 'byOrg',       // 'byOrg' | 'byManager'
+            preview: null,          // 分配预览结果
+            totalAllocated: 0,      // 已分配总数
+            
+            historyStack: [],       // 上一步历史栈，用于撤销
+            stagingAllocations: [], // 暂存的分配方案，最后统一提交
+        };
+
+        // ===== 工具函数 =====
+
+        function showToast(msg) {
+            var el = document.getElementById('toast');
+            el.textContent = msg;
+            el.classList.add('show');
+            setTimeout(function () { el.classList.remove('show'); }, 2000);
+        }
+
+        function goBack() {
+            if (state.phase === 'alloc') {
+                if (confirm('确定退出分配？已保存的分配不会丢失。')) {
+                    location.href = 'customers.html';
+                }
+            } else {
+                location.href = 'customers.html';
+            }
+        }
+
+        // ===== 进度条渲染 =====
+
+        function renderProgress() {
+            var bar = document.getElementById('progressBar');
+            if (!bar) return;
+            if (state.phase === 'scope') {
+                bar.innerHTML = '<div class="alloc-prog-step active">' +
+                    '<div class="alloc-prog-dot active">1</div>' +
+                    '<span class="alloc-prog-label">选择范围</span>' +
+                    '</div>' +
+                    '<div class="alloc-prog-line"></div>' +
+                    '<div class="alloc-prog-step">' +
+                    '<div class="alloc-prog-dot">2</div>' +
+                    '<span class="alloc-prog-label">分配</span>' +
+                    '</div>';
+                return;
+            }
+            if (state.phase === 'done') {
+                bar.innerHTML = '<div class="alloc-prog-step done">' +
+                    '<div class="alloc-prog-dot done">✓</div>' +
+                    '<span class="alloc-prog-label">选择范围</span>' +
+                    '</div>' +
+                    '<div class="alloc-prog-line done"></div>' +
+                    '<div class="alloc-prog-step done">' +
+                    '<div class="alloc-prog-dot done">✓</div>' +
+                    '<span class="alloc-prog-label">分配</span>' +
+                    '</div>';
+                return;
+            }
+
+            // alloc 阶段 — 展示面包屑路径
+            var html = '<div class="alloc-prog-step done">' +
+                '<div class="alloc-prog-dot done">✓</div>' +
+                '<span class="alloc-prog-label">选择范围</span>' +
+                '</div>';
+
+            var targets = state.currentTargets || [];
+            var nextLevel = targets.length > 0 ? (targets[0].levelName || '下级') : '下级';
+
+            state.breadcrumb.forEach(function (b, idx) {
+                html += '<div class="alloc-prog-line done"></div>';
+                var isLast = (idx === state.breadcrumb.length - 1);
+                html += '<div class="alloc-prog-step ' + (isLast ? 'active' : 'done') + '">' +
+                    '<div class="alloc-prog-dot ' + (isLast ? 'active' : 'done') + '">' + (isLast ? (idx + 2) : '✓') + '</div>' +
+                    '<span class="alloc-prog-label">' + (b.levelName || b.orgName) + '</span>' +
+                    '</div>';
+            });
+
+            // 下一级预告
+            html += '<div class="alloc-prog-line"></div>';
+            html += '<div class="alloc-prog-step">' +
+                '<div class="alloc-prog-dot">' + (state.breadcrumb.length + 2) + '</div>' +
+                '<span class="alloc-prog-label">' + nextLevel + '</span>' +
+                '</div>';
+
+            bar.innerHTML = html;
+        }
+
+        // ===== 第一步：选择分配范围 =====
+
+        function renderScopeStep() {
+            state.phase = 'scope';
+            renderProgress();
+            document.getElementById('headerTitle').textContent = '名单分配';
+            document.getElementById('headerSubtitle').textContent = '';
+
+            // 从企业数据库获取数据
+            var enterprises = RoleManager.getEnterprises ? RoleManager.getEnterprises() : [];
+            var result = RoleManager.getAdminCustomers();
+            var relevantIds = result.pending.concat(result.assigned);
+
+            // 用企业维度过滤（relevantIds 为 1-based 索引）
+            var allEnterprises = enterprises.filter(function (e, idx) {
+                return relevantIds.indexOf(idx + 1) > -1;
+            });
+
+            // 统计产品/批次（基于 matchedProducts，企业去重）
+            var groups = {};
+            allEnterprises.forEach(function (e) {
+                var products = e.matchedProducts || [];
+                products.forEach(function (mp) {
+                    if (mp.status !== 'active') return; // 只统计 active 产品
+                    var key = mp.product + '|||' + mp.batch;
+                    if (!groups[key]) groups[key] = { product: mp.product, batch: mp.batch, usccSet: {} };
+                    groups[key].usccSet[e.uscc] = true;
+                });
+            });
+            // 将 usccSet 转为 count
+            Object.keys(groups).forEach(function (key) {
+                groups[key].count = Object.keys(groups[key].usccSet).length;
+            });
+
+            // 初始化单选状态
+            if (!state.selectedBatch) state.selectedBatch = null;
+
+            // 单选区域：产品/批次
+            var groupKeys = Object.keys(groups);
+            var batchCount = groupKeys.length;
+            var html = '';
+
+            // 信息摘要 — 只显示批次数，整批分配无需显示企业总数/待分配两个容易混淆的数字
+            html += '<div class="alloc-info-card">';
+            html += '<div class="alloc-info-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>';
+            html += '<div class="alloc-info-text">共 <strong>' + batchCount + '</strong> 个产品批次待分配';
+            html += '<div class="sub">选择一个批次，以开始名单分配操作</div></div>';
+            html += '</div>';
+
+            html += '<div class="alloc-section">选择产品批次</div>';
+
+            groupKeys.forEach(function (key) {
+                var g = groups[key];
+                var shortP = g.product.replace('平安银行', '');
+                var isSel = state.selectedBatch && state.selectedBatch.product === g.product && state.selectedBatch.batch === g.batch;
+                html += '<label class="scope-check-item' + (isSel ? ' checked' : '') + '" onclick="selectBatch(\'' + g.product.replace(/'/g, "\\'") + '\',\'' + g.batch + '\')' + '">';
+                html += '<input type="radio" name="batchRadio" ' + (isSel ? 'checked' : '') + ' onclick="event.preventDefault()">';
+                html += '<div class="sci-label">';
+                html += '<div class="sci-name">' + shortP + '</div>';
+                html += '<div class="sci-meta">' + g.batch + '</div>';
+                html += '</div>';
+                html += '<div style="font-size:13px;font-weight:700;color:var(--brand-primary);">' + g.count + ' 家</div>';
+                html += '</label>';
+            });
+
+
+            document.getElementById('mainContent').innerHTML = html;
+
+            // 底部按钮：初始 disabled，选中后激活
+            var footer = document.getElementById('footerBar');
+            footer.style.display = 'flex';
+            footer.innerHTML = '<button class="f-btn secondary" onclick="goBack()">取消</button>' +
+                '<button id="startAllocBtn" class="f-btn primary" onclick="startAlloc()" ' +
+                (!state.selectedBatch ? 'disabled style="opacity:0.4;pointer-events:none;"' : '') +
+                '>开始分配 →</button>';
+        }
+
+        /**
+         * 单选一个批次
+         */
+        function selectBatch(product, batch) {
+            // 若已选中则不变，否则切换
+            if (state.selectedBatch && state.selectedBatch.product === product && state.selectedBatch.batch === batch) {
+                return; // 单选模式下点击已选中项不取消
+            }
+            state.selectedBatch = { product: product, batch: batch };
+            renderScopeStep();
+        }
+
+        // ===== 第二步：开始分配 =====
+
+        function startAlloc() {
+            if (!state.selectedBatch) {
+                showToast('请选择一个产品批次');
+                return;
+            }
+
+            // 从企业数据库获取满足选中批次的企业（单批次内天然不重复）
+            var enterprises = RoleManager.getEnterprises ? RoleManager.getEnterprises() : [];
+            var result = RoleManager.getAdminCustomers();
+            var relevantIds = result.pending.concat(result.assigned);
+            var sb = state.selectedBatch;
+            var filteredEnterprises = [];
+
+            enterprises.forEach(function (e, idx) {
+                if (relevantIds.indexOf(idx + 1) === -1) return;
+                var hasMatch = (e.matchedProducts || []).some(function (mp) {
+                    return mp.status === 'active' && mp.product === sb.product && mp.batch === sb.batch;
+                });
+                if (hasMatch) {
+                    filteredEnterprises.push(Object.assign({}, e, {
+                        id: idx + 1,
+                        product: sb.product,
+                        batch: sb.batch,
+                    }));
+                }
+            });
+
+            if (filteredEnterprises.length === 0) {
+                showToast('所选批次内没有可分配的企业');
+                return;
+            }
+
+            state.filteredCustomers = filteredEnterprises;
+            var profile = RoleManager.getProfile();
+            state.phase = 'alloc';
+            state.breadcrumb = [{ orgId: profile.orgId, orgName: profile.orgName, levelName: profile.orgLevelName || '当前机构' }];
+            state.wizardQueue = [{
+                orgId: profile.orgId,
+                orgName: profile.orgName,
+                customers: state.filteredCustomers
+            }];
+            state.totalAllocated = 0;
+
+            nextStep();
+        }
+
+
+        function nextStep() {
+            if (state.wizardQueue.length === 0) {
+                renderConfirmStep();
+                return;
+            }
+
+            state.currentTask = state.wizardQueue.shift();
+            state.currentTargets = RoleManager.getDirectSubOrgs(state.currentTask.orgId);
+
+            if (state.currentTargets.length === 0) {
+                nextStep();
+                return;
+            }
+
+            // 更新面包屑
+            var inBC = state.breadcrumb.some(function (b) { return b.orgId === state.currentTask.orgId; });
+            if (!inBC) {
+                var node = RoleManager.getOrgTree();
+                var found = (function find(n) {
+                    if (n.id === state.currentTask.orgId) return n;
+                    if (n.children) { for (var i = 0; i < n.children.length; i++) { var r = find(n.children[i]); if (r) return r; } }
+                    return null;
+                })(node);
+                state.breadcrumb.push({
+                    orgId: state.currentTask.orgId,
+                    orgName: state.currentTask.orgName,
+                    levelName: found ? (found.levelName || '') : ''
+                });
+            }
+
+            var hasRegion = RoleManager.hasRegionData(state.currentTargets);
+            state.mode = hasRegion ? 'region' : 'average';
+            state.avgMode = 'byOrg';
+
+            renderAllocStep();
+        }
+
+        // ===== 分配步骤渲染 =====
+
+        function renderAllocStep() {
+            renderProgress();
+
+            var targets = state.currentTargets;
+            var customers = state.currentTask.customers;
+            var mode = state.mode;
+            var targetLevel = targets.length > 0 ? (targets[0].levelName || '下级') : '下级';
+
+            document.getElementById('headerTitle').textContent = '名单分配';
+            document.getElementById('headerSubtitle').textContent = '';
+
+
+            // 计算预览
+            var preview;
+            if (mode === 'region') {
+                preview = RoleManager.allocateByRegion(customers, targets);
+            } else if (mode === 'average') {
+                preview = RoleManager.allocateByAverage(customers, targets, state.avgMode);
+            } else {
+                preview = null;
+            }
+            state.preview = preview;
+
+            var html = '';
+
+            // 合并卡片：面包屑路径 + 数量 — 信息更聚焦，两种模式下均可见
+            var crumbArrow = ' <span style="color:var(--gray-300);font-weight:400;">›</span> ';
+            var crumbHtml = '<span style="color:var(--gray-400);">✓ 已选批次</span>';
+            state.breadcrumb.forEach(function(b, idx) {
+                var isLast = idx === state.breadcrumb.length - 1;
+                crumbHtml += crumbArrow + '<span style="color:' + (isLast ? 'var(--brand-primary)' : 'var(--gray-500)') + ';font-weight:700;">' + (b.levelName || b.orgName) + '</span>';
+            });
+            if (targetLevel) {
+                crumbHtml += crumbArrow + '<span style="color:var(--gray-300);">' + targetLevel + '</span>';
+            }
+
+            html += '<div class="alloc-info-card">';
+            html += '<div class="alloc-info-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg></div>';
+            html += '<div class="alloc-info-text">';
+            // 第一行：面包屑路径
+            html += '<div style="font-size:11px;font-weight:600;margin-bottom:6px;line-height:1.5;">' + crumbHtml + '</div>';
+            // 第二行：数量信息（更大更突出）
+            html += '正在分配 <strong>' + customers.length + '</strong> 家企业至 <strong>' + targetLevel + '</strong>';
+            if (state.scopeFilter) {
+                html += '<div class="sub">产品批次：' + state.scopeFilter.product.replace('平安银行', '') + ' · ' + state.scopeFilter.batch + '</div>';
+            }
+            html += '</div></div>';
+
+            // 模式切换 — 使用统一 seg-btn 样式，无 emoji
+            var hasRegion = RoleManager.hasRegionData(targets);
+            html += '<div class="mode-tabs">';
+            html += '<div class="seg-btn ' + (mode === 'region' ? 'on' : '') + (hasRegion ? '' : ' disabled') + '" onclick="switchMode(\'region\')">按地域</div>';
+            html += '<div class="seg-btn ' + (mode === 'average' ? 'on' : '') + '" onclick="switchMode(\'average\')">均分</div>';
+            html += '<div class="seg-btn ' + (mode === 'custom' ? 'on' : '') + '" onclick="switchMode(\'custom\')">自定义</div>';
+            html += '</div>';
+
+            // 均分子模式 — 使用统一 pill 样式
+            if (mode === 'average') {
+                html += '<div class="avg-sub-tabs">';
+                html += '<div class="pill ' + (state.avgMode === 'byOrg' ? 'on' : '') + '" onclick="switchAvg(\'byOrg\')">按机构均分</div>';
+                html += '<div class="pill ' + (state.avgMode === 'byManager' ? 'on' : '') + '" onclick="switchAvg(\'byManager\')">按人数加权</div>';
+                html += '</div>';
+            }
+
+            // 预览列表
+            var orgSvg = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"/><path d="M6 12H4a2 2 0 0 0-2 2v8"/><path d="M18 16h2a2 2 0 0 1 2 2v4"/></svg>';
+
+            html += '<div class="preview-list">';
+            if (mode === 'custom') {
+                targets.forEach(function (t) {
+                    var mc = RoleManager.countManagers(t.id);
+                    html += '<div class="preview-item"><div class="p-info"><div class="p-icon">' + orgSvg + '</div><div><div class="p-name">' + t.name + '</div><div class="p-meta">' + mc + ' 名客户经理</div></div></div>' +
+                        '<input type="number" class="custom-input" data-org-id="' + t.id + '" min="0" max="' + customers.length + '" value="0" onchange="updateCustom()"></div>';
+                });
+                html += '</div>';
+                html += '<div class="custom-total" id="customTotal">已分配 0 / ' + customers.length + ' 家</div>';
+            } else if (preview) {
+                preview.matched.forEach(function (m) {
+                    var mc = RoleManager.countManagers(m.orgId);
+                    var cnt = m.customers ? m.customers.length : (m.count || 0);
+                    html += '<div class="preview-item"><div class="p-info"><div class="p-icon">' + orgSvg + '</div><div><div class="p-name">' + m.orgName + '</div><div class="p-meta">' + mc + ' 名客户经理</div></div></div>' +
+                        '<div class="p-count">' + cnt + ' <small>家</small></div></div>';
+                });
+                if (preview.unmatched && preview.unmatched.length > 0) {
+                    html += '<div class="preview-item unmatched"><div class="p-info"><div class="p-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div><div class="p-name">待人工分配</div><div class="p-meta" style="color:#d97706;">无匹配的地域节点</div></div></div>' +
+                        '<div class="p-count">' + preview.unmatched.length + ' <small>家</small></div></div>';
+                }
+                html += '</div>';
+            }
+
+            document.getElementById('mainContent').innerHTML = html;
+            window.scrollTo(0, 0);
+
+            // 底部按钮
+            var footer = document.getElementById('footerBar');
+            footer.style.display = 'flex';
+            
+            var hasHistory = state.historyStack.length > 0;
+            var html = '';
+            
+            if (hasHistory) {
+                html += '<button class="f-btn secondary" style="flex: 0.5;" onclick="prevStep()">上一步</button>';
+            }
+            html += '<button class="f-btn secondary" ' + (hasHistory ? 'style="flex:0.8;"' : '') + ' onclick="execAlloc(false)">暂存并预览</button>';
+            html += '<button class="f-btn primary" onclick="execAlloc(true)">暂存并继续下级 →</button>';
+            
+            footer.innerHTML = html;
+        }
+
+        function switchMode(m) {
+            state.mode = m;
+            renderAllocStep();
+        }
+        function switchAvg(m) {
+            state.avgMode = m;
+            renderAllocStep();
+        }
+        function updateCustom() {
+            var inputs = document.querySelectorAll('.custom-input');
+            var total = 0;
+            inputs.forEach(function (inp) { total += parseInt(inp.value) || 0; });
+            var el = document.getElementById('customTotal');
+            if (el) {
+                var max = state.currentTask.customers.length;
+                el.textContent = '已分配 ' + total + ' / ' + max + ' 家';
+                el.className = 'custom-total' + (total > max ? ' over' : '');
+            }
+        }
+
+        // ===== 执行分配 =====
+
+        function execAlloc(continueNext) {
+            var mode = state.mode;
+            var targets = state.currentTargets;
+            var result;
+
+            if (mode === 'custom') {
+                var counts = {};
+                document.querySelectorAll('.custom-input').forEach(function (inp) {
+                    counts[inp.dataset.orgId] = parseInt(inp.value) || 0;
+                });
+                var totalC = 0;
+                for (var k in counts) totalC += counts[k];
+                if (totalC === 0) { showToast('请至少为一个机构分配名单'); return; }
+                if (totalC > state.currentTask.customers.length) { showToast('分配总数不能超过待分配数'); return; }
+                result = RoleManager.allocateByCustom(state.currentTask.customers, targets, counts);
+            } else {
+                result = state.preview;
+            }
+
+            if (!result || !result.matched) return;
+
+            // 快照当前状态，压入历史栈，用于"上一步"回退
+            var snapshot = {
+                wizardQueue: JSON.parse(JSON.stringify(state.wizardQueue)),
+                breadcrumb: JSON.parse(JSON.stringify(state.breadcrumb)),
+                currentTask: JSON.parse(JSON.stringify(state.currentTask)),
+                totalAllocated: state.totalAllocated,
+                stagingLength: state.stagingAllocations.length
+            };
+            state.historyStack.push(snapshot);
+
+            var allocated = 0;
+            var nextTasks = [];
+            var stagingRecord = {
+                taskName: state.currentTask.orgName + ' → ' + (targets.length > 0 ? (targets[0].levelName || '下级') : '下级'),
+                allocations: []
+            };
+
+            result.matched.forEach(function (m) {
+                if (m.customers && m.customers.length > 0) {
+                    var ids = m.customers.map(function (c) { return c.id; });
+                    // 仅暂存，不写入 RoleManager
+                    stagingRecord.allocations.push({ orgId: m.orgId, orgName: m.orgName, count: ids.length, ids: ids });
+                    allocated += ids.length;
+
+                    if (continueNext) {
+                        var subOrgs = RoleManager.getDirectSubOrgs(m.orgId);
+                        if (subOrgs.length > 0) {
+                            nextTasks.push({
+                                orgId: m.orgId,
+                                orgName: m.orgName,
+                                customers: m.customers
+                            });
+                        }
+                    }
+                }
+            });
+
+            if (stagingRecord.allocations.length > 0) {
+                state.stagingAllocations.push(stagingRecord);
+            }
+            state.totalAllocated += allocated;
+
+            if (continueNext) {
+                if (nextTasks.length > 0) {
+                    state.wizardQueue = nextTasks.concat(state.wizardQueue);
+                    showToast('✓ 已暂存，继续下一级分配');
+                    nextStep();
+                } else {
+                    showToast('✓ 此分支已暂存至最底层');
+                    nextStep();
+                }
+            } else {
+                state.wizardQueue = []; // 取消后续任务，直接去确认页
+                showToast('✓ 分配已暂存');
+                renderConfirmStep();
+            }
+        }
+
+        function prevStep() {
+            if (state.historyStack.length === 0) return;
+            var last = state.historyStack.pop();
+            
+            // 恢复状态
+            state.wizardQueue = last.wizardQueue;
+            state.breadcrumb = last.breadcrumb;
+            state.currentTask = last.currentTask;
+            state.totalAllocated = last.totalAllocated;
+            state.stagingAllocations.length = last.stagingLength; // 截断后面新增的暂存
+            
+            // 重新计算并渲染
+            state.currentTargets = RoleManager.getDirectSubOrgs(state.currentTask.orgId);
+            var hasRegion = RoleManager.hasRegionData(state.currentTargets);
+            state.mode = hasRegion ? 'region' : 'average';
+            state.avgMode = 'byOrg';
+            
+            showToast('已撤销上一步操作');
+            renderAllocStep();
+        }
+
+        // ===== 确认提交页面 =====
+        function renderConfirmStep() {
+            state.phase = 'confirm';
+            document.getElementById('headerTitle').textContent = '预览与提交';
+            document.getElementById('headerSubtitle').textContent = '';
+            
+            var totalAssigned = 0;
+            state.stagingAllocations.forEach(function(rec) {
+                rec.allocations.forEach(function(a) { totalAssigned += a.count; });
+            });
+
+            var html = '';
+            html += '<div style="padding:20px; text-align:center;">';
+            html += '<div style="font-size:48px; margin-bottom:10px;">📋</div>';
+            html += '<h2 style="font-size:18px; color:var(--gray-900); margin-bottom:8px;">分配动作已就绪</h2>';
+            html += '<p style="font-size:14px; color:var(--gray-600); line-height:1.5;">共产生了 ' + state.stagingAllocations.length + ' 个分配批次，<br>共计下发 <strong>' + totalAssigned + '</strong> 家企业名单。</p>';
+            html += '</div>';
+
+            html += '<div style="padding: 0 20px;">';
+            state.stagingAllocations.forEach(function(rec, idx) {
+                html += '<div style="background:#fff; border-radius:12px; padding:16px; margin-bottom:12px; box-shadow:0 2px 8px rgba(0,0,0,0.04);">';
+                html += '<div style="font-size:13px; font-weight:600; color:var(--gray-900); margin-bottom:8px; display:flex; justify-content:space-between;">';
+                html += '<span>步骤 ' + (idx+1) + '：' + rec.taskName + '</span>';
+                var subCount = 0; rec.allocations.forEach(function(a){ subCount += a.count; });
+                html += '<span style="color:var(--brand-primary);">' + subCount + ' 家</span>';
+                html += '</div>';
+                
+                html += '<div style="font-size:12px; color:var(--gray-500); line-height:1.6;">';
+                var parts = rec.allocations.map(function(a) { return a.orgName + '(' + a.count + ')'; });
+                html += parts.join('、');
+                html += '</div>';
+                html += '</div>';
+            });
+            html += '</div>';
+
+            document.getElementById('mainContent').innerHTML = html;
+
+            var footer = document.getElementById('footerBar');
+            footer.style.display = 'flex';
+            var fHtml = '';
+            // 如果栈里还有东西，允许退回到最后一步分配
+            if (state.historyStack.length > 0) {
+                fHtml += '<button class="f-btn secondary" onclick="prevStep()">继续分配/修改</button>';
+            }
+            fHtml += '<button class="f-btn primary" onclick="commitFinal()">确认提交生效 ✓</button>';
+            footer.innerHTML = fHtml;
+        }
+
+        function commitFinal() {
+            // 正式写入RoleManager
+            state.stagingAllocations.forEach(function(rec) {
+                rec.allocations.forEach(function(a) {
+                    RoleManager.allocateToOrg(a.ids, a.orgId);
+                });
+            });
+            renderDone();
+        }
+
+        // ===== 完成页面 =====
+
+        function renderDone() {
+            state.phase = 'done';
+            renderProgress();
+            document.getElementById('headerTitle').textContent = '分配完成';
+            document.getElementById('headerSubtitle').textContent = '';
+
+            var html = '<div class="alloc-done">';
+            html += '<div class="alloc-done-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></div>';
+            html += '<h3>分配完成</h3>';
+            html += '<p>共成功分配 <strong style="color:var(--brand-primary)">' + state.totalAllocated + '</strong> 家名单';
+            if (state.scopeFilter) {
+                html += '<br>产品：' + state.scopeFilter.product.replace('平安银行', '') + '<br>批次：' + state.scopeFilter.batch;
+            }
+            html += '</p>';
+            html += '</div>';
+
+            document.getElementById('mainContent').innerHTML = html;
+
+            var footer = document.getElementById('footerBar');
+            footer.style.display = 'flex';
+            footer.innerHTML = '<button class="f-btn primary" onclick="location.href=\'customers.html\'" style="flex:1;">返回名单 →</button>';
+        }
+
+        // ===== 初始化 =====
+        window.addEventListener('DOMContentLoaded', function () {
+            // 演示环境：重置分配数据
+            try { localStorage.removeItem('smart_marketing_allocs'); } catch (e) { }
+            renderScopeStep();
+        });
+    </script>
+
+    <!-- 小程序环境自动检测 —— 在微信 web-view 中自动隐藏自定义返回条 -->
+    <script>
+        (function () {
+            function detect() {
+                var ua = navigator.userAgent.toLowerCase();
+                var isMiniProgram = ua.indexOf('miniprogram') > -1
+                    || window.__wxjs_environment === 'miniprogram';
+                if (isMiniProgram) {
+                    document.documentElement.classList.add('in-miniprogram');
+                }
+            }
+            detect();
+            document.addEventListener('WeixinJSBridgeReady', detect);
+        })();
+    </script>
+    <!-- 角色模拟管理器 -->
+    <script src="js/role-manager.js"></script>
+    <!-- 设计模式（URL 加 ?design=mp 启用） -->
+    <script src="js/design-mode.js"></script>
+</body>
+
+</html>

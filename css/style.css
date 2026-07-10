@@ -115,7 +115,7 @@ input, select, textarea { font: inherit; border: none; outline: none; background
   background: var(--surface);
   border: 1px solid var(--border-strong);
   border-radius: var(--r-pill);
-  padding: 10px 18px;
+  padding: 8px 16px; /* 调小 padding 降低高度 */
   box-shadow: var(--shadow-sm);
   transition: all 0.3s ease;
 }
@@ -140,7 +140,7 @@ input, select, textarea { font: inherit; border: none; outline: none; background
   transition: all 0.2s;
 }
 .seg-btn.on {
-  background: var(--gray-900); color: #fff; 
+  background: var(--brand-primary); color: #fff; 
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
@@ -196,10 +196,10 @@ input, select, textarea { font: inherit; border: none; outline: none; background
 .section-action { font-size: 13px; color: var(--brand-primary); font-weight: 600; }
 
 /* --- Customer Card --- */
-.card-list { padding: 12px 20px 0; }
+.card-list { padding: 12px 20px 0; display: flex; flex-direction: column; gap: 12px; }
 .cust-card {
   background: var(--surface); border-radius: var(--r-lg); padding: 16px 16px 12px;
-  margin-bottom: 12px; border: 1px solid var(--border);
+  border: 1px solid var(--border);
   box-shadow: var(--shadow-sm);
   transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s;
   position: relative;
@@ -236,6 +236,67 @@ input, select, textarea { font: inherit; border: none; outline: none; background
   font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: var(--r-pill);
   background: var(--gray-100); color: var(--gray-600); flex-shrink: 0;
 }
+
+/* --- 产品标签（适配产品，企业卡片 & 详情页） --- */
+.product-tags {
+  display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px;
+}
+.product-tag {
+  display: inline-flex; align-items: center; gap: 3px;
+  font-size: 10px; font-weight: 700; padding: 2px 8px;
+  border-radius: var(--r-pill);
+  background: linear-gradient(135deg, rgba(245,158,11,0.12), rgba(251,191,36,0.12));
+  color: #b45309;
+  border: 1px solid rgba(245,158,11,0.25);
+  white-space: nowrap; cursor: default;
+  transition: transform 0.15s;
+}
+.product-tag:active { transform: scale(0.95); }
+.product-tag.expired {
+  background: transparent;
+  color: var(--gray-400);
+  border: 1px dashed var(--gray-300);
+  font-weight: 500;
+}
+
+/* --- 时间轴操作人标注 --- */
+.timeline-actor {
+  font-size: 11px; font-weight: 600;
+  color: var(--brand-primary); opacity: 0.8;
+}
+
+/* --- 分配流程多选 Checkbox --- */
+.scope-check-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-radius: 12px; cursor: pointer;
+  border: 1.5px solid var(--gray-200); background: #fff;
+  transition: border-color 0.2s, background 0.2s;
+  margin-bottom: 8px;
+}
+.scope-check-item.checked {
+  border-color: var(--brand-primary);
+  background: rgba(37,99,235,0.04);
+}
+.scope-check-item input[type="checkbox"],
+.scope-check-item input[type="radio"] {
+  width: 18px; height: 18px; accent-color: var(--brand-primary);
+  flex-shrink: 0; cursor: pointer;
+}
+.scope-check-item .sci-label {
+  flex: 1; min-width: 0;
+}
+.scope-check-item .sci-name {
+  font-size: 14px; font-weight: 600; color: var(--gray-900); margin-bottom: 2px;
+}
+.scope-check-item .sci-meta {
+  font-size: 12px; color: var(--gray-500);
+}
+.scope-summary {
+  font-size: 12px; color: var(--brand-primary); font-weight: 600;
+  padding: 8px 16px; background: rgba(37,99,235,0.06);
+  border-radius: 8px; margin-top: 4px; text-align: center;
+}
+
 
 .cc-foot {
   display: flex; align-items: center; justify-content: space-between;
@@ -585,6 +646,7 @@ input, select, textarea { font: inherit; border: none; outline: none; background
     z-index: 1002; display: flex; flex-direction: column;
     box-shadow: 0 -8px 24px rgba(0,0,0,0.08);
     max-height: 90vh;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom)) !important; /* 避开底部物理遮挡及全面屏系统指示条 */
 }
 .sheet-panel.on { transform: translateY(0); }
 .sheet-handle { width: 36px; height: 4px; background: var(--gray-300); border-radius: 2px; margin: 12px auto; flex-shrink: 0; }
@@ -636,4 +698,24 @@ input, select, textarea { font: inherit; border: none; outline: none; background
 /* 解决模拟器模式下 sticky 吸顶被覆盖的问题 */
 .design-mode-mp .filter-wrap {
   top: 88px !important;
+}
+
+/* 小程序模式下，强制为所有底部抽屉面板累加 24px 的安全冗余高度，防范微信小程序环境内 env 变量解析失效导致的底部截断 */
+.in-miniprogram .sheet-panel {
+  padding-bottom: calc(16px + env(safe-area-inset-bottom) + 24px) !important;
+}
+
+/* 微信分享右上角引导遮罩在小程序模式下的适配，避开顶部原生导航栏与胶囊 */
+.in-miniprogram #wxShareGuide > div {
+  top: 140px !important;
+}
+
+/* 小程序模式下，强制为页面底部固定操作栏累加 20px 安全冗余，确保其避开全面屏指示条 */
+.in-miniprogram .fixed-bottom {
+  padding-bottom: calc(12px + env(safe-area-inset-bottom) + 20px) !important;
+}
+
+/* 小程序模式下，由于底部固定操作栏加高，页面主体容器的底部填充也需要同步累加，防止内容重叠 */
+.in-miniprogram .page {
+  padding-bottom: calc(100px + env(safe-area-inset-bottom) + 20px) !important;
 }

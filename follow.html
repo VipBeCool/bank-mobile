@@ -236,6 +236,8 @@
         </div>
     </div>
 
+    <div class="no-more">没有更多了~</div>
+
 </div>
 
 <!-- 吸顶覆盖层：统计卡片（独立于文档流，不影响原始布局） -->
@@ -287,12 +289,16 @@
 <!-- 小程序环境检测 -->
 <script>
 (function() {
-    var ua = navigator.userAgent.toLowerCase();
-    var isMiniProgram = ua.indexOf('miniprogram') > -1
-        || window.__wxjs_environment === 'miniprogram';
-    if (isMiniProgram) {
-        document.documentElement.classList.add('in-miniprogram');
+    function detect() {
+        var ua = navigator.userAgent.toLowerCase();
+        var isMiniProgram = ua.indexOf('miniprogram') > -1
+            || window.__wxjs_environment === 'miniprogram';
+        if (isMiniProgram) {
+            document.documentElement.classList.add('in-miniprogram');
+        }
     }
+    detect();
+    document.addEventListener('WeixinJSBridgeReady', detect);
 })();
 </script>
 
@@ -376,7 +382,9 @@ function scrollToGroup(id) {
     window.scrollTo({ top: y, behavior: 'smooth' });
 }
 </script>
-<!-- 设计稿导出模式（URL 加 ?design=mp 启用） -->
+<!-- 设计模式（URL 加 ?design=mp 启用） -->
 <script src="js/design-mode.js"></script>
+<!-- 角色模拟管理器 -->
+<script src="js/role-manager.js"></script>
 </body>
 </html>

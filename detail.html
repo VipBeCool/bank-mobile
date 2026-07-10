@@ -97,6 +97,49 @@
             border-top: 1px solid var(--border);
             z-index: 1000;
         }
+
+        /* ===== 管理员详情页样式 ===== */
+        .admin-readonly-bar {
+            display: flex; align-items: center; gap: 8px;
+            padding: 8px 20px; margin: -12px 0 12px;
+            background: linear-gradient(135deg, rgba(37,99,235,0.06), rgba(59,130,246,0.03));
+            border-bottom: 1px solid rgba(37,99,235,0.08);
+        }
+        .admin-readonly-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--brand-primary); box-shadow: 0 0 6px rgba(37,99,235,0.4); }
+        .admin-readonly-text { font-size: 12px; color: var(--brand-primary); font-weight: 500; }
+        .admin-readonly-badge { font-size: 11px; padding: 2px 8px; border-radius: 4px; background: rgba(37,99,235,0.1); color: var(--brand-primary); font-weight: 600; margin-left: auto; }
+
+        .alloc-timeline { padding: 0 20px; }
+        .alloc-tl-item {
+            position: relative; padding-left: 28px; padding-bottom: 20px;
+            border-left: 2px solid var(--gray-200); margin-left: 10px;
+        }
+        .alloc-tl-item:last-child { border-left-color: transparent; padding-bottom: 0; }
+        .alloc-tl-dot {
+            position: absolute; left: -8px; top: 2px; width: 14px; height: 14px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            background: var(--gray-200); border: 2px solid #fff;
+        }
+        .alloc-tl-item.current .alloc-tl-dot { background: var(--brand-primary); box-shadow: 0 0 8px rgba(37,99,235,0.3); }
+        .alloc-tl-dot svg { width: 8px; height: 8px; }
+        .alloc-tl-label { font-size: 12px; color: var(--gray-400); font-weight: 500; margin-bottom: 4px; }
+        .alloc-tl-name { font-size: 14px; font-weight: 700; color: var(--gray-900); }
+        .alloc-tl-item.current .alloc-tl-name { color: var(--brand-primary); }
+        .alloc-tl-time { font-size: 11px; color: var(--gray-400); margin-top: 2px; }
+
+        .admin-alloc-btn {
+            flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+            background: var(--brand-primary); color: #fff; border: none; border-radius: 12px;
+            height: 48px; font-size: 15px; font-weight: 600; cursor: pointer;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.25); transition: all 0.2s;
+        }
+        .admin-alloc-btn:active { transform: scale(0.98); opacity: 0.9; }
+        .admin-back-btn {
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            background: transparent; color: var(--brand-primary); border: 1.2px solid var(--brand-primary);
+            border-radius: 12px; height: 48px; padding: 0 20px; font-size: 14px; font-weight: 600;
+            cursor: pointer; flex-shrink: 0;
+        }
     </style>
 </head>
 <body>
@@ -199,8 +242,7 @@
         </div>
         -->
 
-        <!-- Tabs -->
-        <div class="detail-tabs">
+        <div class="detail-tabs" id="detailTabs">
             <div class="d-tab active" onclick="switchTab('basic', this)">基本信息</div>
             <div class="d-tab" onclick="switchTab('data', this)">关键数据</div>
             <!-- 当前版本暂不包含模型评分模块，保留代码以便后续恢复
@@ -217,7 +259,7 @@
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
                 </div>
                 <div style="font-size: 13px; color: var(--brand-primary); line-height: 1.6; font-weight: 500;">
-                    该客户已命中「平安银行橙业贷」核心获客策略，以下为触发名单准入建议的关键业务指标：
+                    该企业命中「平安银行橙业贷」获客策略，以下为准入的关键数据指标：
                 </div>
             </div>
 
@@ -228,7 +270,7 @@
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                     </div>
                     <div style="font-size: 14px; font-weight: 700; color: var(--gray-900); margin-bottom: 8px;">获取企业电子授权</div>
-                    <div style="font-size: 13px; color: var(--gray-600); margin-bottom: 24px; line-height: 1.5; padding: 0 10px;">授权后即可解锁企业多维深度数据。</div>
+                    <div style="font-size: 13px; color: var(--gray-600); margin-bottom: 24px; line-height: 1.5; padding: 0 10px;">邀请企业授权即可解锁多维深度数据</div>
                     <button onclick="openAuthQR()" style="background: var(--brand-primary); color: #fff; border: none; border-radius: 8px; padding: 10px 28px; font-size: 14px; font-weight: 600; box-shadow: 0 4px 12px rgba(37,99,235,0.25); cursor: pointer;">立即获取授权</button>
                 </div>
 
@@ -564,7 +606,29 @@
         </div>
 
         <div id="tab-basic" class="tab-pane active">
+
+            <!-- 适配产品区块 -->
+            <div class="info-card" id="matchedProductsCard" style="margin-bottom:16px;">
+                <div style="font-size:13px;font-weight:700;color:var(--gray-700);margin-bottom:12px;display:flex;align-items:center;gap:6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+                    适配产品
+                </div>
+                <div id="matchedProductsList">
+                    <!-- 由 JS 动态填充 -->
+                    <div class="product-tag" style="margin-bottom:6px;display:inline-flex;">橙业贷</div>
+                    <div class="product-tags" style="margin-bottom:12px;">
+                        <span class="product-tag">橙业贷</span>
+                        <span class="product-tag expired">厂房贷</span>
+                    </div>
+                    <div style="font-size:12px;color:var(--gray-500);line-height:1.6;">
+                        <span style="color:var(--gray-400);">橙业贷：</span>橙业贷20160508 · 负责人待分配<br>
+                        <span style="color:var(--gray-400);">厂房贷：</span><span style="color:var(--gray-300);text-decoration:line-through;">厂房贷20160501</span> <span style="font-size:11px;color:var(--gray-300);">已不满足条件</span>
+                    </div>
+                </div>
+            </div>
+
             <!-- 工商核心卡片 -->
+
             <div class="info-card" style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
                 <div>
                     <div style="font-size:12px; color:var(--gray-500); margin-bottom:4px; font-weight:600;">法定代表人</div>
@@ -609,7 +673,7 @@
     </div>
 
     <!-- 底部悬浮操作栏 -->
-    <div class="fixed-bottom">
+    <div class="fixed-bottom" id="fixedBottom">
         <button class="btn-fill ghost" style="flex:1; color: var(--brand-primary); border: 1.2px solid var(--brand-primary); background: transparent;" onclick="openStatusSheet()">状态标记</button>
         <button class="btn-fill primary" style="flex:2;" onclick="openContactSheet()">触达路径</button>
     </div>
@@ -617,7 +681,7 @@
     <!-- 弹窗部分 (从 customers.html 复用) -->
     <!-- 1. 触达面板 -->
     <div class="sheet-overlay" id="contactOverlay" onclick="closeContactSheet()"></div>
-    <div class="sheet-panel" id="contactPanel">
+    <div class="sheet-panel" id="contactPanel" style="max-height: 75vh;">
         <div class="sheet-handle"></div>
         <div class="sheet-header">
             <div class="sheet-title">触达路径</div>
@@ -872,7 +936,7 @@
                     </div>
                     <div class="cp-actions-main">
                         <button class="cp-btn-fb" onclick="toggleFb(this)">联系不上？反馈一下 ▾</button>
-                        <button class="cp-btn-call" onclick="showToast('拨号中...')"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>拨打</button>
+                        <button class="cp-btn-call" onclick="showToast('即将拨打：' + p.full)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>拨打</button>
                     </div>
                     <div class="cp-actions-expand hidden">
                         <button class="cp-action-btn positive" onclick="markFeedback(this, '有效')">有效</button>
@@ -1114,6 +1178,28 @@
                 badge.style.color = rs.c;
             }
 
+            // ===== 持久化到企业数据库 =====
+            try {
+                const urlId = new URLSearchParams(window.location.search).get('id');
+                const enterprises = typeof RoleManager !== 'undefined' && RoleManager.getEnterprises
+                    ? RoleManager.getEnterprises() : [];
+                const ent = enterprises[parseInt(urlId) - 1];
+                if (ent && ent.uscc) {
+                    const reachNote = (document.getElementById('reachNote') || {}).value || '';
+                    const bizNote = (document.getElementById('bizNote') || {}).value || '';
+                    const note = reachNote.trim() || bizNote.trim();
+                    // 更新企业营销状态
+                    RoleManager.updateEnterpriseStatus && RoleManager.updateEnterpriseStatus(ent.uscc, l1, bsVal, note);
+                    // 写入时间轴记录
+                    const actionLabel = bs.l ? `${rs.l} · ${bs.l}` : rs.l;
+                    RoleManager.addTimelineRecord && RoleManager.addTimelineRecord(ent.uscc, {
+                        product: '',
+                        action: actionLabel,
+                        note: note
+                    });
+                }
+            } catch(e) { console.warn('状态持久化失败', e); }
+
             closeStatusSheet();
             showToast('✓ 状态已更新');
         }
@@ -1181,9 +1267,270 @@
             showToast('已标记：' + type);
         }
 
-        // ===== 微信分享引导逻辑 =====
+        // ===== 管理员详情页模式 =====
+        function initAdminDetail() {
+            const profile = RoleManager.getProfile();
+            const params = new URLSearchParams(window.location.search);
+            const customerId = parseInt(params.get('id')) || 1;
+
+            // 1. 插入管理员身份提示条
+            const heroCard = document.querySelector('.page > div:nth-child(2)');
+            if (heroCard) {
+                const bar = document.createElement('div');
+                bar.className = 'admin-readonly-bar';
+                bar.innerHTML = `
+                    <div class="admin-readonly-dot"></div>
+                    <span class="admin-readonly-text">${profile.orgName} · 查阅模式</span>
+                    <span class="admin-readonly-badge">${profile.orgLevelName}管理员</span>
+                `;
+                heroCard.parentNode.insertBefore(bar, heroCard);
+            }
+
+            // 2. 替换底部操作栏：分配按钮 + 返回
+            const bottom = document.getElementById('fixedBottom');
+            if (bottom) {
+                const allocPath = RoleManager.getAllocPath(customerId);
+                const isAtMyLevel = allocPath.length > 0 && allocPath[allocPath.length - 1] === profile.orgId;
+                if (isAtMyLevel) {
+                    bottom.innerHTML = `
+                        <button class="admin-back-btn" onclick="history.back()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                            返回
+                        </button>
+                        <button class="admin-alloc-btn" onclick="openDetailAllocSheet()">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+                            分配至下级
+                        </button>
+                    `;
+                } else {
+                    bottom.innerHTML = `
+                        <button class="admin-back-btn" style="flex:1;" onclick="history.back()">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                            返回名单
+                        </button>
+                    `;
+                }
+            }
+
+            // 3. 添加「名单流转」Tab
+            const tabsEl = document.getElementById('detailTabs');
+            if (tabsEl) {
+                const flowTab = document.createElement('div');
+                flowTab.className = 'd-tab';
+                flowTab.textContent = '名单流转';
+                flowTab.onclick = function() { switchTab('alloc-flow', flowTab); };
+                tabsEl.appendChild(flowTab);
+            }
+
+            // 4. 创建「名单流转」Tab 面板
+            const allocPath = RoleManager.getAllocPath(customerId);
+            const flowPane = document.createElement('div');
+            flowPane.id = 'tab-alloc-flow';
+            flowPane.className = 'tab-pane';
+
+            const mockTimes = [
+                '2026-04-08 09:30', '2026-04-08 14:15', '2026-04-10 10:00',
+                '2026-04-12 11:30', '2026-04-15 09:45'
+            ];
+
+            let flowHtml = '<div class="alloc-timeline" style="padding-top:16px;">';
+            for (let i = 0; i < allocPath.length; i++) {
+                const nodeId = allocPath[i];
+                const nodeName = RoleManager.getNodeName(nodeId);
+                const isCurrent = (i === allocPath.length - 1);
+                const isFirst = (i === 0);
+                const actionText = isFirst ? '名单入池' : '下发分配';
+                flowHtml += `
+                    <div class="alloc-tl-item ${isCurrent ? 'current' : ''}">
+                        <div class="alloc-tl-dot">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <div class="alloc-tl-label">${actionText}</div>
+                        <div class="alloc-tl-name">${nodeName}${isCurrent ? ' <span style="font-size:11px; color:var(--brand-primary); background:rgba(37,99,235,0.1); padding:2px 8px; border-radius:4px; margin-left:6px;">当前</span>' : ''}</div>
+                        <div class="alloc-tl-time">${mockTimes[i] || '2026-04-' + (8 + i * 2) + ' 10:00'}</div>
+                    </div>`;
+            }
+            if (allocPath.length === 0) {
+                flowHtml += '<div style="text-align:center; color:var(--gray-400); padding:40px 0; font-size:14px;">暂无分配记录</div>';
+            }
+            flowHtml += '</div>';
+            flowPane.innerHTML = flowHtml;
+
+            // 插入到最后一个 tab-pane 之后
+            const lastPane = document.getElementById('tab-basic');
+            if (lastPane && lastPane.parentNode) {
+                lastPane.parentNode.insertBefore(flowPane, lastPane.nextSibling);
+            }
+        }
+
+        // 详情页内分配 Sheet (机构树选择器)
+        let detailSelectedTarget = null;
+        let detailSelectedTargetName = '';
+        let expandedNodes = {}; // track expanded orgIds
+
+        function openDetailAllocSheet() {
+            const profile = RoleManager.getProfile();
+            const params = new URLSearchParams(window.location.search);
+            const customerId = parseInt(params.get('id')) || 1;
+            
+            // 默认展开当前机构
+            expandedNodes = {};
+            expandedNodes[profile.orgId] = true;
+            detailSelectedTarget = null;
+            detailSelectedTargetName = '';
+
+            renderTreeSelector();
+            openContactSheet();
+        }
+
+        function renderTreeSelector() {
+            const profile = RoleManager.getProfile();
+            let html = '<div style="padding:20px;">';
+            html += '<div style="font-size:16px; font-weight:700; color:var(--gray-900); margin-bottom:16px;">选择分配目标</div>';
+            
+            // 固定高度，允许滚动
+            html += '<div class="alloc-tree-container" style="max-height:50vh; overflow-y:auto; padding-bottom:10px; margin-bottom:10px;">';
+            
+            // 渲染从当前用户开始的树
+            html += renderTreeNode(profile.orgId, profile.orgName, 'org', profile.orgLevelName, 0, true);
+            
+            html += '</div>'; // .alloc-tree-container
+
+            html += `<button id="detailAllocBtn" onclick="confirmDetailAlloc()" disabled style="width:100%; height:48px; border-radius:12px; background:var(--brand-primary); color:#fff; border:none; font-size:16px; font-weight:600; cursor:pointer; margin-top:8px; box-shadow:0 4px 12px rgba(37,99,235,0.2); opacity:0.4; transition:all 0.2s;">请选择分配目标</button>`;
+            html += '</div>';
+
+            document.getElementById('contactSheetBody').innerHTML = html;
+        }
+
+        function renderTreeNode(id, name, type, meta, depth, isRoot) {
+            const children = RoleManager.getSubTargets(id);
+            const hasChildren = children && children.length > 0;
+            const isExpanded = isRoot || expandedNodes[id];
+            
+            // 图标
+            const typeClass = type === 'org' ? 'org' : (type === 'team' ? 'team' : 'manager');
+            const iconMap = {
+                org: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18"/><path d="M6 12H4a2 2 0 0 0-2 2v8"/><path d="M18 16h2a2 2 0 0 1 2 2v4"/></svg>',
+                team: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>',
+                manager: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>'
+            };
+            
+            const isSelected = detailSelectedTarget === id;
+            
+            // 对于非根节点，向右缩进
+            let paddingLeft = depth > 0 ? (depth * 20) : 0;
+            
+            let html = `<div class="tree-node" data-id="${id}" style="margin-left:${paddingLeft}px; margin-bottom:4px;">`;
+            
+            html += `<div class="tree-node-inner" style="display:flex; align-items:center; gap:8px; padding:10px 12px; border-radius:10px; background:${isSelected ? '#eff6ff' : 'transparent'}; border:1px solid ${isSelected ? 'rgba(37,99,235,0.3)' : 'transparent'}; cursor:pointer; transition:all 0.2s;">`;
+            
+            // 展开/收起箭头
+            if (hasChildren) {
+                html += `<div onclick="toggleTreeNode(event, '${id}')" style="width:24px; height:24px; display:flex; align-items:center; justify-content:center; transform:${isExpanded ? 'rotate(90deg)' : 'rotate(0)'}; transition:all 0.2s;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--gray-500)" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></div>`;
+            } else {
+                html += `<div style="width:24px; height:24px; flex-shrink:0;"></div>`; // 占位
+            }
+            
+            // 点击主体选择目标
+            html += `<div onclick="selectDetailTarget('${id}', '${name}')" style="flex:1; display:flex; align-items:center; gap:10px; min-width:0;">`;
+            html += `<div style="width:28px; height:28px; border-radius:8px; background:var(--gray-100); display:flex; align-items:center; justify-content:center; color:var(--gray-600); flex-shrink:0;">${iconMap[type] || iconMap.org}</div>`;
+            html += `<div style="font-size:15px; color:${isSelected ? 'var(--brand-primary)' : 'var(--gray-900)'}; font-weight:${isSelected ? '600' : '500'}; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${name}</div>`;
+            if (meta) {
+                html += `<div style="font-size:11px; color:var(--gray-500); background:var(--gray-100); padding:2px 6px; border-radius:4px; flex-shrink:0;">${meta}</div>`;
+            }
+            html += `</div>`;
+            
+            // 选中状态打勾
+            if (isSelected) {
+                html += `<div style="width:22px; height:22px; border-radius:50%; background:var(--brand-primary); display:flex; align-items:center; justify-content:center; flex-shrink:0;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>`;
+            } else {
+                html += `<div style="width:22px; height:22px; border-radius:50%; border:2px solid var(--gray-300); flex-shrink:0;"></div>`;
+            }
+            
+            html += `</div>`; // .tree-node-inner
+            
+            // 子节点
+            if (hasChildren && isExpanded) {
+                html += `<div class="tree-children" style="margin-top:4px;">`;
+                children.forEach(c => {
+                    let cMeta = c.levelName || '';
+                    if (c.type === 'team') cMeta = '分组';
+                    if (c.type === 'manager') cMeta = '客户经理';
+                    html += renderTreeNode(c.id, c.name, c.type, cMeta, depth + 1, false);
+                });
+                html += `</div>`;
+            }
+            
+            html += `</div>`;
+            return html;
+        }
+
+        function toggleTreeNode(e, id) {
+            e.stopPropagation(); // 阻止触发 selectDetailTarget
+            expandedNodes[id] = !expandedNodes[id];
+            // 保存滚动位置
+            const container = document.querySelector('.alloc-tree-container');
+            const scrollTop = container ? container.scrollTop : 0;
+            renderTreeSelector();
+            const newContainer = document.querySelector('.alloc-tree-container');
+            if (newContainer) newContainer.scrollTop = scrollTop;
+        }
+
+        function selectDetailTarget(id, name) {
+            detailSelectedTarget = id;
+            detailSelectedTargetName = name;
+            
+            // 保存滚动位置
+            const container = document.querySelector('.alloc-tree-container');
+            const scrollTop = container ? container.scrollTop : 0;
+            renderTreeSelector(); 
+            const newContainer = document.querySelector('.alloc-tree-container');
+            if (newContainer) newContainer.scrollTop = scrollTop;
+            
+            // Update button
+            const btn = document.getElementById('detailAllocBtn');
+            if (btn) {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.textContent = '确认分配至 ' + name;
+            }
+        }
+
+        function confirmDetailAlloc() {
+            if (!detailSelectedTarget) return;
+            const params = new URLSearchParams(window.location.search);
+            const customerId = parseInt(params.get('id')) || 1;
+            RoleManager.allocateCustomers([customerId], detailSelectedTarget);
+            
+            showToast('✓ 已分配至 ' + detailSelectedTargetName);
+            closeContactSheet();
+            
+            // 更新底部按钮（已分配，不再显示分配按钮）
+            const bottom = document.getElementById('fixedBottom');
+            if (bottom) {
+                bottom.innerHTML = `
+                    <button class="admin-back-btn" style="flex:1;" onclick="history.back()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+                        返回名单
+                    </button>
+                `;
+            }
+            
+            // 刷新流转记录
+            initAdminDetail();
+        }
+
+
         function showWxShareGuide() {
             closeAuthQR();
+            
+            // 实时检测并追加小程序类名，确保在用户交互时一定是准确的
+            var ua = navigator.userAgent.toLowerCase();
+            var isMini = ua.indexOf('miniprogram') > -1 || window.__wxjs_environment === 'miniprogram';
+            if (isMini) {
+                document.documentElement.classList.add('in-miniprogram');
+            }
+            
             document.getElementById('wxShareGuide').style.display = 'block';
             setTimeout(() => {
                 document.getElementById('wxShareGuide').style.opacity = '1';
@@ -1220,15 +1567,29 @@
 <!-- 小程序环境检测 -->
 <script>
 (function() {
-    var ua = navigator.userAgent.toLowerCase();
-    var isMiniProgram = ua.indexOf('miniprogram') > -1
-        || window.__wxjs_environment === 'miniprogram';
-    if (isMiniProgram) {
-        document.documentElement.classList.add('in-miniprogram');
+    function detect() {
+        var ua = navigator.userAgent.toLowerCase();
+        var isMiniProgram = ua.indexOf('miniprogram') > -1
+            || window.__wxjs_environment === 'miniprogram';
+        if (isMiniProgram) {
+            document.documentElement.classList.add('in-miniprogram');
+        }
     }
+    detect();
+    document.addEventListener('WeixinJSBridgeReady', detect);
 })();
 </script>
-<!-- 设计稿导出模式（URL 加 ?design=mp 启用） -->
+<!-- 设计模式（URL 加 ?design=mp 启用） -->
 <script src="js/design-mode.js"></script>
+<!-- 角色模拟管理器 -->
+<script src="js/role-manager.js"></script>
+<!-- 管理员详情页检测（必须在 role-manager.js 之后） -->
+<script>
+if (typeof RoleManager !== 'undefined' && RoleManager.isAdmin()) {
+    window.addEventListener('DOMContentLoaded', () => {
+        initAdminDetail();
+    });
+}
+</script>
 </body>
 </html>
