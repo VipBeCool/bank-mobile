@@ -110,7 +110,7 @@
         var path = window.location.pathname;
         if (path.indexOf('detail') > -1) return '客户详情';
         if (path.indexOf('allocation') > -1) return '名单分配';
-        if (path.indexOf('customers') > -1) return '客户名单';
+        if (path.indexOf('customers') > -1) return '营销名单';
         if (path.indexOf('follow') > -1) return '跟进管理';
         if (path.indexOf('admin-dashboard') > -1) return '营销平台';
         if (path.indexOf('admin-team') > -1) return '团队管理';
