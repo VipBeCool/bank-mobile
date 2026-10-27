@@ -140,6 +140,29 @@
             border-radius: 12px; height: 48px; padding: 0 20px; font-size: 14px; font-weight: 600;
             cursor: pointer; flex-shrink: 0;
         }
+    
+    /* ===== AI 智能研报分Tab隔离与样式 ===== */
+    .ai-service-pane {
+      display: none !important;
+    }
+    .ai-service-pane.active {
+      display: block !important;
+    }
+
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: #2563eb;
+      display: inline-block;
+      animation: pulseAnimation 1.5s infinite ease-in-out;
+    }
+    @keyframes pulseAnimation {
+      0%, 100% { transform: scale(0.8); opacity: 0.5; }
+      50% { transform: scale(1.2); opacity: 1; }
+    }
+
     </style>
 </head>
 <body>
@@ -191,64 +214,11 @@
             </div>
         </div>
 
-        <!-- AI营销洞察 -->
-        <!-- 暂时注释：明天演示用
-        <div class="ai-insight" style="background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%); border: 1px solid var(--border-strong); border-radius: 16px; padding: 16px; margin: 0 20px 24px;">
-            <div style="display:flex; align-items:center; gap:8px; margin-bottom: 12px;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--brand-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4"></path><path d="M12 18v4"></path><path d="M4.93 4.93l2.83 2.83"></path><path d="M16.24 16.24l2.83 2.83"></path><path d="M2 12h4"></path><path d="M18 12h4"></path><path d="M4.93 19.07l2.83-2.83"></path><path d="M16.24 7.76l2.83-2.83"></path><rect x="9" y="9" width="6" height="6" rx="1"></rect></svg>
-                <span style="font-size:14px; font-weight:700; color:var(--gray-900);">AI营销洞察</span>
-            </div>
-            <div style="font-size:13px; color:var(--gray-700); line-height:1.6; display: flex; flex-direction: column; gap: 8px;">
-                <div>
-                    <span style="color:var(--gray-900); font-weight:600;">资质洞察：</span>该企业近期新增 3 项发明专利，且具备“专精特新”属性，触发贷款资金需求高分 (92分)。
-                </div>
-                <div>
-                    <span style="color:var(--gray-900); font-weight:600;">跟进断点：</span>根据 5 天前跟进记录，客户对科技贷有初步意向，但因顾虑融资成本处于观望状态。
-                </div>
-                <div style="background: #fff; padding: 10px 12px; border-radius: 8px; border: 1px solid rgba(37, 99, 235, 0.15); margin-top: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-                    <span style="color:var(--brand-primary); font-weight:600;">下一步建议：</span>建议立即介入跟进。可以“恭喜企业新获专利/资质”为破冰点，利用系统输出的高优科创分 (85分)，向客户传达我行可给予最高 <span style="font-weight:700; color:var(--gray-900);">500万</span> 的预估准入额度，吸引客户进行线下或系统测额。
-                </div>
-            </div>
-        </div>
-
-        <div style="margin: 0 20px 24px;">
-            <div style="font-size: 14px; font-weight:700; color:var(--gray-900); margin-bottom: 12px;">作业助手</div>
-            <div style="background:#fff; border-radius:16px; padding:16px 4px; border:1px solid var(--border); box-shadow:var(--shadow-sm); display:grid; grid-template-columns:repeat(4, 1fr); gap:2px;">
-                <div style="display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer;">
-                    <div style="width:44px; height:44px; border-radius:12px; background:var(--gray-50); color:var(--brand-primary); display:flex; align-items:center; justify-content:center;">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
-                    </div>
-                    <span style="font-size:12px; font-weight:600; color:var(--gray-700); text-align:center;">企业画像</span>
-                </div>
-                <div style="display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer;">
-                    <div style="width:44px; height:44px; border-radius:12px; background:var(--gray-50); color:var(--brand-primary); display:flex; align-items:center; justify-content:center;">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-                    </div>
-                    <span style="font-size:12px; font-weight:600; color:var(--gray-700); text-align:center;">AI尽调报告</span>
-                </div>
-                <div style="display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer;">
-                    <div style="width:44px; height:44px; border-radius:12px; background:var(--gray-50); color:var(--brand-primary); display:flex; align-items:center; justify-content:center;">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
-                    </div>
-                    <span style="font-size:12px; font-weight:600; color:var(--gray-700); text-align:center;">智能流水分析</span>
-                </div>
-                <div style="display:flex; flex-direction:column; align-items:center; gap:8px; cursor:pointer;">
-                    <div style="width:44px; height:44px; border-radius:12px; background:var(--gray-50); color:var(--brand-primary); display:flex; align-items:center; justify-content:center;">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-                    </div>
-                    <span style="font-size:12px; font-weight:600; color:var(--gray-700); text-align:center;">客户访谈助手</span>
-                </div>
-            </div>
-        </div>
-        -->
-
         <div class="detail-tabs" id="detailTabs">
             <div class="d-tab active" onclick="switchTab('basic', this)">基本信息</div>
             <div class="d-tab" onclick="switchTab('data', this)">关键数据</div>
-            <!-- 当前版本暂不包含模型评分模块，保留代码以便后续恢复
-            <div class="d-tab" onclick="switchTab('models', this)">模型评分</div>
-            -->
             <div class="d-tab" onclick="switchTab('history', this)">营销轨迹</div>
+            <div class="d-tab" id="tab-btn-ai-report" onclick="switchTab('ai-report', this)">AI 智能研报</div>
         </div>
 
         <!-- Tab 内容 -->
@@ -357,7 +327,30 @@
                 .mc-level.success { background: #ecfdf5; color: #059669; }
                 .mc-level.warning { background: #fffbeb; color: #d97706; }
                 .mc-level.danger { background: #fef2f2; color: #dc2626; }
-            </style>
+            
+    /* ===== AI 智能研报分Tab隔离与样式 ===== */
+    .ai-service-pane {
+      display: none !important;
+    }
+    .ai-service-pane.active {
+      display: block !important;
+    }
+
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: #2563eb;
+      display: inline-block;
+      animation: pulseAnimation 1.5s infinite ease-in-out;
+    }
+    @keyframes pulseAnimation {
+      0%, 100% { transform: scale(0.8); opacity: 0.5; }
+      50% { transform: scale(1.2); opacity: 1; }
+    }
+
+    </style>
             
             <div class="model-grid">
                 <!- - 资金需求评分 - ->
@@ -607,26 +600,6 @@
 
         <div id="tab-basic" class="tab-pane active">
 
-            <!-- 适配产品区块 -->
-            <div class="info-card" id="matchedProductsCard" style="margin-bottom:16px;">
-                <div style="font-size:13px;font-weight:700;color:var(--gray-700);margin-bottom:12px;display:flex;align-items:center;gap:6px;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-                    适配产品
-                </div>
-                <div id="matchedProductsList">
-                    <!-- 由 JS 动态填充 -->
-                    <div class="product-tag" style="margin-bottom:6px;display:inline-flex;">橙业贷</div>
-                    <div class="product-tags" style="margin-bottom:12px;">
-                        <span class="product-tag">橙业贷</span>
-                        <span class="product-tag expired">厂房贷</span>
-                    </div>
-                    <div style="font-size:12px;color:var(--gray-500);line-height:1.6;">
-                        <span style="color:var(--gray-400);">橙业贷：</span>橙业贷20160508 · 负责人待分配<br>
-                        <span style="color:var(--gray-400);">厂房贷：</span><span style="color:var(--gray-300);text-decoration:line-through;">厂房贷20160501</span> <span style="font-size:11px;color:var(--gray-300);">已不满足条件</span>
-                    </div>
-                </div>
-            </div>
-
             <!-- 工商核心卡片 -->
 
             <div class="info-card" style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
@@ -670,93 +643,739 @@
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- 底部悬浮操作栏 -->
-    <div class="fixed-bottom" id="fixedBottom">
-        <button class="btn-fill ghost" style="flex:1; color: var(--brand-primary); border: 1.2px solid var(--brand-primary); background: transparent;" onclick="openStatusSheet()">状态标记</button>
-        <button class="btn-fill primary" style="flex:2;" onclick="openContactSheet()">触达路径</button>
-    </div>
-
-    <!-- 弹窗部分 (从 customers.html 复用) -->
-    <!-- 1. 触达面板 -->
-    <div class="sheet-overlay" id="contactOverlay" onclick="closeContactSheet()"></div>
-    <div class="sheet-panel" id="contactPanel" style="max-height: 75vh;">
-        <div class="sheet-handle"></div>
-        <div class="sheet-header">
-            <div class="sheet-title">触达路径</div>
-            <button class="sheet-close" onclick="closeContactSheet()">✕</button>
-        </div>
-        <div class="sheet-body" id="contactSheetBody">
-            <div class="cs-tabs">
-                <div class="cs-tab on" onclick="csTab(this, 0)">本企触达</div>
-                <div class="cs-tab" onclick="csTab(this, 1)">关联企业</div>
-                <div class="cs-tab" onclick="csTab(this, 2)">行内关联</div>
+                                        <!-- AI 智能研报 Tab (Dify 智能研报分Tab独立呈现) -->
+        <div id="tab-ai-report" class="tab-pane">
+            
+            <!-- 研报服务横滑 Tab 栏 -->
+            <div style="display:flex; gap:6px; overflow-x:auto; padding-bottom:8px; margin-bottom:10px; -webkit-overflow-scrolling:touch;">
+                <button class="ai-sub-tab-btn active" id="btn-tab-prep" onclick="switchAiTab('prep', this)" style="padding:6px 14px; font-size:12.5px; border-radius:100px; white-space:nowrap; border:1px solid #bfdbfe; background:#eff6ff; color:#2563eb; font-weight:600;">访前一页纸</button>
+                <button class="ai-sub-tab-btn" id="btn-tab-diligence" onclick="switchAiTab('diligence', this)" style="padding:6px 14px; font-size:12.5px; border-radius:100px; white-space:nowrap; border:1px solid #e2e8f0; background:#f8fafc; color:#475569; font-weight:600;">尽调报告</button>
+                <button class="ai-sub-tab-btn" id="btn-tab-marketing" onclick="switchAiTab('marketing', this)" style="padding:6px 14px; font-size:12.5px; border-radius:100px; white-space:nowrap; border:1px solid #e2e8f0; background:#f8fafc; color:#475569; font-weight:600;">营销信号</button>
+                <button class="ai-sub-tab-btn" id="btn-tab-risk" onclick="switchAiTab('risk', this)" style="padding:6px 14px; font-size:12.5px; border-radius:100px; white-space:nowrap; border:1px solid #e2e8f0; background:#f8fafc; color:#475569; font-weight:600;">风险信号</button>
+                <button class="ai-sub-tab-btn" id="btn-tab-network" onclick="switchAiTab('network', this)" style="padding:6px 14px; font-size:12.5px; border-radius:100px; white-space:nowrap; border:1px solid #e2e8f0; background:#f8fafc; color:#475569; font-weight:600;">关联网络分析</button>
             </div>
-            <div id="csP0" class="cs-panel on"></div>
-            <div id="csP1" class="cs-panel"></div>
-            <div id="csP2" class="cs-panel"></div>
-        </div>
-    </div>
 
-    <!-- 2. 状态标记面板 (恢复) -->
-    <div class="sheet-overlay" id="statusOverlay" onclick="closeStatusSheet()"></div>
-    <div class="sheet-panel" id="statusPanel" style="max-height:85vh;">
-        <div class="sheet-handle"></div>
-        <div class="sheet-header">
-            <div class="sheet-title">状态更新</div>
-            <div class="sheet-close" onclick="closeStatusSheet()">✕</div>
-        </div>
-        <div class="sheet-body" style="overflow-y:auto; max-height:calc(85vh - 140px);">
-            <div class="st-tabs">
-                <div class="st-tab on" onclick="stTab(this,0)">营销状态</div>
-                <div class="st-tab" onclick="stTab(this,1)">业务状态</div>
-            </div>
-            <div class="st-pane on" id="stP0">
-                <div class="form-group">
-                    <div class="form-label">营销状态</div>
-                    <div class="chip-group" id="fL1Group"></div>
-                    <input type="hidden" id="fL1" value="00">
-                </div>
-                <div class="form-group" id="l2Wrap" style="display:none;">
-                    <div class="form-label">详细情况</div>
-                    <div class="chip-group" id="fL2Group"></div>
-                    <input type="hidden" id="fL2" value="">
-                </div>
-                <div class="form-group">
-                    <div class="form-label">营销跟进备注</div>
-                    <div class="note-wrapper">
-                        <textarea class="form-textarea" id="reachNote" rows="3" placeholder="选填，记录营销跟进情况"></textarea>
-                        <div class="quick-tags" id="quickTags"></div>
+            <!-- 移动端研报顶部控制栏 (历史下拉 + 推理中微章 + 生成最新报告) -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; background:#fff; padding:10px 12px; border-radius:12px; border:1px solid #e2e8f0; gap:8px;">
+                <div style="display:flex; align-items:center; gap:4px; font-size:12px; color:var(--gray-600); flex-shrink:0;">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <span>历史记录：</span>
+                    <!-- 紧凑自定义下拉容器，绝对定位贴合当前位置，彻底解决原生 select 移动端跑偏问题 -->
+                    <div style="position:relative; display:inline-block;" id="mobileHistoryDropdownWrap">
+                        <div onclick="toggleMobileHistoryDropdown(event)" id="mobileHistoryDropdownTrigger" style="display:flex; align-items:center; gap:3px; border:1px solid #cbd5e1; border-radius:6px; font-size:11.5px; padding:3px 6px; background:#f8fafc; color:var(--gray-700); cursor:pointer;">
+                            <span id="mobileHistorySelectedText">2026-10-26 11:09</span>
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+                        </div>
+                        <div id="mobileHistoryDropdownList" style="display:none; position:absolute; top:calc(100% + 4px); left:0; min-width:130px; background:#fff; border:1px solid #cbd5e1; border-radius:8px; box-shadow:0 8px 20px rgba(0,0,0,0.12); z-index:999; overflow:hidden;">
+                            <div class="m-history-opt active" onclick="selectMobileHistoryOpt('v_latest', '2026-10-26 11:09', this)" style="padding:7px 10px; font-size:11.5px; color:#2563eb; background:#eff6ff; cursor:pointer; font-weight:600;">2026-10-26 11:09</div>
+                            <div class="m-history-opt" onclick="selectMobileHistoryOpt('v_sep', '2026-09-18 09:30', this)" style="padding:7px 10px; font-size:11.5px; color:#475569; cursor:pointer; border-top:1px solid #f1f5f9;">2026-09-18 09:30</div>
+                            <div class="m-history-opt" onclick="selectMobileHistoryOpt('v_aug', '2026-08-05 16:40', this)" style="padding:7px 10px; font-size:11.5px; color:#475569; cursor:pointer; border-top:1px solid #f1f5f9;">2026-08-05 16:40</div>
+                        </div>
+                        <select onchange="switchReportHistory(this.value)" style="display:none;" id="aiReportHistorySelect">
+                            <option value="v_latest">2026-10-26 11:09</option>
+                            <option value="v_sep">2026-09-18 09:30</option>
+                            <option value="v_aug">2026-08-05 16:40</option>
+                        </select>
                     </div>
                 </div>
-            </div>
-            <div class="st-pane" id="stP1">
-                <div class="form-group">
-                    <div class="form-label">业务状态</div>
-                    <div class="chip-group" id="fBizGroup">
-                        <div class="chip on" data-val="NONE" onclick="selectBiz('NONE')">未申请</div>
-                        <div class="chip" data-val="APPLIED" onclick="selectBiz('APPLIED')">已申请</div>
-                        <div class="chip" data-val="REVIEWING" onclick="selectBiz('REVIEWING')">审批中</div>
-                        <div class="chip" data-val="APPROVED" onclick="selectBiz('APPROVED')">已授信</div>
-                        <div class="chip" data-val="DISBURSED" onclick="selectBiz('DISBURSED')">已放款</div>
-                        <div class="chip" data-val="SETTLED" onclick="selectBiz('SETTLED')">已结清</div>
-                        <div class="chip" data-val="REJECTED_BIZ" onclick="selectBiz('REJECTED_BIZ')">已拒绝</div>
-                    </div>
-                    <input type="hidden" id="fBiz" value="NONE">
-                </div>
-                <div id="bizDynamic"></div>
-                <div class="form-group">
-                    <div class="form-label">业务备注</div>
-                    <textarea class="form-textarea" id="bizNote" rows="3" placeholder="记录业务关键信息"></textarea>
+                <div>
+                    <button id="btnTriggerDify" onclick="triggerDifyWorkflow()" style="border:none; background:linear-gradient(135deg, #4f46e5, #6366f1); color:#fff; font-size:12px; font-weight:600; padding:6px 14px; border-radius:100px; display:inline-flex; align-items:center; gap:4px; cursor:pointer; box-shadow:0 2px 6px rgba(79,70,229,0.25); white-space:nowrap; transition:all 0.2s;">
+                        生成最新报告
+                    </button>
                 </div>
             </div>
-            <div class="btn-row" style="padding:16px 0 0;">
-                <button class="btn-fill ghost" onclick="closeStatusSheet()">取消</button>
-                <button class="btn-fill primary" onclick="saveDetailStatus()">保存</button>
+
+            <!-- 历史快照提示栏 -->
+            <div id="historySnapshotNotice" style="display:none; background:#fef3c7; border:1px solid #fde68a; border-radius:10px; padding:8px 12px; margin-bottom:12px; font-size:12px; color:#92400e; justify-content:space-between; align-items:center;">
+                <div style="display:flex; align-items:center; gap:6px;">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <span>当前正在查看历史版本报告：<b id="snapshotNoticeDate">2026-09-18 09:30</b></span>
+                </div>
+                <button onclick="restoreToLatestSnapshot()" style="border:none; background:#d97706; color:#fff; padding:3px 8px; border-radius:6px; font-size:11px; font-weight:600; cursor:pointer;">返回最新版本</button>
+            </div>
+
+            <!-- 5个独立的子Tab报告面板，严格 display:none 隐藏非激活项 -->
+            
+
+<div class="ai-service-pane active" id="ai-pane-prep">
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.05);line-height:1.6;">
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f1f5f9;padding-bottom:14px;margin-bottom:16px;">
+            <div>
+                <div style="font-size:17px;font-weight:700;color:#1e1b4b;">访前一页纸</div>
+                <div style="font-size:11.5px;color:#64748b;margin-top:4px;">报告生成时间：<span class="report-gen-time">2026-10-26 11:09:46</span></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+                <button onclick="copyCurrentReportContent()" style="border:1px solid #cbd5e1;background:#fff;border-radius:4px;padding:2px 6px;font-size:11px;color:#475569;cursor:pointer;">复制</button>
+                <button onclick="downloadCurrentReport()" style="border:1px solid #cbd5e1;background:#fff;border-radius:4px;padding:2px 6px;font-size:11px;color:#475569;cursor:pointer;">下载</button>
             </div>
         </div>
+        <div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">客户访前一页纸【苏州智云科技有限公司】</div>
+        <div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">拜访策略提示：客户资质优良但融资饱满，建议先电话核实涉诉与负债结构，再携定制方案上门</div>
+        <div style="overflow-x:auto;margin:14px 0;">
+          <table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;">
+            <thead>
+              <tr style="background:#f8fafc;color:#1e293b;font-weight:600;">
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">拜访环节</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">核心行动指南</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">预期达成的目标</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">访前电话预约</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">以“9月兰州77万中标项目订单垫资 + 实缴497万银税贷优惠”为由头预约实控人郑勇锋</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">敲定本周实地拜访时间，摸清客户对新增授信或降息归集的真实意向</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">当面方案推介</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">主推银税互动贷（1490万~2480万空间）与订单融资（69万放款），提出存量多头归集置换</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">减轻企业4380万保证借款的担保压力，争取将其主办结算行迁至我行</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">现场疑点核验</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">核查行政处罚整改凭证、涉诉判决进展、食品经营许可续期，查看车间库存</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">消除信贷准入疑虑，收集审批所需的第一手财务与征信授权材料</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="font-size:16px;font-weight:700;color:#1e293b;margin:22px 0 10px;">一、拜访由头与客户画像速览</div>
+        <div style="overflow-x:auto;margin:14px 0;">
+          <table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;">
+            <thead>
+              <tr style="background:#f8fafc;color:#1e293b;font-weight:600;">
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">维度</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">关键信息与数据</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">访谈切入点与建议</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">核心由头</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026年9月刚中标兰州现代职业学院教学耗材项目约77万元</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">项目备货与前期垫资需要资金周转，推订单融资切入时机佳</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">拜访对象</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">郑勇锋（实际控制人 / 董事长） · 电话：0514-82076006</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">实控人持股50%拍板融资，直接约访本人</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">经营资质</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2025年营收约1.3亿，纳税A级，实缴增值税约497.3万，苏信分707（优于93%）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">以“优良纳税和高信用等级企业绿色审批通道”切入</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">融资现状</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在贷5-10家，余额约8760万，负债率88.28%，保证类贷款占比68%</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">新增从严，切莫盲目报大额度，主推多头归集与置换</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="font-size:16px;font-weight:700;color:#1e293b;margin:22px 0 10px;">二、推荐产品与额度测算</div>
+        <div style="overflow-x:auto;margin:14px 0;">
+          <table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;">
+            <thead>
+              <tr style="background:#f8fafc;color:#1e293b;font-weight:600;">
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">推荐产品</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">测算依据与口径</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">测算建议额度</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">产品优势与推介要点</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">银税互动贷（主推）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">近一年实缴税额497.3万元 × 3-5倍倍数</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约 1,490万 ~ 2,480万元</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">直接与纳税挂钩，纯信用/弱担保起步，审批效率高</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">订单融资（随单）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">9月兰州中标合同77万元 × 90%放款比例</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约 69 万元</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">单笔随订单走，专款专用，放款迅速，解决采购燃眉之急</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">知识产权质押贷</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在库已授权专利28件（发明1项）全部未质押</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">评估后确定</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">盘活企业无形资产，享受省市级科创知识产权贴息政策</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="font-size:16px;font-weight:700;color:#1e293b;margin:22px 0 10px;">三、建议开口话术</div>
+        <div style="font-size:13px;color:#334155;line-height:1.6;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:12px 14px;margin:8px 0 14px;">
+        郑总您好，系统提示贵司9月刚中标兰州现代职业学院项目约77万，前期采购备货正需要资金周转安排。我们行银税互动贷额度直接跟企业纳税额挂钩，按贵司约497万的实缴纳税规模，能批的额度和利率都很有竞争力。方便的话，想约您本周当面沟通，我带方案上门，顺便把贵司目前的融资结构一起盘一盘。
+        </div>
+
+        <div style="font-size:16px;font-weight:700;color:#1e293b;margin:22px 0 10px;">四、进去必问与资料调取清单</div>
+        <div style="overflow-x:auto;margin:14px 0;">
+          <table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;">
+            <thead>
+              <tr style="background:#f8fafc;color:#1e293b;font-weight:600;">
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">核查优先级</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">核查重点事项</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">现场问话要点</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">现场必须调取的证明材料</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">P0（重要疑点）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">合同纠纷与涉诉现状</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">了解历史买卖合同纠纷最新执行进展，确认是否影响银行账户</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">法院判决书、调解书或已结案履约凭证</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">P0（准入合规）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">食品经营资质有效性</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">核验食品生产许可证有效期限及近期证件续期办理进度</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">食品经营/生产许可证及市场监管续期受理回执</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">P1（审批准入）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">企业经营与现金流水</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">了解今年订单接单与去年对比，主要回款周期，核对真实产能</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">近6个月主要结算行流水对账单、近一年完税证明</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">P1（授信建档）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">征信授权与综合评级</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">签署授权书，启动银税互动贷系统测算与行内准入审批</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">企业公章签署的征信查询授权书、实控人身份证复印件</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
     </div>
+</div>
+
+<div class="ai-service-pane" id="ai-pane-diligence">
+<div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.05);line-height:1.6;">
+<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f1f5f9;padding-bottom:14px;margin-bottom:16px;">
+<div>
+<div style="font-size:17px;font-weight:700;color:#1e1b4b;">企业AI尽调全景报告</div>
+                <div style="font-size:11.5px;color:#64748b;margin-top:4px;">报告生成时间：<span class="report-gen-time">2026-10-26 11:09:46</span></div>
+</div>
+<div style="display:flex;align-items:center;gap:6px;">
+                <button onclick="copyCurrentReportContent()" style="border:1px solid #cbd5e1;background:#fff;border-radius:4px;padding:2px 6px;font-size:11px;color:#475569;cursor:pointer;">复制</button>
+                <button onclick="downloadCurrentReport()" style="border:1px solid #cbd5e1;background:#fff;border-radius:4px;padding:2px 6px;font-size:11px;color:#475569;cursor:pointer;">下载</button>
+            </div>
+</div>
+<div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">企业AI尽调全景报告【苏州智云科技有限公司】</div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">数据获取：本期各接口均正常返回</div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">本报告怎么读：</div><div style="overflow-x:auto;margin:14px 0;"><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;"><thead><tr style="background:#f8fafc;color:#1e293b;font-weight:600;"><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">报告块</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">回答的问题</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">读法提示</th></tr></thead><tbody><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">结论卡（第一节）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">能不能碰、给多少</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">先看 1.1 红线核查（踩一条就不能碰），再看 1.2 建议表（含为什么敢做/为什么盯着）+ 1.3 额度怎么算出来的</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">机会与风险清单（第二节）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">凭什么这么判</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">建档时点全部有效营销/风险信号留痕（级别+数据日期+距建档）；第一节每个判断都能在这里找到对应信号</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">上门怎么谈（第三节）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">怎么开口、怎么核实</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">3.1 怎么开口（一段话直接念：称呼＋由头＋方案＋约访收尾）＋ 3.2 进去必问（P0/P1 逐条问法＋「→ 要什么材料」）</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">证据档案（第四节）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">证据明细在哪</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">信号与参数背后的原始证据明细，带日期与时效判定，供核实与评审引用</td></tr></tbody></table></div><div style="font-size:16px;font-weight:700;color:#1e293b;margin:22px 0 10px;">一、结论卡</div><div style="font-size:14.5px;font-weight:700;color:#334155;margin:16px 0 8px;">1.1 红线核查：踩一条就不能碰</div><div style="overflow-x:auto;margin:14px 0;"><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;"><thead><tr style="background:#f8fafc;color:#1e293b;font-weight:600;"><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;"># 核查项</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">核查主体</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">结果</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">核查日期</th></tr></thead><tbody></tbody></table></div><div style="overflow-x:auto;margin:14px 0;"><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;"><thead><tr style="background:#f8fafc;color:#1e293b;font-weight:600;"><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">1</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">企业失信被执行人</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">企业</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">无</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">2026-10-26</th></tr></thead><tbody><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">企业限制高消费</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">企业</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">无</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">3</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">法定代表人个人失信</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">法定代表人</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">无</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">4</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">法定代表人个人限高</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">法定代表人</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">无</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">5</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">严重违法</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">企业</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">无</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">6</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">破产重整</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">企业</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">无</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">7</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">股权冻结</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">企业</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">无</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">8</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">终本案件</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">企业</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">无</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td></tr></tbody></table></div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">准入判定：8/8 项通过，无禁入项（一票否决全部为实时接口，判定恒为当前状态，不存在时效问题）。</div><div style="font-size:14.5px;font-weight:700;color:#334155;margin:16px 0 8px;">1.2 做不做、给多少、怎么担保（AI 建议，银行评审为准）</div><div style="overflow-x:auto;margin:14px 0;"><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;"><thead><tr style="background:#f8fafc;color:#1e293b;font-weight:600;"><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">参数</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">建议</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">核心依据</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">时效判定</th></tr></thead><tbody><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">整体策略</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">慎入</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">8 项否决全过＋苏信分 AAA＋纳税 A 级；但资产负债率 88.28% 偏高，且当前在贷已超测算规模</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">建档时点有效</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">风险等级</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">高风险</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">资产负债率88.28%&gt;85%</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">建档时点有效</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">建议额度</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">模型测算合理融资上限约 1540 万，当前在贷 8760 万已明显超出测算规模（约 5.7 倍）（完整判读见 1.3 结论）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">1.3 多法测算（各法取小）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">基于 2025 年报，最新年报更新后需重算</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">建议期限</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">待定（随 3.1 方案）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">—</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">随 3.1 方案确定</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">担保要求</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">需强担保/抵押增信</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">增信资源近耗尽，且在贷已超合理测算规模——新增从严，主打存量优化</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">建档时点有效</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">定价区间</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">待银行定价模型测算</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">—</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">银行定价模型测算</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">为什么敢做</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">8 项否决全过；纳税信用 A 级；五级分类全正常</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">8 项否决全过；纳税信用 A 级；五级分类全正常</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">建档时点有效</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">为什么盯着</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">最新年报净利 -2400 万仍亏——放款后盯盈利拐点；负债率 88.28% 偏高——盯偿债安排</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">最新年报净利 -2400 万仍亏——放款后盯盈利拐点；负债率 88.28% 偏高——盯偿债安排</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">贷后持续盯防</td></tr></tbody></table></div><div style="font-size:14.5px;font-weight:700;color:#334155;margin:16px 0 8px;">1.3 额度怎么算出来的</div><div style="overflow-x:auto;margin:14px 0;"><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;"><thead><tr style="background:#f8fafc;color:#1e293b;font-weight:600;"><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">测算路径</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">口径</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">结果</th></tr></thead><tbody><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">销售比例法</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">营收 13000 万 × 30%</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">3900 万</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">银税倍数法</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">年纳税 370 万 × 5 倍</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">1850 万</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">净资产法（总盘校验）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">净资产 2200 万 × 70%</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">1540 万</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">监管流贷公式</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">需行业营运资金周转次数（接口未覆盖），公式口径待补</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">暂不可用</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">总授信上限</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">各法取小</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">1540 万</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">流动资金贷款（含提额）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">模型测算合理融资上限 1540 万；当前在贷 8760 万（全市场口径）已达测算上限 5.7 倍</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">新增受限——主推存量优化</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">订单融资（单笔·随订单）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">近 6 月最大中标 77 万 × 70%</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">53.9 万</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">知识产权质押贷</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">发明授权 1 件在库（质押许可情况见 4.11）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">待评估后测算</td></tr></tbody></table></div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">测算系数为政策参数（销售 30% 银税 5 倍 净资产 70% / 订单 70%，可按银行制度调整），额度以银行评审为准。</div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">结论：模型测算合理融资上限约 1540 万，当前在贷 8760 万已明显超出测算规模（约 5.7 倍）——超需求融资特征，新增额度受限；重点做归集结算、存量置换与提额谈判，而非新增投放</div><div style="font-size:16px;font-weight:700;color:#1e293b;margin:22px 0 10px;">二、机会与风险清单</div><div style="font-size:14.5px;font-weight:700;color:#334155;margin:16px 0 8px;">2.1 营销信号</div><div style="overflow-x:auto;margin:14px 0;"><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;"><thead><tr style="background:#f8fafc;color:#1e293b;font-weight:600;"><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">级别</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">信号</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">一句话解读</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">数据日期</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">距建档</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">处置时限</th></tr></thead><tbody><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">O-A</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">银税贷优质户</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">增值税实缴税额约497万元，纳税规模可观，是银税类信贷产品的优质准入客户。</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">税务口径（缴税月份见4.2）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">—</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">O-A</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">资金需求概率 83.8%</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">模型评分高，高需求客户</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">0 天</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">—</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">O-A</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">纳税信用 A 级</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">银税类融资产品准入空间扩大</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-04-30</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">179 天（超90天 ⚠️临界）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">—</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">O-B</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">苏信分 707 / A</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">信用资质尚可，可作准入加分项</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">0 天</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">—</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">O-B</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">融资分散（在贷机构 5-10家）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">存在归集结算与提额降息谈判空间</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">以征信报告时点为准</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">—</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">O-B</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">优质存量客户（在贷约 8760 万·五级分类正常）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">近12月无不良，具备提额与利率议价空间</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">以征信报告时点为准</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">—</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">O-C</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">正面舆情 218 篇</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">外部舆论环境正面，品牌形象提升</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-24</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2 天</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">—</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">O-C</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在招岗位 5 个</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">用人需求先行，经营活跃旁证</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">—</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">—</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">—</td></tr></tbody></table></div><div style="font-size:14.5px;font-weight:700;color:#334155;margin:16px 0 8px;">2.2 风险信号</div><div style="overflow-x:auto;margin:14px 0;"><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;"><thead><tr style="background:#f8fafc;color:#1e293b;font-weight:600;"><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">级别</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">信号</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">一句话解读</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">数据日期</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">距建档</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">处置时限</th></tr></thead><tbody><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">A</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">风险提示：存在行政处罚</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">3 个工作日内核实处置</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">0 天</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">3个工作日内处置</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">B</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">资产负债率 88.28%</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">偏高，需关注偿债压力</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2025-12-31</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">年报口径</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">月度重点监控</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">B</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">保证类贷款占比 68%</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">增信结构偏弱，可评估抵押/信用置换</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">—</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">以征信报告时点为准</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">月度重点监控</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">B</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">涉诉偏多（裁判文书 4 条）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">核实案件性质、被告角色与或有负债</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2023-06-05</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">1239 天</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">月度重点监控</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">B</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">环保评级记录（年份待核实）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">核实评级结果与整改要求</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">—</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">—</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">月度重点监控</td></tr></tbody></table></div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">另有 1 条信号距建档超 90 天，按 R2 保鲜期规则视为已消化，未列入快照。</div><div style="font-size:16px;font-weight:700;color:#1e293b;margin:22px 0 10px;">三、上门怎么谈</div><div style="font-size:14.5px;font-weight:700;color:#334155;margin:16px 0 8px;">3.1 怎么开口（沟通话术）</div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">郑总，贵司信用资质不错！不过看贵司整体融资盘子已经比较饱满，先不按新增额度报——把各家银行的授信归集到主办银行结算，存量置换和利率都有得谈。方便的话，想跟您约个本周的时间，我带方案上门，顺便把贵司整体的融资结构一起盘一盘。</div><div style="font-size:14.5px;font-weight:700;color:#334155;margin:16px 0 8px;">3.2 进去必问（风险核查话术）</div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">·【风险提示：存在行政处罚】P1 系统显示贵司有一条税务/处罚相关记录，想了解下事由和处理结果，便于更新评估。 → 获取处罚决定书及整改缴款凭证</div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">·【资产负债率 88.28%】P1 跟您盘一下贵司目前的整体融资安排——各家银行的授信和在贷情况，我们同步更新下档案。 → 获取各家银行授信及在贷明细</div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">·【保证类贷款占比 68%】P1 系统有一条「增信结构偏弱」的提示，想跟您当面核实下具体情况。 → 获取企业情况说明</div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">·【涉诉偏多（裁判文书 4 条）】P1 系统显示贵司有涉诉记录，方便说说案件进展和对经营的影响吗？ → 获取案件进展说明与涉诉清单</div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">·【环保评级记录（年份待核实）】P1 系统显示贵司有环保评级记录，想了解下评级结果和整改要求。 → 获取评级结果及整改材料</div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">以下为备查档案区</div><div style="font-size:16px;font-weight:700;color:#1e293b;margin:22px 0 10px;">四、证据档案</div><div style="font-size:14.5px;font-weight:700;color:#334155;margin:16px 0 8px;">4.1 企业底子</div><div style="overflow-x:auto;margin:14px 0;"><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;"><thead><tr style="background:#f8fafc;color:#1e293b;font-weight:600;"><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">维度</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">数据</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">时效判定</th></tr></thead><tbody><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">企业主体</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">有限责任公司（自然人投资或控股），2015-01-22 成立（11 年）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">—</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">企业状态</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在业</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">建档日实时</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">注册资本</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">8000万（2022-01-10由20000万减至8000万）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">变更日期随值展示</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">实际控制人</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">郑勇锋（持股 未披露）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">以变更记录（4.12）为准</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">企业苏信分</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">707 分（等级：A，优于全国 93% 的企业）；维度：守法合规80 · 关联风险100 · 财务信息80 · 经营情况90 · 创新能力90</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">建档日实时</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">纳税信用等级</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">A 级（2026-A → 2025-A → 2024-A）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">评定时间随值展示</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">员工规模（参保）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">138（202607 期）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">最近缴存月随值展示</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">联系电话 / 经营地址</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">0514-82076006 / 扬州市邗江区荷叶西路18号</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">建档日实时</td></tr></tbody></table></div><div style="font-size:14.5px;font-weight:700;color:#334155;margin:16px 0 8px;">4.2 赚不赚钱（年报财务趋势 · 近 3-5 个年度）</div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">财务逐年明细</div><div style="overflow-x:auto;margin:14px 0;"><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;"><thead><tr style="background:#f8fafc;color:#1e293b;font-weight:600;"><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">指标</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">2025</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">2024</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">2023</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">2022</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">2021</th></tr></thead><tbody><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">营收</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约13000万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约10000万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约6600万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约7100万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约9700万</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">利润总额</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约-2400万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约-2200万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约-1200万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约-5万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约-10万</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">净利润</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约-2400万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约-2200万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约-1200万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约-5万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约-55万</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">资产</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约19000万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约20000万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约19000万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约19000万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约17000万</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">负债</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约16000万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约15000万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约12000万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约11000万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约9700万</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">权益</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约2200万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约4800万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约6900万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约8100万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约8100万</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">纳税</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约370万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约320万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约290万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约200万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约40万</td></tr></tbody></table></div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">增值税</div><div style="overflow-x:auto;margin:14px 0;"><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;"><thead><tr style="background:#f8fafc;color:#1e293b;font-weight:600;"><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">项目</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">数据</th></tr></thead><tbody><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">纳税人名称</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">苏州智云科技有限公司</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">纳税人识别号</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">913210033237104882</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">增值税应纳税额</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">4,983,619.40 元（约 498.4 万）</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">增值税实缴税额</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">4,973,219.40 元（约 497.3 万）</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">最近一次正常缴税日期</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026/10/21</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">前一年缴税日期</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">15 次（2025-11-12、2025-11-12、2025-12-10、2025-12-10、2026-01-14、2026-01-14、2026-02-12、2026-03-12、2026-04-16、2026-05-13、2026-06-10、2026-07-09、2026-08-13、2026-09-09、2026-10-21）</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">缴纳判读</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">足额缴纳，无欠缴迹象</td></tr></tbody></table></div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">复合增速：+40.3%（2023→2025，2 年复合）</div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">趋势判读：营收复合增速达 +40.3%，2025 年营收约 13000 万，较 2024 年约 10000 万增长 24.706%，呈现稳步增长态势；但净利润持续为负，2025 年约 -2400 万，亏损幅度有所收窄。</div><div style="font-size:14.5px;font-weight:700;color:#334155;margin:16px 0 8px;">4.3 跟同行比（2025 年报口径）</div><div style="overflow-x:auto;margin:14px 0;"><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;"><thead><tr style="background:#f8fafc;color:#1e293b;font-weight:600;"><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">指标</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">企业值</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">行业平均·优秀</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">结论</th></tr></thead><tbody><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">ROE</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">-36.29%</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">5.40% / 14.90%</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">位于行业较差区间</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">资产回报率</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">-10.65%</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">4.40% / 7.80%</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">位于行业较差区间</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">资产负债率</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">76.64%</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">58.00% / 48.00%</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">位于行业平均区间</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">总资产周转率</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">0.53</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">0.60 / 1.20</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">位于行业平均区间</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">营收增长率</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">58.81%</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">4.90% / 23.70%</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">位于行业优秀区间</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">利润增长率</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">-93.50%</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">6.30% / 22.50%</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">位于行业较差区间</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">近一年纳税总额</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约370万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">- / -</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">趋势：增长</td></tr></tbody></table></div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">注：对标表企业值为行业对标接口口径，与 4.2 年报重算值不一致时，以年报重算口径为准</div><div style="font-size:14.5px;font-weight:700;color:#334155;margin:16px 0 8px;">4.4 背后是谁</div><div style="overflow-x:auto;margin:14px 0;"><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;"><thead><tr style="background:#f8fafc;color:#1e293b;font-weight:600;"><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">关联维度</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">数据</th></tr></thead><tbody><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">法定代表人关联企业</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">7 个</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">控股股东</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">苏州智云科技有限公司；实控人 郑勇锋 未披露</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">集团/母公司</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">苏州智云科技有限公司</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">股权穿透</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">[{"percent":"50.0%","chain":"郑勇锋-&gt;(50.0%)苏州智云科技有限公司"}]</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">控股子公司</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">7 家</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">参股企业</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">无</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">法定代表人兼任</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">郑勇锋（执行董事）、郑勇清（监事）、郑新金（经理）</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">分支机构</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2家（苏州智云科技有限公司上海分公司（其他有限责任公司分公司）、苏州智云科技有限公司湖南分公司（有限责任公司分公司(自然人投资或控股)））</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">重要客户</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">兰州现代职业学院、邗江区自然资源和规划局、中国联合网络通信有限公司扬州市分公司</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">关联方异常</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">1 家（失信 0 限高 0 信贷不良 0）</td></tr></tbody></table></div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">关联方明细（逐家风险穿透）</div><div style="overflow-x:auto;margin:14px 0;"><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;"><thead><tr style="background:#f8fafc;color:#1e293b;font-weight:600;"><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">关联企业</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">关系</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">企业状态</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">失信</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">限高</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">信贷不良</th></tr></thead><tbody><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">杭州方广食品有限公司</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">股东</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在业</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">否</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">否</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">否</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">扬州桑恩食品有限公司</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">股东</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在业</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">否</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">否</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">否</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">方广食品营销（北京）有限公司</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">股东</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">注销</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">否</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">否</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">否</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">扬州卓泓检测有限公司</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">股东</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在业</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">否</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">否</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">否</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">扬州方广电子商务有限公司</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">股东</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在业</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">否</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">否</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">否</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">扬州方广营销策划有限公司</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">股东</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在业</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">否</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">否</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">否</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">方广（扬州）进出口有限公司</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">股东</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在业</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">否</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">否</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">否</td></tr></tbody></table></div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">（风险穿透明细仅覆盖关联风险接口返回的记录；参股、任职等其余关联方的总数与结构以上方关联网络表为准，两类口径不同属正常现象）</div><div style="font-size:15px;font-weight:700;color:#1e40af;background:#eff6ff;padding:8px 14px;border-radius:8px;margin:18px 0 8px;">【关联风险结论】：关联结构简单，无异常风险标记</div><div style="font-size:14.5px;font-weight:700;color:#334155;margin:16px 0 8px;">4.5 官司记录（红线看"有无"，此处看"有但轻微"）</div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">司法合计：4 条（裁判文书/被执行/终本/失信/限高合计）</div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">裁判文书总量：共4条（苏州智云科技有限公司与上海汇舫贸易有限公司销售代理合同纠纷一审民事裁定书、陕西怡美商贸有限公司、扬州方广营销策划有限公司等合同纠纷民事一审民事判决书、何某某、苏州智云科技有限公司劳动争议民事一审民事判决书…）｜开庭公告：共9条（劳动争议、合同纠纷、合同纠纷…）</div><div style="overflow-x:auto;margin:14px 0;"><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;"><thead><tr style="background:#f8fafc;color:#1e293b;font-weight:600;"><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">案号/案件</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">案由/类型</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">裁判日期</th></tr></thead><tbody><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">（2023）沪0117民初13077号</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">合同纠纷</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2023-06-05</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">（2022）苏1003民初7331号</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">合同纠纷</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2023-04-17</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">（2021）苏1003民初4683号</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">劳动争议</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2021-12-20</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">（2021）苏10民终3284号</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">买卖合同纠纷</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2021-11-27</td></tr></tbody></table></div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">涉诉案件以合同纠纷为主，金额与影响相对有限，结合约 13000 万营收体量，整体影响可控。</div><div style="font-size:14.5px;font-weight:700;color:#334155;margin:16px 0 8px;">4.6 违规记录</div><div style="overflow-x:auto;margin:14px 0;"><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;"><thead><tr style="background:#f8fafc;color:#1e293b;font-weight:600;"><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">核查项</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">状态</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">详情</th></tr></thead><tbody><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">经营异常（未解除）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">无</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">无记录</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">简易注销申请</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">无</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">无记录</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">税收违法</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">无</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">无记录</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">欠税公告</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">无</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">无记录</td></tr></tbody></table></div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">环保评级：共4条（…）</div><div style="font-size:15px;font-weight:700;color:#1e40af;background:#eff6ff;padding:8px 14px;border-radius:8px;margin:18px 0 8px;">【基本面合规结论】：存在行政处罚</div><div style="font-size:14.5px;font-weight:700;color:#334155;margin:16px 0 8px;">4.7 家底（决定"还能押什么"）</div><div style="overflow-x:auto;margin:14px 0;"><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;"><thead><tr style="background:#f8fafc;color:#1e293b;font-weight:600;"><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">资产维度</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">数据</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">可用性判读</th></tr></thead><tbody><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">不动产（房产/土地）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">房产0处 土地5-10处；抵押0处 查封0处</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">有土地资产，但未见抵押记录，仍有可押空间</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">贷款与抵押结构</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">信用1000万（11.4%）、抵押980万（11.2%）、保证4280万（48.9%）；动产/质押结构：在贷机构：5-10家；抵押贷款余额：约 980 万</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">增信资源近耗尽，且在贷已超合理测算规模——新增从严，主打存量优化</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">知识产权</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">发明申请10 · 发明授权1 · 实用新型27</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">有专利储备，但未见质押记录，仍有可押空间</td></tr></tbody></table></div><div style="font-size:14.5px;font-weight:700;color:#334155;margin:16px 0 8px;">4.8 借贷记录（征信口径）</div><div style="overflow-x:auto;margin:14px 0;"><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;"><thead><tr style="background:#f8fafc;color:#1e293b;font-weight:600;"><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">指标</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">数据</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">评价</th></tr></thead><tbody><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">历史贷款</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">有</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">有贷户</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在贷机构数量</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">5-10家</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">正常</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在贷笔数</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">10-15笔</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">正常</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">抵押机构数</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">0-5家</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">—</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">最差五级分类</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">正常</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">正常</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">近12月不良月份</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">0 个月</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">无</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">不良/违约余额</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">0</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">—</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">贷款结构</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">信用1000万（11.4%）、抵押980万（11.2%）、保证4280万（48.9%）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">正常</td></tr></tbody></table></div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">融资需求概率：83.8%（高）</div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">在贷机构 5-10 家，笔数 10-15 笔，融资结构分散，存在归集结算空间；但当前在贷总额已超合理测算规模，新增受限，主打存量优化。</div><div style="font-size:14.5px;font-weight:700;color:#334155;margin:16px 0 8px;">4.9 担保结构（征信口径）</div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">保证类贷款：保证类贷款 4280万（占最近年报净资产 194.5%）——本企业以保证方式借款（征信口径），非替人担保</div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">保证类贷款占比较高，增信结构偏弱，可评估抵押/信用置换。</div><div style="font-size:14.5px;font-weight:700;color:#334155;margin:16px 0 8px;">4.10 生意忙不忙（滚动 12 个月 · 验证经营真伪）</div><div style="overflow-x:auto;margin:14px 0;"><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;"><thead><tr style="background:#f8fafc;color:#1e293b;font-weight:600;"><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">验证路</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">数据</th></tr></thead><tbody><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">招聘</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">近1年在招5个岗位（急招电商平面设计师、行政专员-需要有工厂经验、抖音运营…）</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">订单端（近6月）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">近6月最大中标：[市本级]兰州现代职业学院2026年教学实训耗材中标（成交）结果公告（兰州现代职业学院，76.968 万）</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">参保（社保）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">138 人（202607 期）</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">舆情</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">平价果泥有哪些值得买？实测3档价位闭眼入清单，1.75元起+FAQ；果泥哪款性价比高？2026实测9款最低1.75元/袋，3档价位闭眼选+FAQ；果泥推荐哪些品牌？实测5大品牌+新国标解读，一篇说清怎么选+FAQ</td></tr></tbody></table></div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">参保与缴纳（社保口径）</div><div style="overflow-x:auto;margin:14px 0;"><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;"><thead><tr style="background:#f8fafc;color:#1e293b;font-weight:600;"><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">指标</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">数据</th></tr></thead><tbody><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">最新缴存月参保</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">138 人（202607 期）</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">用工趋势（近12月）</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">103 → 138 人（+34.0%，用工规模扩张）</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">缴纳连续性</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">9 期缴存记录，断月 1 个月</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">欠缴</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">无欠缴记录</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">单位月缴费</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">档位 120，约 11.9—12.0 万元/月（档位区间，1 档=1000 元）</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">近12月单位缴费合计</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">约 79.8—80.7 万元（档位折算）</td></tr></tbody></table></div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">招投标/订单明细（共10条，仅展示最近2条，最近两年）</div><div style="overflow-x:auto;margin:14px 0;"><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;"><thead><tr style="background:#f8fafc;color:#1e293b;font-weight:600;"><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">日期</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">项目（采购人）·类型</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">金额</th></tr></thead><tbody><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-09-20</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">[市本级]兰州现代职业学院2026年教学实训耗材中标（成交）结果公告（兰州现代职业学院）[中标结果]</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">769680.00</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-04-21</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">关于2025年邗江区省级农产品加工提升项目拟立项公示（扬州市邗江区农业农村局）[招标公告]</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">-</td></tr></tbody></table></div><div style="font-size:14.5px;font-weight:700;color:#334155;margin:16px 0 8px;">4.11 技术家底（专利实力与指标）</div><div style="overflow-x:auto;margin:14px 0;"><table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;"><thead><tr style="background:#f8fafc;color:#1e293b;font-weight:600;"><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">维度</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">指标</th><th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">数据 · 判读</th></tr></thead><tbody><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">规模</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">发明专利</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">累计申请 10 件 · 累计授权 1 件 · 当年授权 0 件（授权率 10%，质量一般）</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">规模</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">其他专利</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">实用新型 27 · 外观设计 4 · PCT 国际申请 未披露</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">运用</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">质押</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">未披露 ——质押融资工具空白</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">运用</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">许可</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">- 次</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">运用</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">被引用</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">最大被引 未披露</td></tr><tr><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">运用</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">高价值专利</td><td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">1 件（占比 10%）（接口权威口径；「发明授权件数」是规模指标，二者勿混）</td></tr></tbody></table></div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">数据更新时间：2026-09-30 15:10（专利指标接口）。</div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">专利授权结构：发明申请10 · 发明授权1 · 实用新型27｜软件著作权：无</div><div style="font-size:14.5px;font-weight:700;color:#334155;margin:16px 0 8px;">4.11+ 资质证书统计</div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">共 20 项体系/资质认证（质量 3 · 食品 6 · 有机产品（OGA） 9 · 排污许可证 2）。证书编号与发证明细可线下调取。</div><div style="font-size:14.5px;font-weight:700;color:#334155;margin:16px 0 8px;">4.12 最近改过什么（近 24 个月）</div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">近 24 个月无注册资本/经营范围变更记录（结构稳定）。</div><div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">报告结束</div>
+</div>
+</div>
+
+<div class="ai-service-pane" id="ai-pane-marketing">
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.05);line-height:1.6;">
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f1f5f9;padding-bottom:14px;margin-bottom:16px;">
+            <div>
+                <div style="font-size:17px;font-weight:700;color:#1e1b4b;">营销信号研判</div>
+                <div style="font-size:11.5px;color:#64748b;margin-top:4px;">报告生成时间：<span class="report-gen-time">2026-10-26 11:09:46</span></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+                <button onclick="copyCurrentReportContent()" style="border:1px solid #cbd5e1;background:#fff;border-radius:4px;padding:2px 6px;font-size:11px;color:#475569;cursor:pointer;">复制</button>
+                <button onclick="downloadCurrentReport()" style="border:1px solid #cbd5e1;background:#fff;border-radius:4px;padding:2px 6px;font-size:11px;color:#475569;cursor:pointer;">下载</button>
+            </div>
+        </div>
+        <div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">企业营销信号研判报告【苏州智云科技有限公司】</div>
+        <div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">数据获取：本期各接口均正常返回</div>
+        <div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">核心研判速览：</div>
+        <div style="overflow-x:auto;margin:14px 0;">
+          <table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;">
+            <thead>
+              <tr style="background:#f8fafc;color:#1e293b;font-weight:600;">
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">分析模块</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">核心结论</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">业务建议与打法</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">纳税资质与额度</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">纳税信用连续A级，增值税实缴税额约497.3万元</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">主推“银税互动贷”，按实缴税额挂钩可测算1490万~2480万授信空间</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">融资结构与现状</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在贷约8900万分散于5-10家机构，保证贷款约4380万（占49%）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">新增从严，主打主办行“融资分散归集与存量置换”，降低企业担保与利息负担</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">资金需求与评分</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">苏信分707（超过93%企业），资金需求概率达83.8%</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">高需求潜力客户，近期中标77万项目前期垫资明确，建议本周内约访实控人</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="font-size:16px;font-weight:700;color:#1e293b;margin:22px 0 10px;">一、总体营销研判</div>
+        <div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">企业纳税规模可观，增值税实缴税额约497.3万元，但融资结构存在优化空间：在贷余额约8900万元，其中保证类贷款余额约4380万元，占在贷余额约49%，担保资源占用偏高，且融资分散于5-10家机构。</div>
+        <div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">企业信用状况优异，苏信分707，排名超过93%的企业，信用等级A。结合资金需求概率83.8%的高需求特征，我行应主推“银税互动贷”以纳税额为背书切入；若主推受阻，可先以“融资分散归集”为切入点，通过归集结算建立关系。</div>
+
+        <div style="font-size:16px;font-weight:700;color:#1e293b;margin:22px 0 10px;">二、建议沟通话术</div>
+        <div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">建议开口话术：</div>
+        <div style="font-size:13px;color:#334155;line-height:1.6;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:12px 14px;margin:8px 0 14px;">
+        郑总，贵司纳税体量很可观，我行银税互动贷的额度直接跟纳税额挂钩，按您这个纳税规模能批的额度和利率都很有优势。方便的话，想跟您约个本周的时间，我带方案上门，顺便把贵司整体的融资结构一起盘一盘。
+        </div>
+
+        <div style="font-size:16px;font-weight:700;color:#1e293b;margin:22px 0 10px;">三、信号清单（全量营销信号备查）</div>
+        <div style="overflow-x:auto;margin:14px 0;">
+          <table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;">
+            <thead>
+              <tr style="background:#f8fafc;color:#1e293b;font-weight:600;">
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">级别</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">信号名称</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">一句话解读与落地建议</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">跟进周期</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">数据日期</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">O-A</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">银税贷优质户</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">增值税实缴税额约497.3万元，近6个月正常缴税7次，银税信贷优质准入客户</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">本周触达</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-21</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">O-A</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">优质信用企业</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">企业苏信分707，排名超过93%的企业，信用等级A，信用状况优异</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">本周触达</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">O-A</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">高资金需求潜力</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">模型评分显示企业有较高的资金需求概率（83.84%），属于高需求客户</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">本周触达</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">O-A</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">担保资源占用偏高</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">保证类贷款余额约4380万元，占在贷约49%，担保资源占用偏高，适合置换</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">本周触达</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">O-B</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">融资分散归集</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在贷机构5-10家（在贷约8900万），融资分散，具备归集结算与提额降息空间</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">月度维护</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">O-B</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">知产质押空白</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">拥有已授权专利28项（发明1项、实用新型27项）全部未质押，具备工具启用空间</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">月度维护</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">O-B</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">优质存量深耕</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在贷余额约8900万元，近12个月无不良记录、五级分类正常，具备议价空间</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">月度维护</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">O-B</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">集团联动入口</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">有限责任公司（自然人控股），存在集团母公司主体，可沿股权链上溯集团联动营销</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">月度维护</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">O-C</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">正面舆情曝光</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">近期有10篇正面新闻报道，行业影响力良好，品牌形象稳步提升</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">长期培育</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-24</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+    </div>
+</div>
+
+<div class="ai-service-pane" id="ai-pane-risk">
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.05);line-height:1.6;">
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f1f5f9;padding-bottom:14px;margin-bottom:16px;">
+            <div>
+                <div style="font-size:17px;font-weight:700;color:#1e1b4b;">风险信号监测</div>
+                <div style="font-size:11.5px;color:#64748b;margin-top:4px;">报告生成时间：<span class="report-gen-time">2026-10-26 11:09:46</span></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+                <button onclick="copyCurrentReportContent()" style="border:1px solid #cbd5e1;background:#fff;border-radius:4px;padding:2px 6px;font-size:11px;color:#475569;cursor:pointer;">复制</button>
+                <button onclick="downloadCurrentReport()" style="border:1px solid #cbd5e1;background:#fff;border-radius:4px;padding:2px 6px;font-size:11px;color:#475569;cursor:pointer;">下载</button>
+            </div>
+        </div>
+        <div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">企业风险信号监测报告【苏州智云科技有限公司】</div>
+        <div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">数据获取：本期各接口均正常返回</div>
+        <div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">核心风险概览：</div>
+        <div style="overflow-x:auto;margin:14px 0;">
+          <table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;">
+            <thead>
+              <tr style="background:#f8fafc;color:#1e293b;font-weight:600;">
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">风险维度</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">监测现状</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">风险等级</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">客户经理处置建议</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">核心准入红线</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">无失信、限高、严重违法、破产重整等否决项</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">正常通过</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">8/8项一票否决全过，准入红线合规</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">财务杠杆与负债</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2025年报资产负债率88.28%，在贷规模约8760万</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">重点关注</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">负债偏高，新增额度从严，盯紧现金流与偿债安排</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">合规与涉诉记录</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">存在1笔行政处罚记录，4笔历史裁判文书</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">限时核实</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">3个工作日内核实处罚决定书与整改凭证，调取涉诉判决</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="font-size:16px;font-weight:700;color:#1e293b;margin:22px 0 10px;">一、总体风险研判</div>
+        <div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">企业未触发失信、限高、严重违法等准入红线。主要风险集中在两方面：一是财务杠杆较高，资产负债率达88.28%，在贷余额（8760万元）超出合理测算规模，且保证类贷款占比达68%，抗风险能力偏弱；二是存在1笔行政处罚及4条历史诉讼记录，需在调查阶段落实查验。</div>
+        <div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">策略建议：授信策略定为“慎入”，原则上不新增纯信用敞口，主推归集置换与存量优化；要求追加强担保或有效抵押增信；贷后重点盯防亏损收窄拐点与到期还款。</div>
+
+        <div style="font-size:16px;font-weight:700;color:#1e293b;margin:22px 0 10px;">二、重点风险核实要点</div>
+        <div style="overflow-x:auto;margin:14px 0;">
+          <table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;">
+            <thead>
+              <tr style="background:#f8fafc;color:#1e293b;font-weight:600;">
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">序号</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">核查事项</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">风险表现</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">核查建议与措施</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">调取凭据</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">1</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">行政处罚核查</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">系统提示存在行政处罚记录</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">核实具体违法事由、罚款是否已如期缴清、是否整改完毕</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">处罚决定书与缴款收据</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">杠杆与偿债压力</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">资产负债率 88.28%（偏高）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">核对企业实际在贷与授信明细，核查近6个月主账户资金流入是否充裕</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">主结算行对账单与授信清单</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">3</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">担保增信结构</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">保证类贷款约4380万（占比高）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">评估现有保证人资产资质与担保链条，防止多头担保风险传染</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">保证人征信与担保合同</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">4</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">司法诉讼进展</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">历史裁判文书 4 条</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">核实案由（买卖合同等）、涉案金额、是否有未结执行款或账户冻结隐患</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">判决书或调解结案书</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="font-size:16px;font-weight:700;color:#1e293b;margin:22px 0 10px;">三、风险信号监测清单（全量信号备查）</div>
+        <div style="overflow-x:auto;margin:14px 0;">
+          <table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;">
+            <thead>
+              <tr style="background:#f8fafc;color:#1e293b;font-weight:600;">
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">级别</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">信号名称</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">一句话解读</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">数据日期</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">距建档</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">处置时限</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">A</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">风险提示：存在行政处罚</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">3个工作日内核实事由及缴款整改凭证</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">0天</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">3个工作日内处置</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">B</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">资产负债率 88.28%</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">负债偏高（>85%），需持续监控偿债能力与现金流</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2025-12-31</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">年报口径</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">月度重点监控</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">B</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">保证类贷款占比 68%</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">增信结构偏弱，可评估抵押或信用置换方案</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2026-10-26</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">征信时点</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">月度重点监控</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">B</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">涉诉偏多（裁判文书 4 条）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">核实案件性质、被告角色与或有负债可能</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">2023-06-05</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">1239天</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">月度重点监控</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">B</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">环保评级记录（年份待核实）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">核实最新评级结果与整改要求，排除关停停产隐患</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">—</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">历史记录</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">月度重点监控</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+    </div>
+</div>
+
+<div class="ai-service-pane" id="ai-pane-network">
+    <div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:24px;box-shadow:0 1px 3px rgba(0,0,0,0.05);line-height:1.6;">
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f1f5f9;padding-bottom:14px;margin-bottom:16px;">
+            <div>
+                <div style="font-size:17px;font-weight:700;color:#1e1b4b;">关联网络分析</div>
+                <div style="font-size:11.5px;color:#64748b;margin-top:4px;">报告生成时间：<span class="report-gen-time">2026-10-26 11:09:46</span></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px;">
+                <button onclick="copyCurrentReportContent()" style="border:1px solid #cbd5e1;background:#fff;border-radius:4px;padding:2px 6px;font-size:11px;color:#475569;cursor:pointer;">复制</button>
+                <button onclick="downloadCurrentReport()" style="border:1px solid #cbd5e1;background:#fff;border-radius:4px;padding:2px 6px;font-size:11px;color:#475569;cursor:pointer;">下载</button>
+            </div>
+        </div>
+        <div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">企业关联网络分析报告【苏州智云科技有限公司】</div>
+        <div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">数据获取：本期各接口均正常返回</div>
+        <div style="font-size:13.5px;color:#334155;line-height:1.7;margin-bottom:8px;">网络核心指标概览：</div>
+        <div style="overflow-x:auto;margin:14px 0;">
+          <table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;">
+            <thead>
+              <tr style="background:#f8fafc;color:#1e293b;font-weight:600;">
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">指标维度</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">数量统计</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">主要构成</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">网络特征分析</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">关联企业规模</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">34家</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">控股子公司7家、分支机构2家、交易对手5家、涉诉相对方10家</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">纵向产业投资与集团化布局特征明显</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">核心关键人员</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">6位</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">郑勇锋（实控人/50%）、郑勇清（30%）、郑新金（20%）等</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">家族或一致行动人紧密控制，对外投资交织</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">集团网络归属</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">7家</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">属于『扬州方广食品』集团成员</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">具备集团母子公司协同与联动营销空间</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">异常与涉诉节点</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">12家</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">经营异常/注销2家，关联方涉诉10家</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">提示关注历史合规与关联担保连带责任</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="font-size:16px;font-weight:700;color:#1e293b;margin:22px 0 10px;">一、控制关系与股权架构</div>
+        <div style="overflow-x:auto;margin:14px 0;">
+          <table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;">
+            <thead>
+              <tr style="background:#f8fafc;color:#1e293b;font-weight:600;">
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">控制关系</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">关联主体名称</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">角色与持股比例</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">经营状态</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">主体定位</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">控制方</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">郑勇锋</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">法定代表人 / 股东（50.0%）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">正常履职</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">疑似实际控制人，最高决策人</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">控制方</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">郑勇清</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">监事 / 股东（30.0%）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">正常履职</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">核心高管与重要出资人</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">控制方</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">郑新金</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">经理 / 股东（20.0%）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">正常履职</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">日常经营负责人与出资人</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">控股子公司</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">杭州方广食品有限公司</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">全资控股（100.0%）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在业</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">省外销售与区域运营平台</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">控股子公司</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">扬州桑恩食品有限公司</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">全资控股（100.0%）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在业</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">生产加工与供应链协同</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">控股子公司</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">方广食品营销（北京）有限公司</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">全资控股（100.0%）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在业</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">北方区域品牌与营销平台</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">控股子公司</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">扬州卓泓检测有限公司</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">全资控股（100.0%）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在业</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">食品检验检测技术服务</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">控股子公司</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">扬州方广电子商务有限公司</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">全资控股（100.0%）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在业</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">线上电商与全网渠道分销</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="font-size:16px;font-weight:700;color:#1e293b;margin:22px 0 10px;">二、关键人员对外投资任职版图</div>
+        <div style="overflow-x:auto;margin:14px 0;">
+          <table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;">
+            <thead>
+              <tr style="background:#f8fafc;color:#1e293b;font-weight:600;">
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">人员姓名</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">本企任职与持股</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">对外关联主体数</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">重点对外任职及投资主体</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">核实提示</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">郑勇锋</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">法定代表人 / 股东 50%</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在外13家</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">扬州方广营销策划、扬州方广电商、森可（上海）健康食品等</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">同名投资需人工确认无误</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">郑勇清</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">监事 / 股东 30%</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在外15家</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">扬州方广营销策划上海分公司、扬州卓泓检测、上海隽墨电商等</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">关注在外关联负债与出资</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">郑新金</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">经理 / 股东 20%</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">在外11家</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">上海高兴贸易、扬州数方科技发展合伙、上海昌茂食品等</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">贸易类关联企业防资金拆借</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="font-size:16px;font-weight:700;color:#1e293b;margin:22px 0 10px;">三、关联方风险节点排查</div>
+        <div style="overflow-x:auto;margin:14px 0;">
+          <table style="width:100%;border-collapse:collapse;font-size:13px;border:1px solid #e2e8f0;background:#fff;">
+            <thead>
+              <tr style="background:#f8fafc;color:#1e293b;font-weight:600;">
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">关联方名称</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">关联性质</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">风险表现</th>
+                <th style="border:1px solid #e2e8f0;padding:8px 12px;text-align:left;">对目标企业影响研判与处置建议</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">邗江区美之晖广告服务部</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">关键人员在外关联企业</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">注销（状态异常）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">个体户注销，核实是否有历史未结清债务或税务尾巴</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">邗江区零与糖食品经营部</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">关键人员在外关联企业</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">注销（状态异常）</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">个体户注销，已正常解散，无重大连带影响</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">扬州方广营销策划有限公司</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">集团核心成员公司</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">涉诉记录</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">涉买卖合同纠纷，核实是否涉及母子公司联合担保互保</td>
+              </tr>
+              <tr>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">扬州乐活农业科技有限公司</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">关键人员对外投资企业</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">涉诉记录</td>
+                <td style="border:1px solid #e2e8f0;padding:8px 12px;color:#334155;line-height:1.5;">司法涉诉记录，核查资金往来是否存在违规占款</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+    </div>
+</div>
+
+
+        </div>
+
 
     <!-- 3. 模型说明面板 (新) -->
     <div class="sheet-overlay" id="introOverlay" onclick="closeIntroSheet()"></div>
@@ -1591,5 +2210,434 @@ if (typeof RoleManager !== 'undefined' && RoleManager.isAdmin()) {
     });
 }
 </script>
+
+
+
+</div>
+</div> <!-- 闭合 .page -->
+
+<script>
+// ===== 移动端 AI 研报交互 =====
+function openMobileAiTab(subId) {
+    const aiTabBtn = document.getElementById('tab-btn-ai-report');
+    if (aiTabBtn) {
+        switchTab('ai-report', aiTabBtn);
+    }
+    if (subId) {
+        setTimeout(() => {
+            const sec = document.getElementById('m-sec-' + subId);
+            if (sec) {
+                sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 150);
+    }
+}
+
+function makeDirectCall(phone, name) {
+    if (confirm(`即将呼叫 ${name} (${phone})，是否继续？`)) {
+        window.location.href = 'tel:' + phone;
+    }
+}
+
+function copyMobileScript() {
+    const text = document.getElementById('mPrepScriptBubble')?.innerText || '';
+    navigator.clipboard.writeText(text).then(() => {
+        showToast('已复制现场开口破冰话术');
+    }).catch(() => {
+        alert(text);
+    });
+}
+
+function switchMobileAiVersion(v) {
+    if (v === 'v1') {
+        showToast('已切换至历史版本 [2026-08-15 14:20 留痕]');
+    } else {
+        showToast('已切换至最新版本 [2026-10-26 11:09 当前快照]');
+    }
+}
+
+let currentMobileDifyService = 'prep';
+
+const M_DIFY_SERVICE_NAMES = {
+    'prep': '访前一页纸生成工作流',
+    'diligence': '企业AI尽调全景报告工作流',
+    'marketing': '营销信号研判工作流',
+    'risk': '风险信号监测工作流',
+    'network': '关联网络分析工作流'
+};
+
+
+function switchAiTab(tabKey, btn) {
+    document.querySelectorAll('.ai-sub-tab-btn').forEach(b => {
+        b.classList.remove('active');
+        b.style.background = '#f8fafc';
+        b.style.color = '#475569';
+        b.style.borderColor = '#e2e8f0';
+    });
+    if (btn) {
+        btn.classList.add('active');
+        btn.style.background = '#eff6ff';
+        btn.style.color = '#2563eb';
+        btn.style.borderColor = '#bfdbfe';
+    }
+    document.querySelectorAll('.ai-service-pane').forEach(p => p.classList.remove('active'));
+    const target = document.getElementById('ai-pane-' + tabKey);
+    if (target) target.classList.add('active');
+}
+
+function switchDifyService(serviceKey, el) {
+    currentMobileDifyService = serviceKey;
+    document.querySelectorAll('.ai-sub-tab-btn').forEach(b => {
+        b.classList.remove('active');
+        b.style.background = 'var(--gray-100)';
+        b.style.color = 'var(--gray-600)';
+    });
+    if (el) {
+        el.classList.add('active');
+        el.style.background = '#eff6ff';
+        el.style.color = '#2563eb';
+    }
+    document.querySelectorAll('.ai-service-content').forEach(c => c.classList.remove('active'));
+    const target = document.getElementById('service-' + serviceKey);
+    if (target) target.classList.add('active');
+}
+
+let isDifyGenerating = false;
+
+function triggerDifyWorkflow() {
+  const modal = document.getElementById('difyWorkflowModal');
+  const logBox = document.getElementById('difyStepLogs');
+  const btnDone = document.getElementById('btnDifyDone');
+  const btnMinimize = document.getElementById('btnDifyMinimize');
+  const mainBtn = document.getElementById('btnTriggerDify');
+  const titleText = document.getElementById('modalTitleText');
+  const spinIcon = document.getElementById('modalSpinIcon');
+
+  isDifyGenerating = true;
+
+  if (mainBtn) {
+    mainBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="animation:spin 0.8s linear infinite;display:inline-block;vertical-align:middle;margin-right:4px;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>生成中...';
+    mainBtn.style.background = '#eff6ff';
+    mainBtn.style.color = '#2563eb';
+    mainBtn.style.border = '1px solid #bfdbfe';
+    mainBtn.style.boxShadow = '0 1px 3px rgba(37,99,235,0.12)';
+    mainBtn.style.opacity = '1';
+    mainBtn.onclick = reopenDifyModal;
+  }
+
+  if (titleText) titleText.textContent = 'AI 研报生成中';
+  if (spinIcon) spinIcon.style.display = 'inline-block';
+  if (btnDone) btnDone.style.display = 'none';
+  if (btnMinimize) btnMinimize.style.display = 'inline-block';
+
+  if (logBox) {
+    logBox.innerHTML = `
+      <div style="display:flex;align-items:center;gap:6px;color:#2563eb;"><span class="pulse-dot"></span> 正在连接企业数据底座，获取基础指标...</div>
+    `;
+  }
+  
+  if (modal) modal.style.display = 'flex';
+
+  setTimeout(() => {
+    if (logBox && isDifyGenerating) {
+      logBox.innerHTML += `
+        <div style="display:flex;align-items:center;gap:6px;color:#475569;"><span>✔</span> 已读取苏州智云科技多维财务与信贷数据</div>
+        <div style="display:flex;align-items:center;gap:6px;color:#2563eb;"><span class="pulse-dot"></span> 结合分析模型进行深度智能研判...</div>
+      `;
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+  }, 600);
+
+  setTimeout(() => {
+    if (logBox && isDifyGenerating) {
+      logBox.innerHTML += `
+        <div style="display:flex;align-items:center;gap:6px;color:#475569;"><span>✔</span> 营销机会点与风险信号特征推理完成</div>
+        <div style="display:flex;align-items:center;gap:6px;color:#2563eb;"><span class="pulse-dot"></span> 正在自动生成结构化章节与建议策略...</div>
+      `;
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+  }, 1200);
+
+  setTimeout(() => {
+    isDifyGenerating = false;
+    const doneTime = new Date().toTimeString().split(' ')[0];
+    
+    if (titleText) titleText.textContent = '最新研报生成完毕';
+    if (spinIcon) spinIcon.style.display = 'none';
+
+    if (logBox) {
+      logBox.innerHTML += `
+        <div style="display:flex;align-items:center;gap:6px;color:#16a34a;font-weight:600;margin-top:4px;"><span>✔</span> 报告生成完毕！数据已自动同步最新快照。</div>
+      `;
+      logBox.scrollTop = logBox.scrollHeight;
+    }
+
+    if (btnDone) btnDone.style.display = 'inline-block';
+    if (btnMinimize) btnMinimize.style.display = 'none';
+    if (mainBtn) {
+      mainBtn.innerHTML = '生成最新报告';
+      mainBtn.style.background = 'linear-gradient(135deg, #4f46e5, #6366f1)';
+      mainBtn.style.color = '#fff';
+      mainBtn.style.border = 'none';
+      mainBtn.style.boxShadow = '0 2px 6px rgba(79,70,229,0.25)';
+      mainBtn.style.opacity = '1';
+      mainBtn.onclick = triggerDifyWorkflow;
+    }
+
+    const fullDate = new Date().toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' }).replace(/\//g, '-');
+    const timeFormatted = `${fullDate} ${doneTime.substring(0, 5)}`;
+    
+    document.querySelectorAll('.report-gen-time').forEach(el => el.textContent = `${timeFormatted}:${doneTime.substring(6, 8)}`);
+
+    const sel = document.getElementById('aiReportHistorySelect');
+    if (sel) {
+      const newOpt = document.createElement('option');
+      newOpt.value = 'v_' + Date.now();
+      newOpt.text = timeFormatted;
+      sel.insertBefore(newOpt, sel.firstChild);
+      sel.selectedIndex = 0;
+    }
+    const label = document.getElementById('mobileHistorySelectedText');
+    if (label) label.textContent = timeFormatted;
+
+    const list = document.getElementById('mobileHistoryDropdownList');
+    if (list) {
+      const newDiv = document.createElement('div');
+      newDiv.className = 'm-history-opt active';
+      newDiv.style.cssText = 'padding:7px 10px; font-size:11.5px; color:#2563eb; background:#eff6ff; cursor:pointer; font-weight:600; border-bottom:1px solid #f1f5f9;';
+      newDiv.textContent = timeFormatted;
+      newDiv.onclick = function() { selectMobileHistoryOpt('v_' + Date.now(), timeFormatted, this); };
+      
+      document.querySelectorAll('.m-history-opt').forEach(opt => {
+        opt.classList.remove('active');
+        opt.style.background = '#fff';
+        opt.style.color = '#475569';
+        opt.style.fontWeight = 'normal';
+      });
+
+      list.insertBefore(newDiv, list.firstChild);
+    }
+  }, 2000);
+}
+
+function minimizeDifyModal() {
+  const modal = document.getElementById('difyWorkflowModal');
+  if (modal) modal.style.display = 'none';
+  }
+
+function reopenDifyModal() {
+  const modal = document.getElementById('difyWorkflowModal');
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeDifyModal() {
+  const modal = document.getElementById('difyWorkflowModal');
+  if (modal) modal.style.display = 'none';
+  }
+
+function toggleMobileHistoryDropdown(e) {
+  if (e) e.stopPropagation();
+  const list = document.getElementById('mobileHistoryDropdownList');
+  if (list) {
+    list.style.display = list.style.display === 'none' ? 'block' : 'none';
+  }
+}
+
+function selectMobileHistoryOpt(val, text, el) {
+  const label = document.getElementById('mobileHistorySelectedText');
+  if (label) label.textContent = text;
+
+  const sel = document.getElementById('aiReportHistorySelect');
+  if (sel) {
+    sel.value = val;
+  }
+
+  document.querySelectorAll('.m-history-opt').forEach(opt => {
+    opt.classList.remove('active');
+    opt.style.background = '#fff';
+    opt.style.color = '#475569';
+    opt.style.fontWeight = 'normal';
+  });
+
+  if (el) {
+    el.classList.add('active');
+    el.style.background = '#eff6ff';
+    el.style.color = '#2563eb';
+    el.style.fontWeight = '600';
+  }
+
+  const list = document.getElementById('mobileHistoryDropdownList');
+  if (list) list.style.display = 'none';
+
+  switchReportHistory(val);
+}
+
+document.addEventListener('click', function(e) {
+  const wrap = document.getElementById('mobileHistoryDropdownWrap');
+  const list = document.getElementById('mobileHistoryDropdownList');
+  if (wrap && list && !wrap.contains(e.target)) {
+    list.style.display = 'none';
+  }
+});
+
+function switchReportHistory(val) {
+  const notice = document.getElementById('historySnapshotNotice');
+  const noticeDate = document.getElementById('snapshotNoticeDate');
+  if (val.includes('sep')) {
+    if (notice) notice.style.display = 'flex';
+    if (noticeDate) noticeDate.textContent = '2026-09-18 09:30';
+    document.querySelectorAll('.report-gen-time').forEach(el => el.textContent = '2026-09-18 09:30:12');
+  } else if (val.includes('aug')) {
+    if (notice) notice.style.display = 'flex';
+    if (noticeDate) noticeDate.textContent = '2026-08-05 16:40';
+    document.querySelectorAll('.report-gen-time').forEach(el => el.textContent = '2026-08-05 16:40:00');
+  } else {
+    if (notice) notice.style.display = 'none';
+    document.querySelectorAll('.report-gen-time').forEach(el => el.textContent = '2026-10-26 11:09:46');
+  }
+}
+
+function restoreToLatestSnapshot() {
+  const sel = document.getElementById('aiReportHistorySelect');
+  if (sel) sel.selectedIndex = 0;
+  const label = document.getElementById('mobileHistorySelectedText');
+  if (label && sel) label.textContent = sel.options[0].text;
+  
+  const firstOpt = document.querySelector('.m-history-opt');
+  if (firstOpt) {
+    document.querySelectorAll('.m-history-opt').forEach(opt => {
+      opt.classList.remove('active');
+      opt.style.background = '#fff';
+      opt.style.color = '#475569';
+      opt.style.fontWeight = 'normal';
+    });
+    firstOpt.classList.add('active');
+    firstOpt.style.background = '#eff6ff';
+    firstOpt.style.color = '#2563eb';
+    firstOpt.style.fontWeight = '600';
+  }
+
+  const notice = document.getElementById('historySnapshotNotice');
+  if (notice) notice.style.display = 'none';
+  document.querySelectorAll('.report-gen-time').forEach(el => el.textContent = '2026-10-26 11:09:46');
+}
+
+function downloadCurrentReport() {
+  const activePane = document.querySelector('.ai-service-pane.active');
+  if (!activePane) {
+    if (typeof window.showToast === 'function') {
+      window.showToast('未找到可下载的研报内容');
+    } else {
+      alert('未找到可下载的研报内容');
+    }
+    return;
+  }
+
+  // 提取当前研报名称
+  const titleEl = activePane.querySelector('[style*="font-size:17px"], [style*="font-size: 17px"], [style*="font-size:16px"], h2, h3');
+  const reportTitle = titleEl ? titleEl.textContent.trim() : 'AI智能研报';
+  const companyName = '苏州智云科技有限公司';
+  const now = new Date();
+  const dateStr = `${now.getFullYear()}${String(now.getMonth()+1).padStart(2,'0')}${String(now.getDate()).padStart(2,'0')}`;
+  const fileName = `${companyName}_${reportTitle}_${dateStr}.doc`;
+
+  // 克隆节点并过滤掉非研报正文的操作按钮
+  const clone = activePane.cloneNode(true);
+  clone.querySelectorAll('button').forEach(btn => btn.remove());
+
+  // 构造标准 Word 导出版式
+  const docHtml = `
+    <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+    <head>
+      <meta charset="utf-8">
+      <title>${companyName} - ${reportTitle}</title>
+      <style>
+        body { font-family: "PingFang SC", "Microsoft YaHei", Arial, sans-serif; line-height: 1.7; color: #1e293b; padding: 30px; }
+        .doc-header { border-bottom: 2px solid #2563eb; padding-bottom: 12px; margin-bottom: 20px; }
+        .doc-header h1 { font-size: 18px; color: #1e3a8a; margin: 0 0 6px 0; }
+        .doc-header .doc-meta { font-size: 12px; color: #64748b; }
+        table { border-collapse: collapse; width: 100%; margin: 16px 0; }
+        th, td { border: 1px solid #cbd5e1; padding: 8px 12px; font-size: 12.5px; text-align: left; }
+        th { background-color: #f1f5f9; font-weight: bold; color: #1e293b; }
+        .badge { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+      </style>
+    </head>
+    <body>
+      <div class="doc-header">
+        <h1>江苏省联合征信 · 企业AI智能研报</h1>
+        <div class="doc-meta">目标主体：${companyName} | 统一社会信用代码：91320594MA1EXAMPLE1 | 报告类型：${reportTitle}</div>
+      </div>
+      <div>
+        ${clone.innerHTML}
+      </div>
+    </body>
+    </html>
+  `;
+
+  // 触发真实的浏览器文件下载（绝不调起物理打印机窗口）
+  const blob = new Blob([docHtml], { type: 'application/msword;charset=utf-8' });
+  const downloadUrl = URL.createObjectURL(blob);
+  const downloadAnchor = document.createElement('a');
+  downloadAnchor.href = downloadUrl;
+  downloadAnchor.download = fileName;
+  document.body.appendChild(downloadAnchor);
+  downloadAnchor.click();
+  document.body.removeChild(downloadAnchor);
+  URL.revokeObjectURL(downloadUrl);
+
+  // 静默下载完成，无需弹出 toast 提示
+}
+
+function copyCurrentReportContent() {
+  const activePane = document.querySelector('.ai-service-pane.active');
+  const text = activePane ? activePane.innerText : '';
+  navigator.clipboard.writeText(text).then(() => {
+    if (typeof showToast === 'function') {
+      showToast('✅ 报告内容已复制到剪贴板！');
+    } else {
+      alert('报告内容已复制到剪贴板！');
+    }
+  }).catch(() => {
+    if (typeof showToast === 'function') {
+      showToast('报告已就绪。');
+    } else {
+      alert('报告文本已准备好。');
+    }
+  });
+}
+
+function openMobileAiTab(subTab) {
+  switchTab('ai-report', document.querySelector('.d-tab:nth-child(4)'));
+  const btn = document.getElementById('btn-tab-' + subTab);
+  if (btn) switchAiTab(subTab, btn);
+}
+</script>
+
+<!-- Dify 工作流移动端执行模态框 (极简浅色风，支持收起/完成) -->
+<div id="difyWorkflowModal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.5);z-index:9999;backdrop-filter:blur(3px);align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:14px;width:100%;max-width:340px;overflow:hidden;box-shadow:0 20px 40px rgba(0,0,0,0.2);border:1px solid #e2e8f0;">
+    <div style="padding:12px 16px;background:#f8fafc;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+      <div style="font-size:14px;font-weight:700;color:#1e293b;display:flex;align-items:center;gap:6px;">
+        <svg id="modalSpinIcon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.5" style="animation:spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+        <span id="modalTitleText">AI 研报生成中</span>
+      </div>
+      <button onclick="minimizeDifyModal()" style="background:transparent;border:none;color:#64748b;font-size:18px;cursor:pointer;line-height:1;">&times;</button>
+    </div>
+    <div style="padding:16px;">
+      <div id="difyStepLogs" style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:12px 14px;font-size:12px;line-height:1.9;color:#334155;height:130px;overflow-y:auto;font-family:inherit;">
+        <div style="color:#2563eb;">● 正在请求 Dify 工作流推理服务...</div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:14px;">
+        <button id="btnDifyMinimize" type="button" onclick="minimizeDifyModal()" style="background:#f8fafc;color:#475569;border:1px solid #cbd5e1;padding:6px 14px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;">
+          收起
+        </button>
+        <button id="btnDifyDone" type="button" onclick="closeDifyModal()" style="display:none;background:#2563eb;color:#fff;border:none;padding:6px 18px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;box-shadow:0 2px 6px rgba(37,99,235,0.25);">
+          完成
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
